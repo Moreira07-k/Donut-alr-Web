@@ -179,6 +179,7 @@
         top: 0;
         z-index: 700;
         background: rgba(255, 246, 249, 0.97);
+        -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
         border-bottom: 1.5px solid rgba(255, 180, 210, 0.3);
       }
@@ -340,11 +341,6 @@
         background: var(--pink-pale);
       }
 
-      .mnav-item:active {
-        transform: scale(0.95);
-        background: var(--pink-pale);
-      }
-
       .mnav-item.active {
         color: var(--pink);
       }
@@ -439,14 +435,14 @@
         touch-action: manipulation;
       }
 
-      .btn-primary:active {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 14px rgba(255, 64, 129, 0.35);
-      }
-
       .btn-primary:hover {
         transform: translateY(-3px);
         box-shadow: 0 10px 28px rgba(255, 64, 129, 0.4);
+      }
+
+      .btn-primary:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(255, 64, 129, 0.35);
       }
 
       .btn-outline {
@@ -592,6 +588,24 @@
         font-weight: 600;
       }
 
+      /* WRAP & REVEAL */
+      .wrap {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.7s ease;
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       /* SECTIONS */
       .section {
         max-width: 1300px;
@@ -609,6 +623,146 @@
         font-weight: 800;
         color: var(--brown);
         margin-bottom: 0.3rem;
+      }
+
+      .sec-label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--pink);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+      }
+
+      .sec-title {
+        font-family: "Syne", sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--brown);
+      }
+
+      .sec-title .accent {
+        color: var(--pink);
+      }
+
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.2rem;
+        margin-top: 1.5rem;
+      }
+
+      .project-card {
+        background: #fff;
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        border: 1.5px solid rgba(255, 180, 210, 0.2);
+        transition: 0.25s;
+        cursor: pointer;
+      }
+
+      .project-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--pink-light);
+      }
+
+      .project-num {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--pink);
+        margin-bottom: 0.5rem;
+      }
+
+      .project-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--brown);
+        margin-bottom: 0.6rem;
+      }
+
+      .project-desc {
+        font-size: 0.85rem;
+        color: var(--brown-light);
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+
+      .project-tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background: var(--pink-pale);
+        color: var(--pink);
+        padding: 0.25rem 0.7rem;
+        border-radius: 99px;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+
+      /* CERTIFICAÇÕES */
+      .certifications-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.2rem;
+        margin-top: 1.5rem;
+      }
+
+      .cert-card {
+        background: #fff;
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        border: 1.5px solid rgba(255, 180, 210, 0.2);
+        transition: 0.25s;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .cert-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--pink-light);
+      }
+
+      .cert-icon {
+        font-size: 2rem;
+        min-width: 50px;
+        height: 50px;
+        background: var(--gradient-soft);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cert-info {
+        flex: 1;
+      }
+
+      .cert-title {
+        font-family: "Syne", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--brown);
+        margin-bottom: 0.3rem;
+      }
+
+      .cert-org {
+        font-size: 0.8rem;
+        color: var(--brown-light);
+        margin-bottom: 0.5rem;
+      }
+
+      .cert-date {
+        font-size: 0.75rem;
+        color: var(--pink);
+        font-weight: 600;
       }
 
       .section-title .accent {
@@ -1411,13 +1565,9 @@
         transition: background 0.2s;
       }
 
-      .close-btn:active {
-        background: var(--pink-pale);
-      }
-
-      .close-btn:active {
-        background: var(--pink-pale);
-      }
+.close-btn:active {
+         background: var(--pink-pale);
+       }
 
       .cart-body {
         flex: 1;
@@ -1579,6 +1729,7 @@
         opacity: 0;
         pointer-events: none;
         transition: 0.3s;
+        -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
         padding: 1rem;
       }
@@ -1945,7 +2096,7 @@
         }
 
         .delivery-grid {
-          grid-template-columns: 1fr;
+          flex-direction: column;
         }
 
         .footer-inner {
@@ -2207,6 +2358,190 @@
       </div>
     </div>
 
+    <!-- TRABALHOS REALIZADOS -->
+    <section id="trabalhos" class="section section-alt">
+      <div class="wrap">
+
+        <div class="reveal">
+          <p class="sec-label">Meus trabalhos</p>
+          <h2 class="sec-title">Projetos <strong>desenvolvidos</strong></h2>
+        </div>
+
+        <div class="projects-grid">
+
+          <!-- Trabalho 1 -->
+          <div class="project-card reveal" style="transition-delay: 0.05s">
+            <p class="project-num">01 / HTML</p>
+
+            <h3 class="project-title">Botão Interativo</h3>
+
+            <p class="project-desc">
+              Projeto desenvolvido para praticar estilização de botões
+              modernos utilizando HTML e CSS responsivo.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+            </div>
+          </div>
+
+          <!-- Trabalho 2 -->
+          <div class="project-card reveal" style="transition-delay: 0.1s">
+            <p class="project-num">02 / RESPONSIVO</p>
+
+            <h3 class="project-title">Imagem Flexível</h3>
+
+            <p class="project-desc">
+              Desenvolvimento de página responsiva com imagens adaptáveis
+              para diferentes tamanhos de tela.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">HTML5</span>
+              <span class="tag">Responsividade</span>
+            </div>
+          </div>
+
+          <!-- Trabalho 3 -->
+          <div class="project-card reveal" style="transition-delay: 0.15s">
+            <p class="project-num">03 / TAGS</p>
+
+            <h3 class="project-title">Estrutura Semântica HTML</h3>
+
+            <p class="project-desc">
+              Exercício focado em boas práticas utilizando tags semânticas
+              e estrutura moderna de páginas web.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">Semântica</span>
+            </div>
+          </div>
+
+          <!-- Trabalho 4 -->
+          <div class="project-card reveal" style="transition-delay: 0.2s">
+            <p class="project-num">04 / EMOJIS</p>
+
+            <h3 class="project-title">Página com Emojis</h3>
+
+            <p class="project-desc">
+              Projeto simples utilizando emojis e caracteres especiais
+              para criação de interfaces mais modernas.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">Unicode</span>
+              <span class="tag">HTML</span>
+            </div>
+          </div>
+
+          <!-- Trabalho 5 -->
+          <div class="project-card reveal" style="transition-delay: 0.25s">
+            <p class="project-num">05 / IMAGENS</p>
+
+            <h3 class="project-title">Galeria de Imagens</h3>
+
+            <p class="project-desc">
+              Página desenvolvida com organização visual de imagens
+              utilizando estrutura limpa e moderna.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">Layout</span>
+              <span class="tag">CSS</span>
+              <span class="tag">HTML</span>
+            </div>
+          </div>
+
+          <!-- Trabalho 6 -->
+          <div class="project-card reveal" style="transition-delay: 0.3s">
+            <p class="project-num">06 / MAPA</p>
+
+            <h3 class="project-title">Mapa Mundi Visual</h3>
+
+            <p class="project-desc">
+              Construção visual de mapa mundi utilizando composição
+              organizada de imagens.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">Imagens</span>
+            </div>
+          </div>
+
+          <!-- Trabalho 7 -->
+          <div class="project-card reveal" style="transition-delay: 0.35s">
+            <p class="project-num">07 / DESIGN</p>
+
+            <h3 class="project-title">Páginas Temáticas</h3>
+
+            <p class="project-desc">
+              Desenvolvimento de interfaces coloridas focadas
+              em contraste visual e estilização moderna.
+            </p>
+
+            <div class="project-tags">
+              <span class="tag">CSS</span>
+              <span class="tag">Design</span>
+              <span class="tag">UI</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICAÇÕES -->
+    <section id="certificacao" class="section">
+      <div class="wrap">
+        <div class="reveal">
+          <p class="sec-label">Certificações</p>
+          <h2 class="sec-title">Minhas <strong>Qualificações</strong></h2>
+        </div>
+
+        <div class="certifications-grid">
+          <div class="cert-card reveal" style="transition-delay: 0.1s">
+            <div class="cert-icon">🏆</div>
+            <div class="cert-info">
+              <div class="cert-title">HTML5 e CSS3 - Básico</div>
+              <div class="cert-org">Curso em Vídeo - Canal do Youtube</div>
+              <div class="cert-date">Concluído em 2024</div>
+            </div>
+          </div>
+
+          <div class="cert-card reveal" style="transition-delay: 0.15s">
+            <div class="cert-icon">🎨</div>
+            <div class="cert-info">
+              <div class="cert-title">Web Design Responsivo</div>
+              <div class="cert-org">Rocketseat</div>
+              <div class="cert-date">Concluído em 2024</div>
+            </div>
+          </div>
+
+          <div class="cert-card reveal" style="transition-delay: 0.2s">
+            <div class="cert-icon">💻</div>
+            <div class="cert-info">
+              <div class="cert-title">JavaScript Fundamentos</div>
+              <div class="cert-org">Alura</div>
+              <div class="cert-date">Concluído em 2025</div>
+            </div>
+          </div>
+
+          <div class="cert-card reveal" style="transition-delay: 0.25s">
+            <div class="cert-icon">🚀</div>
+            <div class="cert-info">
+              <div class="cert-title">Desenvolvimento Front-end</div>
+              <div class="cert-org">Origamid</div>
+              <div class="cert-date">Concluído em 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- DELIVERY COM BAIRROS -->
     <div class="delivery-wrapper" id="delivery">
       <div class="delivery-inner">
@@ -2277,6 +2612,11 @@
             <div class="frete-resultado" id="freteResultado">
               <div id="freteInfo"></div>
               <div class="frete-valor" id="freteValorDisplay">-</div>
+              <div class="route-info" id="routeInfo">
+                <span class="route-chip">📏 <span id="distKm">-</span></span>
+                <span class="route-chip">⏱ <span id="durTime">-</span></span>
+                <span class="route-chip">💰 <span id="fretValue">-</span></span>
+              </div>
               <button
                 class="btn-primary"
                 style="margin-top: 0.8rem; width: 100%"
@@ -2328,7 +2668,7 @@
           </div>
           <div class="form-group">
             <label>Tipo de evento</label>
-            <select class="form-control" id="encTipo">
+            <select class="form-control" id="encTipo" title="Tipo de evento">
               <option>Festa de aniversário</option>
               <option>Casamento</option>
               <option>Chá de bebê</option>
@@ -2340,7 +2680,7 @@
           <div class="form-row">
             <div class="form-group">
               <label>Data do evento</label>
-              <input type="date" class="form-control" id="encData" />
+              <input type="date" class="form-control" id="encData" title="Data do evento" />
             </div>
             <div class="form-group">
               <label>Quantidade</label>
@@ -2450,6 +2790,7 @@
           <a
             href="https://wa.me/5589912345678"
             target="_blank"
+            rel="noopener"
             class="contact-card"
           >
             <div class="contact-icon">💬</div>
@@ -2463,6 +2804,7 @@
           <a
             href="https://instagram.com/donutalr"
             target="_blank"
+            rel="noopener"
             class="contact-card"
           >
             <div class="contact-icon">📸</div>
@@ -2597,9 +2939,7 @@
           <span class="mnav-icon">🥤</span><span>Bebidas</span>
         </button>
         <button class="mnav-item" onclick="openCart()">
-          <span class="mnav-icon">🛒</span
-          ><span class="mnav-badge" id="mobileCartCount">0</span
-          ><span>Carrinho</span>
+          <span class="mnav-icon">🛒</span><span class="mnav-badge" id="mobileCartCount">0</span><span>Carrinho</span>
         </button>
         <button class="mnav-item" onclick="navTo('#delivery')">
           <span class="mnav-icon">🚚</span><span>Entrega</span>
@@ -3196,15 +3536,19 @@
           });
         });
       }
-      function selecionarBairro(nome, frete) {
+      function selecionarBairro(nome, frete, btn) {
         bairroAtual = { nome: nome, frete: frete };
         document.querySelectorAll(".bairro-btn").forEach(function (b) {
           b.classList.remove("selected");
         });
-        var selBtn = document.querySelector(
-          '.bairro-btn[data-nome="' + nome + '"]',
-        );
-        if (selBtn) selBtn.classList.add("selected");
+        if (btn) {
+          btn.classList.add("selected");
+        } else {
+          var selBtn = document.querySelector(
+            '.bairro-btn[data-nome="' + nome + '"]',
+          );
+          if (selBtn) selBtn.classList.add("selected");
+        }
       }
       function calcularFrete() {
         let addressInput = document.getElementById("addressInput").value.trim();
@@ -3607,16 +3951,25 @@
         document
           .getElementById("calcFreteBtn")
           ?.addEventListener("click", calcularFrete);
-        document.querySelectorAll(".tab-btn").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            document
-              .querySelectorAll(".tab-btn")
-              .forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            renderProdutos(btn.dataset.cat);
-          });
-        });
-      };
+document.querySelectorAll(".tab-btn").forEach((btn) => {
+           btn.addEventListener("click", () => {
+             document
+               .querySelectorAll(".tab-btn")
+               .forEach((b) => b.classList.remove("active"));
+             btn.classList.add("active");
+             renderProdutos(btn.dataset.cat);
+           });
+         });
+         // Reveal animations for trabalhos and certificacoes sections
+         const observer = new IntersectionObserver((entries) => {
+           entries.forEach(entry => {
+             if (entry.isIntersecting) {
+               entry.target.classList.add('visible');
+             }
+           });
+         }, { threshold: 0.1 });
+         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+       };
     </script>
   </body>
 </html>

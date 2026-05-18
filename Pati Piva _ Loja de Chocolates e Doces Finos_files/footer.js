@@ -1,0 +1,2 @@
+if(!customElements.get("footer-details")){class FooterDetails extends AccordionDetails{constructor(){super()}connectedCallback(){this.openDefault=this.dataset.openDefault==="true",FoxTheme.config.mqlTablet&&(this.openDefault||(this.open=!1)),document.addEventListener("matchTablet",()=>{this.openDefault?this.open=!0:this.open=!1}),document.addEventListener("unmatchTablet",()=>{this.open=!0})}}customElements.define("footer-details",FooterDetails,{extends:"details"})}
+//# sourceMappingURL=/cdn/shop/t/55/assets/footer.js.map?v=164338537823248558181770219790
