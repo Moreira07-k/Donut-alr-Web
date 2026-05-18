@@ -28,6 +28,7 @@
         --gray-2: #eee0e8;
         --text: #2d1020;
         --text-2: #7a4055;
+<<<<<<< HEAD
         --shadow-sm: 0 2px 8px rgba(200,80,120,0.12);
         --shadow-md: 0 8px 28px rgba(200,80,120,0.18);
         --shadow-lg: 0 20px 60px rgba(200,80,120,0.22);
@@ -267,13 +268,195 @@
         .hero-right { display:none; }
         .footer-inner { grid-template-columns:1fr; }
         .bairros-grid { grid-template-columns:1fr; }
+=======
+        --shadow-sm: 0 2px 8px rgba(200, 80, 120, 0.12);
+        --shadow-md: 0 8px 28px rgba(200, 80, 120, 0.18);
+        --shadow-lg: 0 20px 60px rgba(200, 80, 120, 0.22);
+        --radius: 20px;
+        --radius-sm: 12px;
+        --gradient: linear-gradient(135deg, #ff6b9d 0%, #ff4081 100%);
+        --gradient-soft: linear-gradient(135deg, #ffd4e8 0%, #eed6f8 100%);
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html { scroll-behavior: smooth; font-size: 16px; }
+      body { font-family: "Plus Jakarta Sans", sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
+      img { max-width: 100%; display: block; }
+      a { text-decoration: none; }
+
+      /* STATUS BANNER */
+      .status-banner { background: var(--mint-dark); color: #fff; text-align: center; padding: 0.45rem; font-size: 0.82rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem; z-index: 999; position: relative; }
+      .status-dot { width: 8px; height: 8px; background: #aeffd8; border-radius: 50%; animation: pulse 1.5s infinite; }
+      .status-dot.fechado { background: #ff6b6b; animation: none; }
+      .status-banner.fechado-banner { background: #c0392b; }
+      @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.8); } }
+
+      /* HEADER */
+      .site-header { position: sticky; top: 0; z-index: 700; background: rgba(255, 246, 249, 0.97); backdrop-filter: blur(20px); border-bottom: 1.5px solid rgba(255, 180, 210, 0.3); }
+      .navbar { max-width: 1300px; margin: 0 auto; padding: 0 1.5rem; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+      .logo-area { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+      .logo-blob { width: 46px; height: 46px; background: var(--gradient); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: var(--shadow-sm); }
+      .logo-text { font-family: "Syne", sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--brown); line-height: 1; }
+      .logo-text em { display: block; font-style: normal; font-size: 0.62rem; font-weight: 600; color: var(--pink); text-transform: uppercase; }
+      .nav-links { display: flex; gap: 0.1rem; list-style: none; flex: 1; justify-content: center; }
+      .nav-links a { font-weight: 600; color: var(--brown-mid); font-size: 0.88rem; padding: 0.45rem 0.95rem; border-radius: 99px; transition: all 0.18s; }
+      .nav-links a:hover { background: var(--peach); color: var(--pink); }
+      .header-actions { display: flex; gap: 0.7rem; align-items: center; }
+      .cart-btn { display: flex; align-items: center; gap: 7px; background: var(--gradient); color: #fff; border: none; padding: 0.55rem 1.1rem; border-radius: 99px; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-sm); font-family: inherit; font-size: 0.9rem; transition: transform 0.2s; }
+      .cart-btn:active { transform: scale(0.95); }
+      .cart-badge { background: #fff; color: var(--rose); border-radius: 50%; width: 20px; height: 20px; font-size: 0.72rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+      /* HERO */
+      .hero { max-width: 1300px; margin: 0 auto; padding: 3rem 1.5rem; display: grid; grid-template-columns: 1fr 460px; gap: 3rem; align-items: center; }
+      .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--yellow); color: var(--brown); padding: 0.35rem 1rem; border-radius: 99px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; }
+      .hero-text h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: var(--brown); line-height: 1.15; margin-bottom: 1rem; }
+      .hero-text h1 .accent { color: var(--pink); }
+      .hero-text p { color: var(--brown-light); font-size: 1.05rem; margin-bottom: 1.5rem; max-width: 480px; }
+      .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+      .btn-primary { background: var(--gradient); color: #fff; border: none; padding: 0.85rem 1.8rem; border-radius: 99px; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 20px rgba(255, 64, 129, 0.3); display: inline-flex; align-items: center; gap: 7px; font-family: inherit; font-size: 0.95rem; }
+      .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(255, 64, 129, 0.4); }
+      .btn-outline { background: transparent; color: var(--pink); border: 2px solid var(--pink-light); padding: 0.82rem 1.6rem; border-radius: 99px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; font-family: inherit; font-size: 0.95rem; transition: 0.2s; }
+      .hero-right { display: flex; justify-content: center; }
+      .hero-card { background: #fff; border-radius: 24px; padding: 1.5rem; width: 100%; max-width: 360px; box-shadow: var(--shadow-lg); border: 1.5px solid rgba(255, 180, 210, 0.2); }
+      .hero-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+      .hero-card-title { font-weight: 700; color: var(--brown); }
+      .hero-card-status { background: var(--mint); color: #1a7a4a; padding: 0.25rem 0.8rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; }
+      .hero-preview-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid var(--peach); }
+      .hpi-emoji { font-size: 1.8rem; }
+      .hpi-name { flex: 1; font-weight: 600; color: var(--brown); font-size: 0.9rem; }
+      .hpi-price { font-weight: 800; color: var(--pink); }
+      .hero-total { display: flex; justify-content: space-between; padding-top: 0.8rem; font-weight: 800; color: var(--brown); }
+      .hero-delivery-info { display: flex; gap: 0.8rem; margin-top: 1rem; }
+      .hdi-chip { background: var(--peach); color: var(--pink); padding: 0.3rem 0.7rem; border-radius: 99px; font-size: 0.75rem; font-weight: 600; }
+
+      /* STATS */
+      .stats-bar { background: var(--gradient); padding: 1.2rem 1.5rem; }
+      .stats-inner { max-width: 1300px; margin: 0 auto; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; }
+      .stat { text-align: center; color: #fff; }
+      .stat-num { font-family: "Syne", sans-serif; font-size: 1.8rem; font-weight: 800; }
+      .stat div:last-child { font-size: 0.8rem; opacity: 0.85; font-weight: 600; }
+
+      /* SECTIONS */
+      .section { max-width: 1300px; margin: 0 auto; padding: 3rem 1.5rem; }
+      .section-alt { background: var(--gray); }
+      .section-title { font-family: "Syne", sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--brown); margin-bottom: 0.3rem; }
+      .section-title .accent { color: var(--pink); }
+      .section-sub { color: var(--brown-light); margin-bottom: 1.8rem; }
+
+      /* TABS */
+      .tab-nav { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.8rem; background: #fff; padding: 0.4rem; border-radius: 16px; border: 1.5px solid var(--gray-2); width: fit-content; }
+      .tab-btn { background: none; border: none; padding: 0.5rem 1.1rem; border-radius: 12px; font-size: 0.88rem; font-weight: 600; cursor: pointer; color: var(--brown-mid); transition: all 0.18s; font-family: inherit; }
+      .tab-btn.active { background: var(--gradient); color: #fff; }
+
+      /* PRODUCTS GRID */
+      .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+      .product-card { background: #fff; border-radius: var(--radius); overflow: hidden; border: 1.5px solid rgba(255, 180, 210, 0.2); transition: 0.25s; cursor: pointer; position: relative; }
+      .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+      .product-img-wrap { aspect-ratio: 1; background: var(--peach); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+      .product-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      /* Fallback mostrado quando img falha OU não tem src */
+      .img-fallback { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: linear-gradient(135deg, #ffd4e8 0%, #eed6f8 100%); z-index: 1; }
+      /* Quando img carrega com sucesso, sobrepõe o fallback */
+      .product-img.loaded { position: relative; z-index: 2; }
+      .product-badge { position: absolute; top: 8px; right: 8px; background: var(--gradient); color: #fff; border-radius: 99px; padding: 0.15rem 0.55rem; font-size: 0.72rem; font-weight: 700; z-index: 3; }
+      .product-tag { position: absolute; top: 8px; left: 8px; background: var(--yellow); color: var(--brown); border-radius: 99px; padding: 0.15rem 0.55rem; font-size: 0.7rem; font-weight: 700; z-index: 3; }
+      .product-info { padding: 1rem; }
+      .product-title { font-weight: 700; color: var(--brown); margin-bottom: 0.25rem; font-size: 0.95rem; }
+      .product-desc { font-size: 0.75rem; color: var(--brown-light); margin-bottom: 0.8rem; line-height: 1.45; }
+      .product-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+      .product-price { font-weight: 800; font-size: 1.15rem; color: var(--pink); white-space: nowrap; }
+      .btn-add { background: var(--gradient); color: #fff; border: none; width: 38px; height: 38px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.15s; flex-shrink: 0; }
+      .btn-add:active { transform: scale(0.9); }
+
+      /* DRINKS */
+      .drinks-section-bg { background: var(--gradient-soft); }
+      .drinks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem; }
+      .drink-card { background: #fff; border-radius: var(--radius); padding: 1rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; border: 1.5px solid rgba(180, 220, 255, 0.3); transition: 0.2s; box-shadow: var(--shadow-sm); }
+      .drink-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+      .drink-thumb { min-width: 52px; width: 52px; height: 52px; background: var(--yellow); border-radius: 14px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; font-size: 1.6rem; flex-shrink: 0; }
+      .drink-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 14px; z-index: 2; }
+      .drink-info { flex: 1; min-width: 0; }
+      .drink-name { font-weight: 700; color: var(--brown); font-size: 0.9rem; }
+      .drink-desc { font-size: 0.72rem; color: var(--brown-light); margin-top: 2px; }
+      .drink-price { font-weight: 800; color: var(--pink); font-size: 1rem; margin-top: 4px; }
+      .drink-add { background: var(--gradient); color: #fff; border: none; width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.15s; }
+      .drink-add:active { transform: scale(0.9); }
+
+      /* DELIVERY */
+      .delivery-wrapper { background: var(--gradient); padding: 3.5rem 1.5rem; }
+      .delivery-inner { max-width: 1300px; margin: 0 auto; }
+      .delivery-title { text-align: center; color: #fff; margin-bottom: 1.8rem; }
+      .delivery-title h2 { font-family: "Syne", sans-serif; font-size: 2rem; font-weight: 800; }
+      .calc-box { background: #fff; border-radius: 24px; padding: 1.8rem; box-shadow: var(--shadow-lg); max-width: 500px; margin: 0 auto; }
+      .calc-box h3 { font-family: "Syne", sans-serif; color: var(--brown); margin-bottom: 1.2rem; font-size: 1.2rem; }
+      .bairros-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
+      .bairro-btn { background: var(--gray); border: 1.5px solid var(--gray-2); border-radius: 10px; padding: 0.55rem 0.75rem; font-size: 0.78rem; font-weight: 600; cursor: pointer; color: var(--brown-mid); transition: 0.18s; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
+      .bairro-btn.selected { background: var(--peach); border-color: var(--pink); color: var(--rose); }
+      .btn-calc { width: 100%; background: var(--gradient); color: #fff; border: none; padding: 0.9rem; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 1rem; font-family: inherit; font-size: 1rem; }
+      .frete-resultado { display: none; margin-top: 1rem; background: var(--peach); border-radius: 16px; padding: 1rem; text-align: center; }
+      .frete-resultado.show { display: block; }
+      .frete-valor { font-size: 1.6rem; font-weight: 800; color: var(--pink); margin: 0.3rem 0; }
+
+      /* CART SIDEBAR */
+      .cart-sidebar { position: fixed; top: 0; right: 0; width: 400px; max-width: 100vw; height: 100%; background: #fff; z-index: 1001; transform: translateX(110%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(200, 80, 120, 0.15); }
+      .cart-sidebar.open { transform: translateX(0); }
+      .cart-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-2); display: flex; justify-content: space-between; align-items: center; }
+      .close-btn { background: var(--gray); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; }
+      .cart-body { flex: 1; overflow-y: auto; padding: 1rem; }
+      .cart-empty { text-align: center; padding: 3rem 1rem; color: var(--brown-light); font-size: 1rem; }
+      .cart-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.85rem 0; border-bottom: 1px solid var(--peach); }
+      .cart-item-emoji { font-size: 1.9rem; min-width: 42px; text-align: center; }
+      .cart-item-info { flex: 1; }
+      .cart-item-name { font-weight: 700; color: var(--brown); font-size: 0.88rem; }
+      .cart-item-price { font-size: 0.8rem; color: var(--brown-light); }
+      .qty-ctrl { display: flex; align-items: center; gap: 0.5rem; }
+      .qty-btn { background: var(--gray); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: 700; font-size: 1rem; font-family: inherit; }
+      .qty-num { min-width: 24px; text-align: center; font-weight: 700; font-size: 1rem; }
+      .cart-footer { padding: 1.2rem 1.5rem; border-top: 1px solid var(--gray-2); }
+      .cart-summary-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--brown-mid); margin-bottom: 0.3rem; }
+      .cart-summary-row.total { font-weight: 800; font-size: 1.05rem; color: var(--brown); }
+      .btn-checkout { width: 100%; background: var(--gradient); color: #fff; border: none; padding: 0.9rem; border-radius: 14px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 1rem; margin-top: 0.8rem; }
+
+      .overlay { position: fixed; inset: 0; background: rgba(45, 16, 32, 0.4); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(4px); }
+      .overlay.show { opacity: 1; pointer-events: all; }
+      .toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--brown); color: #fff; padding: 0.75rem 1.5rem; border-radius: 99px; z-index: 3000; opacity: 0; transition: 0.3s; white-space: nowrap; font-size: 0.9rem; font-weight: 600; pointer-events: none; }
+      .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+      /* MOBILE NAV */
+      .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 800; background: #fff; border-top: 1.5px solid var(--gray-2); padding: 0.6rem 0 calc(0.6rem + env(safe-area-inset-bottom)); }
+      .mobile-nav-inner { display: flex; justify-content: space-around; align-items: center; }
+      .mnav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 0.35rem 0.6rem; border-radius: 12px; background: none; border: none; font-family: inherit; color: var(--brown-light); font-size: 0.6rem; font-weight: 600; position: relative; }
+      .mnav-icon { font-size: 1.3rem; }
+      .mnav-badge { position: absolute; top: -4px; right: 50%; transform: translateX(8px); background: var(--rose); color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 0.6rem; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
+
+      /* FOOTER */
+      footer { background: var(--brown); color: rgba(255, 255, 255, 0.8); padding: 3rem 1.5rem calc(5rem + env(safe-area-inset-bottom)); }
+      .footer-inner { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
+      .footer-bottom { max-width: 1300px; margin: 1.5rem auto 0; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.6; text-align: center; }
+      footer a { color: rgba(255,255,255,0.7); }
+      footer a:hover { color: #fff; }
+      .footer-col-title { font-weight: 700; color: #fff; margin-bottom: 0.75rem; font-size: 0.9rem; }
+      .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; }
+
+      @media (max-width: 768px) {
+        .nav-links { display: none; }
+        .mobile-nav { display: block; }
+        .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+        .hero { grid-template-columns: 1fr; }
+        .hero-right { display: none; }
+        .footer-inner { grid-template-columns: 1fr; }
+        .bairros-grid { grid-template-columns: 1fr; }
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
       }
     </style>
   </head>
 
   <body>
+<<<<<<< HEAD
     <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
 
+=======
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
     <div class="status-banner" id="statusBanner">
       <span class="status-dot" id="statusDot"></span>
       <span id="horarioStatus">Verificando horário...</span>
@@ -292,7 +475,10 @@
           <li><a href="#contato">Contato</a></li>
         </ul>
         <div class="header-actions">
+<<<<<<< HEAD
           <button class="dark-toggle" id="darkToggle" title="Alternar modo escuro">🌙</button>
+=======
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
           <button class="cart-btn" id="cartBtn">🛒 Carrinho <span class="cart-badge" id="cartCount">0</span></button>
         </div>
       </nav>
@@ -332,6 +518,7 @@
     <section class="section" id="cardapio">
       <h2 class="section-title">Nosso <span class="accent">Cardápio</span></h2>
       <p class="section-sub">Feitos com amor e ingredientes selecionados 🍬</p>
+<<<<<<< HEAD
 
       <!-- 🔍 BUSCA -->
       <div class="search-wrap">
@@ -341,6 +528,9 @@
       </div>
 
       <div class="tab-nav" id="tabNav">
+=======
+      <div class="tab-nav">
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         <button class="tab-btn active" data-cat="all">🍬 Todos</button>
         <button class="tab-btn" data-cat="donuts">🍩 Donuts</button>
         <button class="tab-btn" data-cat="cupcakes">🧁 Cupcakes</button>
@@ -377,6 +567,7 @@
     <section class="section" id="contato">
       <h2 class="section-title">📬 <span class="accent">Contato</span></h2>
       <p class="section-sub">Estamos disponíveis de Segunda a Sexta, das 08:00 às 18:00</p>
+<<<<<<< HEAD
       <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
         <a href="https://wa.me/5589912345678" target="_blank" style="background:var(--card);border-radius:18px;padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;text-decoration:none;color:inherit;box-shadow:var(--shadow-sm);">
           <span style="font-size:1.8rem;">💬</span>
@@ -385,6 +576,16 @@
         <a href="https://instagram.com/donutalr" target="_blank" style="background:var(--card);border-radius:18px;padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;text-decoration:none;color:inherit;box-shadow:var(--shadow-sm);">
           <span style="font-size:1.8rem;">📸</span>
           <div><div style="font-weight:700;">Instagram</div><div style="font-size:0.78rem;color:var(--brown-light);">@donutalr</div></div>
+=======
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="https://wa.me/5589912345678" target="_blank" style="background:#fff; border-radius:18px; padding:1rem 1.5rem; display:flex; align-items:center; gap:1rem; text-decoration:none; color:inherit; box-shadow: var(--shadow-sm);">
+          <span style="font-size:1.8rem;">💬</span>
+          <div><div style="font-weight:700;">WhatsApp</div><div style="font-size:0.78rem; color:var(--brown-light);">(89) 9 1234-5678</div></div>
+        </a>
+        <a href="https://instagram.com/donutalr" target="_blank" style="background:#fff; border-radius:18px; padding:1rem 1.5rem; display:flex; align-items:center; gap:1rem; text-decoration:none; color:inherit; box-shadow: var(--shadow-sm);">
+          <span style="font-size:1.8rem;">📸</span>
+          <div><div style="font-weight:700;">Instagram</div><div style="font-size:0.78rem; color:var(--brown-light);">@donutalr</div></div>
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         </a>
       </div>
     </section>
@@ -422,12 +623,16 @@
 
     <div class="overlay" id="overlay"></div>
 
+<<<<<<< HEAD
     <!-- CART SIDEBAR -->
+=======
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
     <div class="cart-sidebar" id="cartSidebar">
       <div class="cart-header">
         <h2 style="font-family:'Syne',sans-serif;font-size:1.2rem;color:var(--brown);">🛒 Meu Carrinho</h2>
         <button class="close-btn" id="closeCartBtn">✕</button>
       </div>
+<<<<<<< HEAD
       <div class="cart-tabs">
         <button class="cart-tab-btn active" id="tabCarrinho" onclick="switchCartTab('carrinho')">🛒 Carrinho</button>
         <button class="cart-tab-btn" id="tabHistorico" onclick="switchCartTab('historico')">📜 Histórico</button>
@@ -441,6 +646,10 @@
           </div>
           <div class="coupon-status" id="couponStatus"></div>
         </div>
+=======
+      <div class="cart-body" id="cartBody"></div>
+      <div class="cart-footer">
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         <div class="cart-summary" id="cartSummary"></div>
         <button class="btn-checkout" id="checkoutBtn">✅ Finalizar pelo WhatsApp</button>
       </div>
@@ -450,6 +659,7 @@
 
     <script>
       // ============================================================
+<<<<<<< HEAD
       // DADOS
       // ============================================================
       const PRODUTOS = [
@@ -528,15 +738,123 @@
       // ============================================================
       function salvar() {
         try { localStorage.setItem("donut_cart_v3", JSON.stringify(carrinho)); } catch(e) {}
+=======
+      // CONFIGURAÇÃO DE IMAGENS
+      //
+      // ✅ COMO USAR SUAS IMAGENS LOCAIS:
+      //
+      // 1. Coloque suas imagens na mesma pasta deste HTML.
+      //    Exemplo: crie uma pasta chamada "imagens/" ao lado do HTML.
+      //
+      // 2. Substitua o campo "img" de cada produto com o caminho relativo.
+      //    Exemplos:
+      //      img: "imagens/donut-nutella.jpg"
+      //      img: "imagens/cupcake-red-velvet.png"
+      //
+      // 3. Se a imagem não existir ou falhar, o emoji aparece automaticamente.
+      //
+      // ❌ NÃO FUNCIONA: caminhos absolutos como /home/Moreira/...
+      //    O navegador bloqueia acesso a caminhos do sistema operacional
+      //    por segurança. Sempre use caminhos relativos ou URLs completas.
+      //
+      // DICA: Para hospedar online, use o caminho completo:
+      //   img: "https://seusite.com/imagens/donut-nutella.jpg"
+      // ============================================================
+
+      // ⬇️ SUBSTITUA os valores de "img" pelos nomes reais dos seus arquivos
+      const PRODUTOS = [
+        // DONUTS
+        { id: 1,  name: "Donut Glitter Rosa",     emoji: "🍩", img: "imagens/donut-glitter-rosa.jpg",    desc: "Cobertura rosé com confeitos dourados",         price: 12.9,  category: "donuts",    badge: "❤️", tag: "" },
+        { id: 2,  name: "Donut Nutella Love",      emoji: "🍩", img: "imagens/donut-nutella.jpg",         desc: "Recheio cremoso de Nutella derretida",           price: 16.9,  category: "donuts",    badge: "⭐", tag: "Mais pedido" },
+        { id: 3,  name: "Donut Coração",           emoji: "💕", img: "imagens/donut-coracao.jpg",         desc: "Formato coração com geleia de morango",          price: 18.9,  category: "donuts",    badge: "💖", tag: "" },
+        { id: 4,  name: "Donut Chuvinha Clássico", emoji: "🍩", img: "imagens/donut-chuvinha.jpg",        desc: "Chocolate belga com granulado colorido",         price: 13.9,  category: "donuts",    badge: "",   tag: "" },
+        { id: 5,  name: "Donut Oreo Crush",        emoji: "🍩", img: "imagens/donut-oreo.jpg",            desc: "Cobertura de creme branco com Oreo",             price: 15.9,  category: "donuts",    badge: "🔥", tag: "Novo" },
+        { id: 6,  name: "Donut Maracujá",          emoji: "🍩", img: "imagens/donut-maracuja.jpg",        desc: "Cobertura de maracujá azedinho",                 price: 14.9,  category: "donuts",    badge: "",   tag: "" },
+        { id: 7,  name: "Donut Churros",           emoji: "🍩", img: "imagens/donut-churros.jpg",         desc: "Recheio de doce de leite com canela",            price: 14.5,  category: "donuts",    badge: "",   tag: "" },
+        { id: 8,  name: "Donut Pistache",          emoji: "🍩", img: "imagens/donut-pistache.jpg",        desc: "Creme de pistache importado",                    price: 19.9,  category: "donuts",    badge: "✨",  tag: "Premium" },
+        // CUPCAKES
+        { id: 9,  name: "Cupcake Arco-Íris",       emoji: "🌈", img: "imagens/cupcake-arcoiris.jpg",      desc: "Massa colorida com frosting de baunilha",        price: 14.5,  category: "cupcakes",  badge: "🌈", tag: "" },
+        { id: 10, name: "Cupcake Red Velvet",       emoji: "🧁", img: "imagens/cupcake-red-velvet.jpg",    desc: "Red velvet com cream cheese",                    price: 17.9,  category: "cupcakes",  badge: "✨",  tag: "Top" },
+        { id: 11, name: "Cupcake Unicórnio",        emoji: "🦄", img: "imagens/cupcake-unicornio.jpg",     desc: "Glitter comestível e chifre dourado",            price: 22.9,  category: "cupcakes",  badge: "🦄", tag: "" },
+        { id: 12, name: "Cupcake Nuvem Doce",       emoji: "☁️", img: "imagens/cupcake-nuvem.jpg",         desc: "Marshmallow tostado",                            price: 15.9,  category: "cupcakes",  badge: "",   tag: "" },
+        { id: 13, name: "Cupcake Limão Siciliano",  emoji: "🍋", img: "imagens/cupcake-limao.jpg",         desc: "Massa cítrica com curd de limão",                price: 16.9,  category: "cupcakes",  badge: "",   tag: "Novo" },
+        { id: 14, name: "Cupcake Morango",          emoji: "🍓", img: "imagens/cupcake-morango.jpg",       desc: "Recheio de morangos frescos",                    price: 15.5,  category: "cupcakes",  badge: "",   tag: "" },
+        // BOLOS NO POTE
+        { id: 15, name: "Bolo no Pote Brigadeiro",  emoji: "🍫", img: "imagens/bolo-brigadeiro.jpg",       desc: "Camadas de bolo e brigadeiro",                   price: 16.9,  category: "bolos",     badge: "",   tag: "" },
+        { id: 16, name: "Bolo no Pote Prestígio",   emoji: "🥥", img: "imagens/bolo-prestigio.jpg",        desc: "Chocolate com coco ralado",                      price: 17.9,  category: "bolos",     badge: "",   tag: "" },
+        { id: 17, name: "Bolo no Pote Morango",     emoji: "🍓", img: "imagens/bolo-morango.jpg",          desc: "Bolo de baunilha com morangos",                  price: 18.9,  category: "bolos",     badge: "❤️", tag: "" },
+        { id: 18, name: "Bolo no Pote Churros",     emoji: "🍮", img: "imagens/bolo-churros.jpg",          desc: "Doce de leite com canela",                       price: 17.5,  category: "bolos",     badge: "",   tag: "Novo" },
+        // ESPECIAIS
+        { id: 19, name: "Donut Royal Dourado",      emoji: "👑", img: "imagens/donut-royal-dourado.jpg",   desc: "Ouro comestível 24k",                            price: 29.9,  category: "especiais", badge: "👑", tag: "Premium" },
+        { id: 20, name: "Caixa Surpresa",           emoji: "🎁", img: "imagens/caixa-surpresa.jpg",        desc: "Seleção surpresa do dia",                        price: 39.9,  category: "especiais", badge: "🎁", tag: "" },
+        // COMBOS
+        { id: 21, name: "Kit Mini Donuts 6un",      emoji: "🍩", img: "imagens/combo-mini-6.jpg",          desc: "6 mini donuts variados",                         price: 29.9,  category: "combos",    badge: "🎁", tag: "" },
+        { id: 22, name: "Kit Festa 12 peças",       emoji: "🎉", img: "imagens/combo-festa-12.jpg",        desc: "12 peças sortidas",                              price: 69.9,  category: "combos",    badge: "🎉", tag: "Top" },
+        { id: 23, name: "Combo Casal",              emoji: "💑", img: "imagens/combo-casal.jpg",           desc: "2 donuts + 2 bebidas",                           price: 49.9,  category: "combos",    badge: "💖", tag: "" },
+        { id: 24, name: "Box Presenteável 4un",     emoji: "🎀", img: "imagens/combo-box-4.jpg",           desc: "4 donuts gourmet em caixa",                      price: 44.9,  category: "combos",    badge: "",   tag: "" }
+      ];
+
+      // ⬇️ SUBSTITUA os valores de "img" pelos nomes reais dos seus arquivos de bebidas
+      const BEBIDAS = [
+        { id: 101, name: "Milk Shake Morango",       emoji: "🍓", img: "imagens/shake-morango.jpg",    desc: "Morango fresco batido com sorvete", price: 18.9 },
+        { id: 102, name: "Milk Shake Nutella",       emoji: "🍫", img: "imagens/shake-nutella.jpg",    desc: "Nutella com sorvete de creme",      price: 21.9 },
+        { id: 103, name: "Milk Shake Oreo",          emoji: "🥛", img: "imagens/shake-oreo.jpg",       desc: "Biscoito Oreo com sorvete",         price: 20.9 },
+        { id: 104, name: "Suco de Morango Natural",  emoji: "🍓", img: "imagens/suco-morango.jpg",     desc: "Morango natural",                   price: 10.9 },
+        { id: 105, name: "Suco de Laranja",          emoji: "🍊", img: "imagens/suco-laranja.jpg",     desc: "Laranja espremida na hora",         price: 9.9  },
+        { id: 106, name: "Refrigerante Lata",        emoji: "🥤", img: "imagens/refri-lata.jpg",       desc: "Coca, Guaraná ou Fanta",            price: 7.9  },
+        { id: 107, name: "Chocolate Quente",         emoji: "☕", img: "imagens/chocolate-quente.jpg", desc: "Chocolate belga cremoso",           price: 14.9 },
+        { id: 108, name: "Café com Leite",           emoji: "☕", img: "imagens/cafe-leite.jpg",       desc: "Café coado + leite",                price: 8.9  },
+        { id: 109, name: "Água Mineral",             emoji: "💧", img: "imagens/agua.jpg",             desc: "500ml gelada",                      price: 4.9  },
+        { id: 110, name: "Vitamina de Banana",       emoji: "🍌", img: "imagens/vitamina-banana.jpg",  desc: "Banana, leite e mel",               price: 12.9 }
+      ];
+
+      const BAIRROS = [
+        { nome: "Centro",        frete: 7.9  },
+        { nome: "Bom Jesus",     frete: 8.9  },
+        { nome: "Catete",        frete: 8.9  },
+        { nome: "Taboca",        frete: 9.9  },
+        { nome: "Angico",        frete: 10.9 },
+        { nome: "Pantanal",      frete: 12.9 },
+        { nome: "São João",      frete: 10.9 }
+      ];
+
+      // WHATSAPP - substitua pelo número real
+      const WHATSAPP_NUMBER = "5589912345678";
+
+      // ============================================================
+      // ESTADO DO CARRINHO
+      // ============================================================
+      let carrinho = [];
+      let freteAtual = 7.9;
+      let bairroAtual = { nome: "Centro", frete: 7.9 };
+
+      // Salva com tratamento de erro para modo privado
+      function salvar() {
+        try {
+          localStorage.setItem("donut_cart_v2", JSON.stringify(carrinho));
+        } catch(e) {
+          // Modo privado ou localStorage indisponível — ignora silenciosamente
+        }
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         atualizarBadge();
       }
 
       function carregar() {
+<<<<<<< HEAD
         try { const c = localStorage.getItem("donut_cart_v3"); if (c) carrinho = JSON.parse(c); } catch(e) { carrinho = []; }
+=======
+        try {
+          const c = localStorage.getItem("donut_cart_v2");
+          if (c) carrinho = JSON.parse(c);
+        } catch(e) {
+          carrinho = [];
+        }
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         atualizarBadge();
         renderCart();
       }
 
+<<<<<<< HEAD
       function salvarHistorico(pedido) {
         try {
           const hist = JSON.parse(localStorage.getItem("donut_hist_v1") || "[]");
@@ -560,10 +878,23 @@
       }
 
       let toastTimer;
+=======
+      function atualizarBadge() {
+        const total = carrinho.reduce((s, i) => s + i.qtd, 0);
+        document.getElementById("cartCount").textContent = total;
+        const mb = document.getElementById("mobileCartCount");
+        if (mb) {
+          mb.textContent = total;
+          mb.style.display = total > 0 ? "flex" : "none";
+        }
+      }
+
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
       function showToast(msg) {
         const t = document.getElementById("toast");
         t.textContent = msg;
         t.classList.add("show");
+<<<<<<< HEAD
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => t.classList.remove("show"), 2500);
       }
@@ -586,6 +917,23 @@
           btn.classList.add('bouncing');
           setTimeout(() => btn.classList.remove('bouncing'), 400);
         }
+=======
+        setTimeout(() => t.classList.remove("show"), 2500);
+      }
+
+      function addToCart(id, isBebida = false) {
+        const item = isBebida ? BEBIDAS.find(p => p.id === id) : PRODUTOS.find(p => p.id === id);
+        if (!item) return;
+        const exist = carrinho.find(i => i.id === id);
+        if (exist) {
+          exist.qtd++;
+        } else {
+          carrinho.push({ id: item.id, name: item.name, emoji: item.emoji, price: item.price, qtd: 1 });
+        }
+        salvar();
+        renderCart();
+        showToast(`${item.emoji} ${item.name} adicionado!`);
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
       }
 
       function changeQty(id, delta) {
@@ -597,6 +945,7 @@
         renderCart();
       }
 
+<<<<<<< HEAD
       function calcTotais() {
         const subtotal = carrinho.reduce((s,i) => s + i.price * i.qtd, 0);
         let frete = subtotal >= 80 ? 0 : freteAtual;
@@ -627,27 +976,45 @@
 
         footer.style.display = 'block';
 
+=======
+      function renderCart() {
+        const body = document.getElementById("cartBody");
+        const summary = document.getElementById("cartSummary");
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         if (!carrinho.length) {
           body.innerHTML = `<div class="cart-empty">🛒<br><br>Carrinho vazio<br><small>Adicione itens do cardápio</small></div>`;
           summary.innerHTML = "";
           return;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         body.innerHTML = carrinho.map(i => `
           <div class="cart-item">
             <div class="cart-item-emoji">${i.emoji}</div>
             <div class="cart-item-info">
               <div class="cart-item-name">${i.name}</div>
+<<<<<<< HEAD
               <div class="cart-item-price">R$ ${i.price.toFixed(2).replace(".",",")}</div>
             </div>
             <div class="qty-ctrl">
               <button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button>
               <span class="qty-num">${i.qtd}</span>
               <button class="qty-btn" onclick="changeQty(${i.id},1)">+</button>
+=======
+              <div class="cart-item-price">R$ ${i.price.toFixed(2).replace(".", ",")}</div>
+            </div>
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(${i.id}, -1)">−</button>
+              <span class="qty-num">${i.qtd}</span>
+              <button class="qty-btn" onclick="changeQty(${i.id}, 1)">+</button>
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
             </div>
           </div>
         `).join("");
 
+<<<<<<< HEAD
         const { subtotal, frete, desconto, total } = calcTotais();
         summary.innerHTML = `
           <div class="cart-summary-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace(".",",")}</span></div>
@@ -768,10 +1135,57 @@
         document.getElementById("couponStatus").textContent = "";
         salvar();
         renderCart();
+=======
+        const subtotal = carrinho.reduce((s, i) => s + i.price * i.qtd, 0);
+        const frete = subtotal >= 80 ? 0 : freteAtual;
+        const total = subtotal + frete;
+        summary.innerHTML = `
+          <div class="cart-summary-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace(".", ",")}</span></div>
+          <div class="cart-summary-row"><span>Frete (${bairroAtual.nome})</span><span>${frete === 0 ? "🎉 Grátis" : "R$ " + frete.toFixed(2).replace(".", ",")}</span></div>
+          ${subtotal < 80 ? '<div class="cart-summary-row" style="font-size:0.75rem;color:var(--brown-light)"><span>Frete grátis acima de R$ 80,00</span></div>' : ""}
+          <div class="cart-summary-row total"><span>Total</span><span>R$ ${total.toFixed(2).replace(".", ",")}</span></div>
+        `;
+      }
+
+      function openCart() {
+        document.getElementById("cartSidebar").classList.add("open");
+        document.getElementById("overlay").classList.add("show");
+        renderCart();
+      }
+
+      function closeCart() {
+        document.getElementById("cartSidebar").classList.remove("open");
+        document.getElementById("overlay").classList.remove("show");
+      }
+
+      function navTo(id) {
+        document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+      }
+
+      // ============================================================
+      // CHECKOUT VIA WHATSAPP — Monta mensagem com o pedido completo
+      // ============================================================
+      function finalizarPedido() {
+        if (!carrinho.length) { showToast("❌ Carrinho vazio!"); return; }
+        const subtotal = carrinho.reduce((s, i) => s + i.price * i.qtd, 0);
+        const frete = subtotal >= 80 ? 0 : freteAtual;
+        const total = subtotal + frete;
+        let msg = "🍩 *Pedido - Donut ALR*\n\n";
+        carrinho.forEach(i => {
+          msg += `• ${i.emoji} ${i.name} x${i.qtd} = R$ ${(i.price * i.qtd).toFixed(2).replace(".", ",")}\n`;
+        });
+        msg += `\n📍 *Bairro:* ${bairroAtual.nome}`;
+        msg += `\n🚚 *Frete:* ${frete === 0 ? "Grátis" : "R$ " + frete.toFixed(2).replace(".", ",")}`;
+        msg += `\n💰 *Total:* R$ ${total.toFixed(2).replace(".", ",")}`;
+        msg += "\n\n💸 Pagamento: PIX / Dinheiro";
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+        window.open(url, "_blank");
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         closeCart();
       }
 
       // ============================================================
+<<<<<<< HEAD
       // 🎉 CONFETE
       // ============================================================
       function lancarConfete() {
@@ -825,6 +1239,14 @@
         document.getElementById("bairrosGrid").innerHTML = BAIRROS.map(b => `
           <button class="bairro-btn" onclick="selecionarBairro('${b.nome}',${b.frete},this)">
             <span>${b.nome}</span><span>R$ ${b.frete.toFixed(2).replace(".",",")}</span>
+=======
+      // BAIRROS E FRETE
+      // ============================================================
+      function renderBairros() {
+        document.getElementById("bairrosGrid").innerHTML = BAIRROS.map(b => `
+          <button class="bairro-btn" onclick="selecionarBairro('${b.nome}', ${b.frete}, this)">
+            <span>${b.nome}</span><span>R$ ${b.frete.toFixed(2).replace(".", ",")}</span>
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
           </button>
         `).join("");
       }
@@ -838,6 +1260,7 @@
       }
 
       function calcularFrete() {
+<<<<<<< HEAD
         const temSelecionado = document.querySelector(".bairro-btn.selected");
         if (!temSelecionado) { showToast("⚠️ Selecione um bairro primeiro!"); return; }
         const subtotal = carrinho.reduce((s,i) => s + i.price * i.qtd, 0);
@@ -886,10 +1309,83 @@
       function renderBebidas_grid() {
         document.getElementById("drinksGrid").innerHTML = BEBIDAS.map(d => `
           <div class="drink-card">
+=======
+        // CORREÇÃO: avisa se nenhum bairro foi selecionado
+        const temSelecionado = document.querySelector(".bairro-btn.selected");
+        if (!temSelecionado) {
+          showToast("⚠️ Selecione um bairro primeiro!");
+          return;
+        }
+        const subtotal = carrinho.reduce((s, i) => s + i.price * i.qtd, 0);
+        const frete = subtotal >= 80 ? 0 : bairroAtual.frete;
+        const resultado = document.getElementById("freteResultado");
+        document.getElementById("freteInfo").innerHTML = `<strong>📍 ${bairroAtual.nome}</strong>`;
+        document.getElementById("freteValorDisplay").innerHTML = frete === 0 ? "🎉 GRÁTIS" : `R$ ${frete.toFixed(2).replace(".", ",")}`;
+        resultado.classList.add("show");
+        renderCart();
+        showToast(`Frete ${bairroAtual.nome}: ${frete === 0 ? "Grátis!" : "R$ " + frete.toFixed(2).replace(".", ",")}`);
+      }
+
+      // ============================================================
+      // RENDER PRODUTOS — Imagem com fallback para emoji
+      // ============================================================
+      function criarCardProduto(p) {
+        const div = document.createElement("div");
+        div.className = "product-card";
+        div.innerHTML = `
+          <div class="product-img-wrap">
+            <div class="img-fallback">${p.emoji}</div>
+            ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ""}
+            ${p.tag ? `<div class="product-tag">${p.tag}</div>` : ""}
+          </div>
+          <div class="product-info">
+            <div class="product-title">${p.name}</div>
+            <div class="product-desc">${p.desc}</div>
+            <div class="product-footer">
+              <div class="product-price">R$ ${p.price.toFixed(2).replace(".", ",")}</div>
+              <button class="btn-add" onclick="addToCart(${p.id})">+</button>
+            </div>
+          </div>
+        `;
+        // Carrega a imagem dinamicamente — sem onerror inline (mais seguro)
+        if (p.img) {
+          const img = new Image();
+          img.className = "product-img";
+          img.alt = p.name;
+          img.loading = "lazy";
+          img.onload = function() {
+            img.classList.add("loaded");
+            div.querySelector(".product-img-wrap").prepend(img);
+          };
+          // Se a imagem falhar, o emoji (img-fallback) já está visível
+          img.src = p.img;
+        }
+        return div;
+      }
+
+      function renderProdutos(cat = "all") {
+        const list = cat === "all" ? PRODUTOS : PRODUTOS.filter(p => p.category === cat);
+        const grid = document.getElementById("productsGrid");
+        grid.innerHTML = "";
+        list.forEach(p => grid.appendChild(criarCardProduto(p)));
+      }
+
+      // ============================================================
+      // RENDER BEBIDAS — mesma lógica de fallback segura
+      // ============================================================
+      function renderBebidas_grid() {
+        const grid = document.getElementById("drinksGrid");
+        grid.innerHTML = "";
+        BEBIDAS.forEach(d => {
+          const div = document.createElement("div");
+          div.className = "drink-card";
+          div.innerHTML = `
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
             <div class="drink-thumb">${d.emoji}</div>
             <div class="drink-info">
               <div class="drink-name">${d.name}</div>
               <div class="drink-desc">${d.desc}</div>
+<<<<<<< HEAD
               <div class="drink-price">R$ ${d.price.toFixed(2).replace(".",",")}</div>
             </div>
             <button class="drink-add" onclick="addToCart(${d.id},true,this)">+</button>
@@ -903,6 +1399,35 @@
       function atualizarStatusHorario() {
         const agora = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
         const dia = agora.getDay(); const hora = agora.getHours();
+=======
+              <div class="drink-price">R$ ${d.price.toFixed(2).replace(".", ",")}</div>
+            </div>
+            <button class="drink-add" onclick="addToCart(${d.id}, true)">+</button>
+          `;
+          // Carrega imagem dinamicamente
+          if (d.img) {
+            const img = new Image();
+            img.alt = d.name;
+            img.loading = "lazy";
+            img.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;border-radius:14px;z-index:2;";
+            img.onload = function() {
+              div.querySelector(".drink-thumb").appendChild(img);
+            };
+            img.src = d.img;
+          }
+          grid.appendChild(div);
+        });
+      }
+
+      // ============================================================
+      // STATUS DE HORÁRIO — com fuso horário de Floriano-PI (BRT = UTC-3)
+      // ============================================================
+      function atualizarStatusHorario() {
+        // Força o horário de Brasília (BRT) independente do fuso do dispositivo
+        const agora = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Fortaleza" }));
+        const dia = agora.getDay();   // 0=dom, 1=seg, ..., 5=sex, 6=sab
+        const hora = agora.getHours();
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         const statusEl = document.getElementById("horarioStatus");
         const dot = document.getElementById("statusDot");
         const banner = document.getElementById("statusBanner");
@@ -910,6 +1435,10 @@
         if (aberto) {
           statusEl.textContent = "Aberto agora · Segunda a Sexta, 08:00–18:00";
           dot.classList.remove("fechado");
+<<<<<<< HEAD
+=======
+          banner.classList.remove("fechado-banner");
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
           banner.style.background = "";
         } else {
           statusEl.textContent = "Fechado no momento · Voltamos Segunda a Sexta, 08:00–18:00";
@@ -919,6 +1448,7 @@
       }
 
       // ============================================================
+<<<<<<< HEAD
       // DARK MODE
       // ============================================================
       function initDarkMode() {
@@ -951,6 +1481,12 @@
       window.addEventListener("DOMContentLoaded", () => {
         initDarkMode();
         renderProdutos();
+=======
+      // INICIALIZAÇÃO
+      // ============================================================
+      window.addEventListener("DOMContentLoaded", () => {
+        renderProdutos("all");
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         renderBebidas_grid();
         renderBairros();
         carregar();
@@ -962,6 +1498,7 @@
         document.getElementById("overlay").addEventListener("click", closeCart);
         document.getElementById("calcFreteBtn").addEventListener("click", calcularFrete);
         document.getElementById("checkoutBtn").addEventListener("click", finalizarPedido);
+<<<<<<< HEAD
         document.getElementById("darkToggle").addEventListener("click", toggleDark);
 
         // Busca
@@ -980,10 +1517,14 @@
         });
 
         // Tabs
+=======
+
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
         document.querySelectorAll(".tab-btn").forEach(btn => {
           btn.addEventListener("click", () => {
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
+<<<<<<< HEAD
             currentCat = btn.dataset.cat;
             renderProdutos();
           });
@@ -993,6 +1534,11 @@
         document.getElementById("couponInput").addEventListener("keydown", e => {
           if (e.key === "Enter") aplicarCupom();
         });
+=======
+            renderProdutos(btn.dataset.cat);
+          });
+        });
+>>>>>>> 5dbee8a664ca08b3d03fe61f42e7637f9fcbc7b7
       });
     </script>
   </body>
