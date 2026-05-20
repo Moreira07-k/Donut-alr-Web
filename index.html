@@ -84,7 +84,7 @@
       [data-theme="dark"] .tab-nav { background: #2a1520; border-color: #3a2030; }
       [data-theme="dark"] .coupon-input { background: #2a1520; color: #f5e6ee; border-color: #3a2030; }
       [data-theme="dark"] .history-item { background: #2a1520; border-color: #3a2030; }
-      [data-theme="dark"] .cep-input-wrap input { background: #2a1520; color: #f5e6ee; border-color: #3a2030; }
+      [data-theme="dark"] .bairro-btn { background: #2a1520; border-color: #3a2030; color: var(--brown-mid); }
       [data-theme="dark"] .modal-box { background: #2a1520; }
       [data-theme="dark"] .auth-input { background: #1a0d14; color: #f5e6ee; border-color: #3a2030; }
       [data-theme="dark"] .auth-input::placeholder { color: #a07088; }
@@ -203,29 +203,9 @@
       .delivery-title h2 { font-family:"Syne",sans-serif; font-size:2rem; font-weight:800; }
       .calc-box { background:var(--card); border-radius:24px; padding:1.8rem; box-shadow:var(--shadow-lg); max-width:560px; margin:0 auto; }
       .calc-box h3 { font-family:"Syne",sans-serif; color:var(--brown); margin-bottom:1.2rem; font-size:1.2rem; }
-      .cep-lookup-wrap { display:flex; flex-direction:column; gap:1rem; }
-      .cep-input-row { display:flex; gap:0.6rem; align-items:flex-end; }
-      .cep-input-row input { flex:1; padding:0.75rem 1rem; border:1.5px solid var(--gray-2); border-radius:12px; font-family:inherit; font-size:0.95rem; background:var(--card); color:var(--text); outline:none; transition:0.2s; }
-      .cep-input-row input:focus { border-color:var(--pink); box-shadow:0 0 0 3px rgba(255,107,157,0.15); }
-      .cep-input-row input::placeholder { color:var(--brown-light); }
-      .btn-buscar-cep { background:var(--gradient); color:#fff; border:none; padding:0.75rem 1.2rem; border-radius:12px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.9rem; white-space:nowrap; transition:0.2s; flex-shrink:0; }
-      .btn-buscar-cep:disabled { opacity:0.6; cursor:not-allowed; }
-      .endereco-card { background:var(--peach); border-radius:16px; padding:1.2rem 1.4rem; display:none; }
-      .endereco-card.show { display:block; }
-      .endereco-card-row { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem; }
-      .endereco-card-row:last-child { margin-bottom:0; }
-      .endereco-card-label { font-size:0.72rem; font-weight:700; color:var(--brown-mid); text-transform:uppercase; letter-spacing:0.5px; min-width:64px; }
-      .endereco-card-value { font-weight:700; color:var(--brown); font-size:0.9rem; }
-      .numero-input-row { display:flex; gap:0.6rem; margin-top:0.5rem; }
-      .numero-input-row input { flex:1; padding:0.65rem 0.9rem; border:1.5px solid rgba(255,107,157,0.4); border-radius:10px; font-family:inherit; font-size:0.88rem; background:#fff; color:var(--text); outline:none; transition:0.2s; }
-      .numero-input-row input:focus { border-color:var(--pink); }
-      .frete-tag { display:inline-flex; align-items:center; gap:0.4rem; background:var(--gradient); color:#fff; border-radius:99px; padding:0.3rem 0.9rem; font-size:0.82rem; font-weight:700; margin-top:0.6rem; }
-      .cep-not-found { background:var(--yellow); border-radius:12px; padding:0.9rem 1.1rem; font-size:0.85rem; color:var(--brown); font-weight:600; display:none; }
-      .cep-not-found.show { display:block; }
-      .manual-fields { display:none; flex-direction:column; gap:0.6rem; margin-top:0.3rem; }
-      .manual-fields.show { display:flex; }
-      .manual-fields input { padding:0.65rem 0.9rem; border:1.5px solid var(--gray-2); border-radius:10px; font-family:inherit; font-size:0.88rem; background:var(--card); color:var(--text); outline:none; transition:0.2s; }
-      .manual-fields input:focus { border-color:var(--pink); }
+      .bairros-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:0.5rem; margin-top:0.5rem; }
+      .bairro-btn { background:var(--gray); border:1.5px solid var(--gray-2); border-radius:10px; padding:0.55rem 0.75rem; font-size:0.78rem; font-weight:600; cursor:pointer; color:var(--brown-mid); transition:0.18s; display:flex; justify-content:space-between; align-items:center; font-family:inherit; }
+      .bairro-btn.selected { background:var(--peach); border-color:var(--pink); color:var(--rose); }
       .btn-calc { width:100%; background:var(--gradient); color:#fff; border:none; padding:0.9rem; border-radius:12px; font-weight:700; cursor:pointer; margin-top:1rem; font-family:inherit; font-size:1rem; }
       .geo-btn { background:var(--pink); color:#fff; border:none; padding:0.5rem; border-radius:10px; margin-top:0.5rem; font-size:0.75rem; cursor:pointer; width:100%; }
       .frete-resultado { display:none; margin-top:1rem; background:var(--peach); border-radius:16px; padding:1rem; text-align:center; }
@@ -430,6 +410,7 @@
         .cart-btn { padding: 0.45rem 0.85rem; font-size: 0.85rem; }
         .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem; }
         .drinks-grid { grid-template-columns: 1fr; }
+        .bairros-grid { grid-template-columns: 1fr; }
         .product-card { border-radius: 16px; }
         .product-info { padding: 0.8rem; }
         .product-title { font-size: 0.88rem; }
@@ -564,45 +545,15 @@
 
     <div class="delivery-wrapper" id="delivery">
       <div class="delivery-inner">
-        <div class="delivery-title"><h2>🚚 Calcule o Frete</h2><p>Digite seu CEP e descubra o valor da entrega</p></div>
+        <div class="delivery-title"><h2>🚚 Calcule o Frete</h2><p>Entregamos em toda Floriano-PI e Barão de Grajaú</p></div>
         <div class="calc-box">
-          <h3>📍 Informe seu CEP</h3>
-          <div class="cep-lookup-wrap">
-            <div class="cep-input-row">
-              <input type="text" id="cepFreteInput" placeholder="00000-000" maxlength="9" inputmode="numeric" oninput="mascararCepFrete(this)" onkeydown="if(event.key==='Enter') buscarCepFrete()" aria-label="CEP para calcular frete" />
-              <button class="btn-buscar-cep" id="btnBuscarCepFrete" onclick="buscarCepFrete()">🔍 Buscar</button>
-            </div>
-
-            <!-- CEP não encontrado: campos manuais -->
-            <div class="cep-not-found" id="cepNotFound">
-              😕 CEP não encontrado. Preencha o endereço manualmente:
-              <div class="manual-fields show" id="manualFields">
-                <input type="text" id="manualRua" placeholder="Rua / Avenida" />
-                <div style="display:flex;gap:0.6rem">
-                  <input type="text" id="manualBairro" placeholder="Bairro" style="flex:1" />
-                  <input type="text" id="manualCidade" placeholder="Cidade" style="flex:1" />
-                </div>
-                <button class="btn-buscar-cep" onclick="usarEnderecoManual()" style="width:100%">✅ Usar este endereço</button>
-              </div>
-            </div>
-
-            <!-- Resultado do CEP -->
-            <div class="endereco-card" id="enderecoCardFrete">
-              <div class="endereco-card-row"><span class="endereco-card-label">📍 Rua</span><span class="endereco-card-value" id="ecRua"></span></div>
-              <div class="endereco-card-row"><span class="endereco-card-label">🏘️ Bairro</span><span class="endereco-card-value" id="ecBairro"></span></div>
-              <div class="endereco-card-row"><span class="endereco-card-label">🏙️ Cidade</span><span class="endereco-card-value" id="ecCidade"></span></div>
-              <div class="numero-input-row">
-                <input type="text" id="ecNumero" placeholder="Número" inputmode="numeric" maxlength="6" />
-                <input type="text" id="ecComplemento" placeholder="Complemento (opcional)" />
-              </div>
-              <div id="freteTagWrap"></div>
-            </div>
-
-            <button class="btn-calc" id="calcFreteBtn" style="display:none">🚚 Confirmar Endereço</button>
-            <div class="frete-resultado" id="freteResultado">
-              <div id="freteInfo"></div>
-              <div class="frete-valor" id="freteValorDisplay">-</div>
-            </div>
+          <h3>📍 Selecione seu Bairro</h3>
+          <div class="bairros-grid" id="bairrosGrid"></div>
+          <button class="geo-btn" id="geoLocationBtn" onclick="usarGeolocalizacao()">📍 Usar minha localização</button>
+          <button class="btn-calc" id="calcFreteBtn">🚚 Calcular Frete</button>
+          <div class="frete-resultado" id="freteResultado">
+            <div id="freteInfo"></div>
+            <div class="frete-valor" id="freteValorDisplay">-</div>
           </div>
         </div>
       </div>
@@ -889,6 +840,15 @@
       { id:110, name:"Vitamina de Banana", emoji:"🍌", desc:"Banana, leite e mel", price:12.9 }
     ];
 
+    const BAIRROS = [
+      { nome:"Centro", frete:7.9 }, { nome:"Bom Jesus", frete:8.9 },
+      { nome:"Catete", frete:8.9 }, { nome:"Taboca", frete:9.9 },
+      { nome:"Angico", frete:10.9 }, { nome:"Pantanal", frete:12.9 },
+      { nome:"São João", frete:10.9 }, { nome:"Planalto", frete:9.9 },
+      { nome:"Barão de Grajaú", frete:14.9 }, { nome:"Boa Esperança", frete:11.9 },
+      { nome:"Parque das Flores", frete:10.9 }, { nome:"Santa Terezinha", frete:8.9 }
+    ];
+
     const CUPONS = {
       'BEMVINDO10': { tipo:'percentual', valor:10, minPedido:30, desc:'10% de desconto — boas-vindas!' },
       'FRETEGRATIS': { tipo:'frete', valor:100, minPedido:50, desc:'Frete grátis' },
@@ -908,9 +868,8 @@
     const MAX_ITENS_POR_PRODUTO = 10;
 
     let carrinho = [];
-    let freteAtual = 0;
-    let bairroAtual = { nome:"", frete:0 };
-    let enderecoFreteConfirmado = null; // { rua, numero, complemento, bairro, cidade, cep, frete }
+    let freteAtual = 7.9;
+    let bairroAtual = { nome:"Centro", frete:7.9 };
     let cupomAtivo = null;
     let cartTab = 'carrinho';
     let currentCat = 'all';
@@ -966,106 +925,23 @@
       showToast("🗑️ Carrinho esvaziado");
     }
 
-    // ── CEP FRETE ──────────────────────────────────────────────
-    function calcularFretePorCidade(cidade) {
-      const c = (cidade || '').toLowerCase().trim();
-      if (c.includes('floriano')) return 8.9;
-      if (c.includes('barão') || c.includes('barao') || c.includes('grajaú') || c.includes('grajau')) return 14.9;
-      return 12.9; // outras cidades próximas
-    }
-
-    function mascararCepFrete(input) {
-      let v = input.value.replace(/\D/g,'').substring(0,8);
-      if (v.length > 5) v = v.substring(0,5) + '-' + v.substring(5);
-      input.value = v;
-    }
-
-    async function buscarCepFrete() {
-      const cep = document.getElementById('cepFreteInput').value.replace(/\D/g,'');
-      if (cep.length !== 8) { showToast('⚠️ CEP deve ter 8 dígitos'); return; }
-      const btn = document.getElementById('btnBuscarCepFrete');
-      btn.textContent = '⏳ Buscando…'; btn.disabled = true;
-      document.getElementById('enderecoCardFrete').classList.remove('show');
-      document.getElementById('freteResultado').classList.remove('show');
-      document.getElementById('cepNotFound').classList.remove('show');
-      document.getElementById('calcFreteBtn').style.display = 'none';
-      try {
-        const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-        const d = await r.json();
-        if (d.erro) {
-          document.getElementById('cepNotFound').classList.add('show');
-        } else {
-          const frete = calcularFretePorCidade(d.localidade);
-          document.getElementById('ecRua').textContent = d.logradouro || '(sem logradouro)';
-          document.getElementById('ecBairro').textContent = d.bairro || '—';
-          document.getElementById('ecCidade').textContent = `${d.localidade} - ${d.uf}`;
-          document.getElementById('ecNumero').value = '';
-          document.getElementById('ecComplemento').value = '';
-          const subtotal = carrinho.reduce((s,i)=>s+i.price*i.qtd,0);
-          const freteExibir = subtotal >= 80 ? 0 : frete;
-          document.getElementById('freteTagWrap').innerHTML = `<div class="frete-tag">🚚 Frete: ${freteExibir === 0 ? 'Grátis 🎉' : 'R$ ' + freteExibir.toFixed(2).replace('.',',')}</div>`;
-          document.getElementById('enderecoCardFrete').classList.add('show');
-          document.getElementById('calcFreteBtn').style.display = 'block';
-          // guardar provisoriamente
-          enderecoFreteConfirmado = { rua: d.logradouro||'', bairro: d.bairro||'', cidade: `${d.localidade} - ${d.uf}`, cep: document.getElementById('cepFreteInput').value, frete, uf: d.uf };
-          bairroAtual = { nome: d.bairro || d.localidade, frete };
-          freteAtual = frete;
-          renderCart();
-        }
-      } catch(e) {
-        showToast('❌ Erro ao buscar CEP. Verifique sua conexão.');
-      }
-      btn.textContent = '🔍 Buscar'; btn.disabled = false;
-    }
-
-    function usarEnderecoManual() {
-      const rua = document.getElementById('manualRua').value.trim();
-      const bairro = document.getElementById('manualBairro').value.trim();
-      const cidade = document.getElementById('manualCidade').value.trim();
-      if (!bairro || !cidade) { showToast('⚠️ Preencha ao menos o Bairro e a Cidade'); return; }
-      const frete = calcularFretePorCidade(cidade);
-      document.getElementById('ecRua').textContent = rua || '(informado manualmente)';
-      document.getElementById('ecBairro').textContent = bairro;
-      document.getElementById('ecCidade').textContent = cidade;
-      document.getElementById('ecNumero').value = '';
-      document.getElementById('ecComplemento').value = '';
-      const subtotal = carrinho.reduce((s,i)=>s+i.price*i.qtd,0);
-      const freteExibir = subtotal >= 80 ? 0 : frete;
-      document.getElementById('freteTagWrap').innerHTML = `<div class="frete-tag">🚚 Frete: ${freteExibir === 0 ? 'Grátis 🎉' : 'R$ ' + freteExibir.toFixed(2).replace('.',',')}</div>`;
-      document.getElementById('enderecoCardFrete').classList.add('show');
-      document.getElementById('cepNotFound').classList.remove('show');
-      document.getElementById('calcFreteBtn').style.display = 'block';
-      enderecoFreteConfirmado = { rua, bairro, cidade, cep: '', frete };
-      bairroAtual = { nome: bairro, frete };
-      freteAtual = frete;
-      renderCart();
-    }
-
-    function calcularFrete() {
-      if (!enderecoFreteConfirmado) { showToast('⚠️ Busque um CEP primeiro'); return; }
-      const numero = document.getElementById('ecNumero').value.trim();
-      const complemento = document.getElementById('ecComplemento').value.trim();
-      if (!numero) { showToast('⚠️ Informe o número do endereço'); return; }
-      enderecoFreteConfirmado.numero = numero;
-      enderecoFreteConfirmado.complemento = complemento;
-      const subtotal = carrinho.reduce((s,i)=>s+i.price*i.qtd,0);
-      const frete = subtotal >= 80 ? 0 : enderecoFreteConfirmado.frete;
-      const endStr = `${enderecoFreteConfirmado.rua}, ${numero}${complemento ? ' '+complemento : ''} — ${enderecoFreteConfirmado.bairro}, ${enderecoFreteConfirmado.cidade}`;
-      document.getElementById('freteInfo').innerHTML = `<strong>🏠 ${endStr}</strong>`;
-      document.getElementById('freteValorDisplay').innerHTML = frete === 0 ? '🎉 GRÁTIS' : `R$ ${frete.toFixed(2).replace('.',',')}`;
-      document.getElementById('freteResultado').classList.add('show');
-      freteAtual = frete; bairroAtual = { nome: enderecoFreteConfirmado.bairro, frete };
-      renderCart();
-      showToast(`✅ Endereço confirmado! Frete: ${frete === 0 ? 'Grátis' : 'R$ '+frete.toFixed(2).replace('.',',')}`);
-      document.getElementById('freteResultado').scrollIntoView({ behavior:'smooth', block:'center' });
-    }
-
     function usarGeolocalizacao() {
-      if (!navigator.geolocation) { showToast('❌ Geolocalização não disponível'); return; }
-      showToast('📍 Buscando localização…');
+      if (!navigator.geolocation) {
+        showToast("❌ Seu navegador não suporta geolocalização");
+        return;
+      }
+      showToast("📍 Buscando sua localização...");
       navigator.geolocation.getCurrentPosition(
-        () => showToast('📍 Use o CEP para confirmar seu endereço'),
-        () => showToast('❌ Não foi possível obter a localização')
+        pos => {
+          showToast("📍 Localização detectada! Sugerimos o bairro Centro");
+          const btnCentro = document.querySelector('.bairro-btn');
+          if (btnCentro && btnCentro.textContent.includes('Centro')) {
+            btnCentro.click();
+          }
+        },
+        err => {
+          showToast("❌ Não foi possível obter sua localização. Selecione o bairro manualmente.");
+        }
       );
     }
 
@@ -1522,7 +1398,7 @@
       
       summary.innerHTML=`
         <div class="cart-summary-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace('.',',')}</span></div>
-        <div class="cart-summary-row"><span>Frete ${bairroAtual.nome ? '('+bairroAtual.nome+')' : ''}</span><span>${frete===0?(freteAtual>0||enderecoFreteConfirmado?"🎉 Grátis":"— calcule →"):"R$ "+frete.toFixed(2).replace('.',',')}</span></div>
+        <div class="cart-summary-row"><span>Frete (${bairroAtual.nome})</span><span>${frete===0?"🎉 Grátis":"R$ "+frete.toFixed(2).replace('.',',')}</span></div>
         ${desconto>0?`<div class="cart-summary-row" style="color:#1a7a4a;font-weight:700"><span>🎟 Desconto</span><span>−R$ ${desconto.toFixed(2).replace('.',',')}</span></div>`:""}
         ${subtotal<80?'<div class="cart-summary-row" style="font-size:0.75rem;color:var(--brown-light)"><span>Frete grátis acima de R$ 80,00</span></div>':""}
         <div class="cart-summary-row total"><span>Total</span><span>R$ ${total.toFixed(2).replace('.',',')}</span></div>
@@ -1585,21 +1461,13 @@
       const { subtotal } = calcTotais();
       if (subtotal < VALOR_MINIMO_PEDIDO) { showToast(`❌ Pedido mínimo: R$ ${VALOR_MINIMO_PEDIDO.toFixed(2).replace('.', ',')}`); return; }
 
+      // Preencher data mínima no input de data
       const hoje = new Date().toISOString().split('T')[0];
       const dataInput = document.getElementById('endData');
       if (dataInput) { dataInput.min = hoje; dataInput.value = ''; }
 
-      // Pré-preencher do CEP já consultado na seção de frete
-      if (enderecoFreteConfirmado) {
-        const e = enderecoFreteConfirmado;
-        if (e.rua) document.getElementById('endRua').value = e.rua;
-        if (e.numero) document.getElementById('endNumero').value = e.numero || '';
-        if (e.complemento) document.getElementById('endComplemento').value = e.complemento || '';
-        if (e.bairro) document.getElementById('endBairro').value = e.bairro;
-        if (e.cidade) document.getElementById('endCidade').value = e.cidade;
-        if (e.cep) document.getElementById('endCep').value = e.cep;
-      } else if (usuarioAtual) {
-        // fallback: perfil salvo
+      // Pré-preencher com dados do usuário, se disponível
+      if (usuarioAtual) {
         const perfil = getPerfilUsuario(usuarioAtual.email);
         if (perfil?.endereco) {
           const e = perfil.endereco;
@@ -1679,8 +1547,7 @@
       waMsg += `📱 *WhatsApp:* ${usuarioAtual?.telefone || 'Não informado'}\n\n`;
       waMsg += `*ITENS:*\n`;
       carrinho.forEach(i => { waMsg += `• ${i.emoji} ${i.name} x${i.qtd} = R$ ${(i.price*i.qtd).toFixed(2).replace('.',',')}\n`; });
-      const cepEnviado = document.getElementById('endCep').value || enderecoFreteConfirmado?.cep || '';
-      if (cepEnviado) waMsg += `\n📮 *CEP:* ${cepEnviado}`;
+      waMsg += `\n📍 *Bairro:* ${bairroAtual.nome}`;
       waMsg += `\n🏠 *Endereço:* ${enderecoCompleto}`;
       if (dataDesejada) waMsg += `\n📅 *Data desejada:* ${new Date(dataDesejada+'T12:00').toLocaleDateString('pt-BR')}`;
       waMsg += `\n🚚 *Frete:* ${frete===0?"Grátis":"R$ "+frete.toFixed(2).replace('.',',')}`;
@@ -1926,8 +1793,16 @@
       setTimeout(()=>{cancelAnimationFrame(frame);canvas.style.display="none";ctx.clearRect(0,0,canvas.width,canvas.height);},4500);
     }
 
-    function calcularFreteInterno() {
-      // frete interno (usado por calcTotais) já usa freteAtual
+    function renderBairros() {
+      document.getElementById("bairrosGrid").innerHTML = BAIRROS.map(b=>`
+        <button class="bairro-btn" onclick="selecionarBairro('${b.nome}',${b.frete},this)"><span>${b.nome}</span><span>R$ ${b.frete.toFixed(2).replace('.',',')}</span></button>
+      `).join('');
+    }
+
+    function selecionarBairro(nome,frete,btn) {
+      bairroAtual={nome,frete}; freteAtual=frete;
+      document.querySelectorAll(".bairro-btn").forEach(b=>b.classList.remove("selected"));
+      btn.classList.add("selected"); renderCart();
     }
 
     function calcularFrete() {
@@ -2034,6 +1909,7 @@
       renderProdutos(true); // skeleton primeiro
       setTimeout(() => renderProdutos(), 350); // depois real
       renderBebidas_grid();
+      renderBairros();
       carregarCarrinho();
       atualizarStatusHorario();
       setInterval(atualizarStatusHorario, 60000);
