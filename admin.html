@@ -232,11 +232,8 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
-
         .status-pending { background: #ffeaa7; color: #d63031; }
-        .status-preparing { background: #74b9ff; color: #0984e3; }
-        .status-delivering { background: #a29bfe; color: #6c5ce7; }
-        .status-delivered { background: #55efc4; color: #00b894; }
+        .status-completed { background: #badc58; color: #6ab04c; }
 
         /* Tab Content */
         .tab-content {
@@ -298,18 +295,18 @@
 <!-- Tela de Login do Admin -->
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
-        <h2 style="color: var(--primary);">Painel Administrativo</h2>
-        <p style="color: #666; margin-bottom: 1.5rem;">Donut ALR - Controle total</p>
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🍩</div>
+        <h2 style="color: var(--primary);">Donut ALR Admin</h2>
+        <p style="color: #666; margin-bottom: 1.5rem;">Controle total da loja</p>
         <div class="form-group">
             <input type="text" id="adminUser" placeholder="Usuário" style="text-align: center;">
         </div>
         <div class="form-group">
             <input type="password" id="adminPass" placeholder="Senha" style="text-align: center;">
         </div>
-        <button class="btn btn-primary" onclick="loginAdmin()" style="width: 100%;">🔓 Acessar Painel</button>
+        <button class="btn btn-primary" onclick="loginAdmin()" style="width: 100%;">Acessar Painel</button>
         <p style="margin-top: 1rem; font-size: 0.8rem; color: #999;">
-            Credenciais padrão: admin / admin123
+            Credenciais: admin / admin123
         </p>
     </div>
 </div>
@@ -320,7 +317,7 @@
         <div class="logo">
             <span>🍩</span>
             <span>Donut ALR - Admin</span>
-            <span class="sync-badge">🔄 Sincronizado</span>
+            <span class="sync-badge" id="syncStatus">🔄 Sincronizado</span>
         </div>
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
@@ -339,7 +336,7 @@
                 <!-- Carregado via JS -->
             </div>
             <div class="table-container">
-                <h3 style="padding: 1rem;">📈 Últimos Pedidos</h3>
+                <h3 style="padding: 1rem;">📈 Últimos Pedidos (Site)</h3>
                 <div id="recentOrders"></div>
             </div>
         </div>
@@ -347,7 +344,7 @@
         <!-- Produtos -->
         <div id="productsTab" class="tab-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h2>🍩 Gestão de Produtos</h2>
+                <h2>🍩 Gestão de Produtos (Cardápio)</h2>
                 <button class="btn btn-primary" onclick="openProductModal()">+ Novo Produto</button>
             </div>
             <div class="table-container">
@@ -360,33 +357,33 @@
             </div>
         </div>
 
-        <!-- Pedidos -->
+        <!-- Pedidos (Sincronizado do Site) -->
         <div id="ordersTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">📦 Gestão de Pedidos</h2>
+            <h2 style="margin-bottom: 1rem;">📦 Pedidos Recebidos (Sincronia Total)</h2>
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr><th>ID</th><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr>
+                        <tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr>
                     </thead>
                     <tbody id="ordersTable"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Usuários -->
+        <!-- Usuários (Sincronizado do Site) -->
         <div id="usersTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">👥 Gestão de Usuários</h2>
+            <h2 style="margin-bottom: 1rem;">👥 Clientes Cadastrados (Sincronia Total)</h2>
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr><th>ID</th><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Pedidos</th><th>Cupons</th><th>Ações</th></tr>
+                        <tr><th>ID</th><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Data Cadastro</th></tr>
                     </thead>
                     <tbody id="usersTable"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Logs -->
+        <!-- Logs do Sistema -->
         <div id="logsTab" class="tab-content">
             <h2 style="margin-bottom: 1rem;">📋 Logs do Sistema</h2>
             <div class="table-container">
@@ -417,20 +414,14 @@
             <div class="form-group">
                 <label>Categoria</label>
                 <select id="productCategory" required>
-                    <option value="donuts">Donuts</option>
-                    <option value="cupcakes">Cupcakes</option>
-                    <option value="bolos">Bolos</option>
-                    <option value="bebidas">Bebidas</option>
-                    <option value="combos">Combos</option>
+                    <option value="Donuts">Donuts</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Bebidas">Bebidas</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Preço (R$)</label>
                 <input type="number" step="0.01" id="productPrice" required>
-            </div>
-            <div class="form-group">
-                <label>Descrição</label>
-                <textarea id="productDesc" rows="3"></textarea>
             </div>
             <div class="form-group">
                 <label>Emoji</label>
@@ -444,69 +435,9 @@
     </div>
 </div>
 
-<!-- Modal Status Pedido -->
-<div id="statusModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Atualizar Status</h3>
-            <button class="btn btn-danger btn-sm" onclick="closeStatusModal()">✕</button>
-        </div>
-        <div class="form-group">
-            <label>Status</label>
-            <select id="orderStatusSelect">
-                <option value="pending">⏳ Pendente</option>
-                <option value="preparing">🍳 Em preparo</option>
-                <option value="delivering">🚚 Saiu para entrega</option>
-                <option value="delivered">✅ Entregue</option>
-            </select>
-        </div>
-        <button class="btn btn-primary" onclick="updateOrderStatus()" style="width: 100%;">Atualizar</button>
-    </div>
-</div>
-
 <script>
     // ============================================================
-    // SINCRONIZAÇÃO COM LOCALSTORAGE DO SITE
-    // ============================================================
-    
-    // Obter usuários cadastrados no site
-    function getUsuariosDoSite() {
-        try {
-            return JSON.parse(localStorage.getItem('donut_usuarios') || '{}');
-        } catch(e) {
-            return {};
-        }
-    }
-
-    // Obter histórico de pedidos de um usuário
-    function getHistoricoPedidosUsuario(email) {
-        try {
-            const key = `donut_hist_${email}`;
-            return JSON.parse(localStorage.getItem(key) || '[]');
-        } catch(e) {
-            return [];
-        }
-    }
-
-    // Obter todos os pedidos (de todos os usuários)
-    function getTodosPedidos() {
-        const usuarios = getUsuariosDoSite();
-        let todosPedidos = [];
-        for (let email in usuarios) {
-            const pedidos = getHistoricoPedidosUsuario(email);
-            todosPedidos = [...todosPedidos, ...pedidos.map(p => ({ ...p, email }))];
-        }
-        return todosPedidos.sort((a, b) => new Date(b.data) - new Date(a.data));
-    }
-
-    // Obter cupons de um usuário
-    function getCuponsUsuario(email) {
-        const usuarios = getUsuariosDoSite();
-        return usuarios[email]?.cupons || [];
-    }
-
-    // ============================================================
-    // BANCO DE DADOS INDEXEDDB
+    // BANCO DE DADOS INDEXEDDB (MESMO DO SITE)
     // ============================================================
     const DB_NAME = 'DonutALR_DB';
     const DB_VERSION = 1;
@@ -524,12 +455,15 @@
             
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
-                
                 if (!db.objectStoreNames.contains('produtos')) {
-                    const productStore = db.createObjectStore('produtos', { keyPath: 'id', autoIncrement: true });
-                    productStore.createIndex('categoria', 'categoria', { unique: false });
+                    db.createObjectStore('produtos', { keyPath: 'id', autoIncrement: true });
                 }
-                
+                if (!db.objectStoreNames.contains('pedidos')) {
+                    db.createObjectStore('pedidos', { keyPath: 'id', autoIncrement: true });
+                }
+                if (!db.objectStoreNames.contains('users')) {
+                    db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+                }
                 if (!db.objectStoreNames.contains('logs')) {
                     db.createObjectStore('logs', { keyPath: 'id', autoIncrement: true });
                 }
@@ -537,14 +471,12 @@
                 // Dados iniciais de produtos
                 const transaction = db.transaction(['produtos'], 'readwrite');
                 const produtos = transaction.objectStore('produtos');
-                
                 produtos.count().onsuccess = (e) => {
                     if (e.target.result === 0) {
                         const produtosIniciais = [
-                            { nome: "Donut Glitter Rosa", categoria: "donuts", preco: 12.9, descricao: "Cobertura rosé com confeitos", emoji: "🍩", ativo: true },
-                            { nome: "Donut Nutella Love", categoria: "donuts", preco: 16.9, descricao: "Recheio cremoso de Nutella", emoji: "🍩", ativo: true },
-                            { nome: "Cupcake Red Velvet", categoria: "cupcakes", preco: 17.9, descricao: "Cream cheese", emoji: "🧁", ativo: true },
-                            { nome: "Milk Shake Morango", categoria: "bebidas", preco: 18.9, descricao: "Sorvete artesanal", emoji: "🍓", ativo: true }
+                            { nome: "Donut Clássico Homer", categoria: "Donuts", preco: 9.50, emoji: "🍩", ativo: true },
+                            { nome: "Donut Chocolate Belga", categoria: "Donuts", preco: 12.00, emoji: "🍫", ativo: true },
+                            { nome: "Donut Ninho com Nutella", categoria: "Premium", preco: 15.00, emoji: "🥜", ativo: true }
                         ];
                         produtosIniciais.forEach(p => produtos.add(p));
                     }
@@ -655,15 +587,15 @@
     }
 
     // ============================================================
-    // DASHBOARD - COM SINCRONIZAÇÃO
+    // DASHBOARD (TOTALMENTE SICRONIZADO)
     // ============================================================
     async function loadDashboard() {
         const produtos = await getAll('produtos');
-        const usuariosDoSite = getUsuariosDoSite();
-        const todosPedidos = getTodosPedidos();
+        const pedidos = await getAll('pedidos'); // Pega do IndexedDB
+        const users = await getAll('users');     // Pega do IndexedDB
         
-        const totalVendas = todosPedidos.reduce((sum, p) => sum + (p.total || 0), 0);
-        const pedidosPendentes = todosPedidos.filter(p => p.status !== 'delivered' && p.status !== undefined).length;
+        const totalVendas = pedidos.reduce((sum, p) => sum + (p.total || 0), 0);
+        const pedidosPendentes = pedidos.filter(p => p.status !== 'completed').length;
         
         document.getElementById('statsGrid').innerHTML = `
             <div class="stat-card">
@@ -671,11 +603,11 @@
                 <div class="stat-label">Produtos</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">${todosPedidos.length}</div>
+                <div class="stat-number">${pedidos.length}</div>
                 <div class="stat-label">Pedidos Totais</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">${Object.keys(usuariosDoSite).length}</div>
+                <div class="stat-number">${users.length}</div>
                 <div class="stat-label">Clientes</div>
             </div>
             <div class="stat-card">
@@ -688,22 +620,23 @@
             </div>
         `;
         
-        const recentOrders = todosPedidos.slice(0, 5);
+        const recentOrders = [...pedidos].sort((a,b) => b.id - a.id).slice(0, 5);
         document.getElementById('recentOrders').innerHTML = `
             <table style="width: 100%;">
                 <thead>
-                    <tr><th>ID</th><th>Cliente</th><th>Total</th><th>Data</th></tr>
+                    <tr><th>ID</th><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></tr>
                 </thead>
                 <tbody>
                     ${recentOrders.map(order => `
                         <tr>
                             <td>#${order.id}</td>
-                            <td>${order.email}</td>
+                            <td>${order.cliente || order.email || '-'}</td>
                             <td>R$ ${(order.total || 0).toFixed(2).replace('.',',')}</td>
-                            <td>${new Date(order.data).toLocaleDateString('pt-BR')}</td>
+                            <td><span class="status-badge ${order.status === 'completed' ? 'status-completed' : 'status-pending'}">${order.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td>
+                            <td>${order.data || '-'}</td>
                         </tr>
                     `).join('')}
-                    ${recentOrders.length === 0 ? '<tr><td colspan="4" style="text-align: center;">Nenhum pedido encontrado</td></tr>' : ''}
+                    ${recentOrders.length === 0 ? '<tr><td colspan="5" style="text-align: center;">Nenhum pedido encontrado no banco de dados</td>' : ''}
                 </tbody>
             </table>
         `;
@@ -725,7 +658,6 @@
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editProduct(${p.id})">✏️</button>
                     <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑️</button>
-                    <button class="btn btn-sm" onclick="toggleProductStatus(${p.id})">${p.ativo ? '🔴' : '🟢'}</button>
                 </td>
             </tr>
         `).join('');
@@ -735,9 +667,8 @@
         document.getElementById('productModalTitle').innerHTML = product ? '✏️ Editar Produto' : '➕ Novo Produto';
         document.getElementById('productId').value = product?.id || '';
         document.getElementById('productName').value = product?.nome || '';
-        document.getElementById('productCategory').value = product?.categoria || 'donuts';
+        document.getElementById('productCategory').value = product?.categoria || 'Donuts';
         document.getElementById('productPrice').value = product?.preco || '';
-        document.getElementById('productDesc').value = product?.descricao || '';
         document.getElementById('productEmoji').value = product?.emoji || '🍩';
         document.getElementById('productModal').classList.add('active');
     }
@@ -754,7 +685,6 @@
             nome: document.getElementById('productName').value,
             categoria: document.getElementById('productCategory').value,
             preco: parseFloat(document.getElementById('productPrice').value),
-            descricao: document.getElementById('productDesc').value,
             emoji: document.getElementById('productEmoji').value || '🍩',
             ativo: true
         };
@@ -788,114 +718,77 @@
         }
     }
 
-    async function toggleProductStatus(id) {
-        const product = await getById('produtos', id);
-        product.ativo = !product.ativo;
-        await update('produtos', product);
-        addLog('admin', 'toggle_produto', `${product.ativo ? 'Ativou' : 'Desativou'}: ${product.nome}`);
-        loadProducts();
-    }
-
     // ============================================================
-    // PEDIDOS - SINCRONIZADO COM SITE
+    // PEDIDOS - LENDO DIRETO DO INDEXEDDB (CRIADO PELO SITE)
     // ============================================================
-    let currentOrderId = null;
-
-    function loadOrders() {
-        const todosPedidos = getTodosPedidos();
+    async function loadOrders() {
+        const pedidos = await getAll('pedidos'); // AGORA LÊ DO MESMO LUGAR QUE O SITE ESCREVE
         const tbody = document.getElementById('ordersTable');
-        tbody.innerHTML = todosPedidos.sort((a,b) => b.id - a.id).map(p => `
+        tbody.innerHTML = pedidos.sort((a,b) => b.id - a.id).map(p => `
             <tr>
                 <td>#${p.id}</td>
-                <td>${p.email}</td>
+                <td>${p.cliente || '-'}</td>
+                <td>${p.whatsapp || '-'}</td>
                 <td>R$ ${(p.total || 0).toFixed(2).replace('.',',')}</td>
-                <td><span class="status-badge status-pending">Recebido</span></td>
-                <td>${new Date(p.data).toLocaleDateString('pt-BR')}</td>
+                <td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td>
+                <td>${p.data || '-'}</td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="viewOrderDetails(${p.id})">👁️ Detalhes</button>
+                    ${p.status !== 'completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder(${p.id})">✅ Concluir</button>` : ''}
                 </td>
             </tr>
         `).join('');
+        if(pedidos.length === 0) tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Nenhum pedido encontrado no banco de dados</td></tr>';
     }
 
-    function viewOrderDetails(orderId) {
-        const todosPedidos = getTodosPedidos();
-        const order = todosPedidos.find(o => o.id === orderId);
-        if (order) {
+    async function completeOrder(orderId) {
+        const pedido = await getById('pedidos', orderId);
+        if(pedido) {
+            pedido.status = 'completed';
+            await update('pedidos', pedido);
+            addLog('admin', 'concluir_pedido', `Concluiu pedido #${orderId} do cliente ${pedido.cliente}`);
+            loadOrders();
+            loadDashboard();
+            alert(`Pedido #${orderId} marcado como concluído!`);
+        }
+    }
+
+    async function viewOrderDetails(orderId) {
+        const pedido = await getById('pedidos', orderId);
+        if (pedido) {
             let detalhes = `📦 PEDIDO #${orderId}\n\n`;
-            detalhes += `👤 Cliente: ${order.email}\n`;
-            detalhes += `📅 Data: ${new Date(order.data).toLocaleString('pt-BR')}\n`;
-            detalhes += `📍 Endereço: ${order.endereco || 'Não informado'}\n`;
-            detalhes += `💳 Pagamento: ${order.pagamento || 'Não especificado'}\n\n`;
+            detalhes += `👤 Cliente: ${pedido.cliente}\n`;
+            detalhes += `📱 WhatsApp: ${pedido.whatsapp || '-'}\n`;
+            detalhes += `📍 Endereço: ${pedido.endereco || '-'}\n`;
+            detalhes += `💳 Pagamento: ${pedido.pagamento || '-'}\n`;
+            detalhes += `📅 Data: ${pedido.data}\n\n`;
             detalhes += `🛒 ITENS:\n`;
-            if (order.itens && Array.isArray(order.itens)) {
-                order.itens.forEach(i => {
-                    detalhes += `  • ${i.emoji} ${i.name} x${i.qtd} = R$ ${(i.price * i.qtd).toFixed(2).replace('.',',')}\n`;
+            if (pedido.itens && Array.isArray(pedido.itens)) {
+                pedido.itens.forEach(i => {
+                    detalhes += `  • ${i.nome} x${i.qtd} = R$ ${(i.preco * i.qtd).toFixed(2).replace('.',',')}\n`;
                 });
             }
-            detalhes += `\n💰 TOTAL: R$ ${(order.total || 0).toFixed(2).replace('.',',')}\n`;
+            detalhes += `\n💰 TOTAL: R$ ${(pedido.total || 0).toFixed(2).replace('.',',')}\n`;
             alert(detalhes);
         }
     }
 
     // ============================================================
-    // USUÁRIOS - SINCRONIZADO COM SITE
+    // USUÁRIOS - LENDO DIRETO DO INDEXEDDB (CRIADO PELO SITE)
     // ============================================================
-    function loadUsers() {
-        const usuariosDoSite = getUsuariosDoSite();
+    async function loadUsers() {
+        const users = await getAll('users'); // AGORA LÊ DO MESMO LUGAR QUE O SITE ESCREVE
         const tbody = document.getElementById('usersTable');
-        let contador = 0;
-        
-        tbody.innerHTML = Object.entries(usuariosDoSite).map(([email, user], idx) => {
-            const pedidos = getHistoricoPedidosUsuario(email);
-            contador++;
-            return `
-                <tr>
-                    <td>${contador}</td>
-                    <td>${user.nome}</td>
-                    <td>${email}</td>
-                    <td>${user.telefone || '-'}</td>
-                    <td>${pedidos.length}</td>
-                    <td>${user.cupons?.length || 0}</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" onclick="giveCouponToUser('${email}')">🎟️</button>
-                        <button class="btn btn-primary btn-sm" onclick="viewUserDetails('${email}')">👁️</button>
-                    </td>
-                </tr>
-            `;
-        }).join('');
-
-        if (Object.keys(usuariosDoSite).length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Nenhum usuário cadastrado</td></tr>';
-        }
-    }
-
-    function viewUserDetails(email) {
-        const usuariosDoSite = getUsuariosDoSite();
-        const user = usuariosDoSite[email];
-        const pedidos = getHistoricoPedidosUsuario(email);
-        if (user) {
-            alert(`👤 ${user.nome}\n📧 ${email}\n📱 ${user.telefone || 'N/A'}\n\n📦 Pedidos: ${pedidos.length}\n🎟️ Cupons: ${user.cupons?.join(', ') || 'Nenhum'}`);
-        }
-    }
-
-    function giveCouponToUser(email) {
-        const cupom = prompt('Digite o código do cupom:', 'DESCONTO10');
-        if (cupom) {
-            const usuariosDoSite = getUsuariosDoSite();
-            if (usuariosDoSite[email]) {
-                usuariosDoSite[email].cupons = usuariosDoSite[email].cupons || [];
-                if (!usuariosDoSite[email].cupons.includes(cupom.toUpperCase())) {
-                    usuariosDoSite[email].cupons.push(cupom.toUpperCase());
-                    localStorage.setItem('donut_usuarios', JSON.stringify(usuariosDoSite));
-                    addLog('admin', 'dar_cupom', `${cupom} para ${usuariosDoSite[email].nome}`);
-                    loadUsers();
-                    alert(`✅ Cupom ${cupom} adicionado para ${usuariosDoSite[email].nome}!`);
-                } else {
-                    alert('⚠️ Este usuário já possui este cupom!');
-                }
-            }
-        }
+        tbody.innerHTML = users.map((user, idx) => `
+            <tr>
+                <td>${idx + 1}</td>
+                <td>${user.nome || '-'}</td>
+                <td>${user.telefone || '-'}</td>
+                <td>${user.email || '-'}</td>
+                <td>${user.data || '-'}</td>
+            </tr>
+        `).join('');
+        if(users.length === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum cliente cadastrado no banco de dados</td></tr>';
     }
 
     // ============================================================
@@ -926,48 +819,8 @@
         document.getElementById(`${tab}Tab`).classList.add('active');
         
         document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        if (window.event && window.event.target) window.event.target.classList.add('active');
 
-        // Recarregar dados ao mudar de aba
-        if (tab === 'dashboard') loadDashboard();
-        else if (tab === 'products') loadProducts();
-        else if (tab === 'orders') loadOrders();
-        else if (tab === 'users') loadUsers();
-        else if (tab === 'logs') loadLogs();
-    }
-
-    // ============================================================
-    // INIT
-    // ============================================================
-    async function init() {
-        await openDatabase();
-        checkAuth();
-        
-        // Auto-refresh a cada 30 segundos
-        setInterval(() => {
-            if (localStorage.getItem('admin_logged') === 'true') {
-                loadDashboard();
-                loadOrders();
-                loadUsers();
-            }
-        }, 30000);
-    }
-
- // ============================================================
-    // NAVEGAÇÃO
-    // ============================================================
-    function switchTab(tab) {
-        const tabs = ['dashboard', 'products', 'orders', 'users', 'logs'];
-        tabs.forEach(t => {
-            const el = document.getElementById(`${t}Tab`);
-            if (el) el.classList.remove('active');
-        });
-        document.getElementById(`${tab}Tab`).classList.add('active');
-        
-        document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
-        if (event && event.target) event.target.classList.add('active');
-
-        // Recarregar dados imediatamente ao clicar
         if (tab === 'dashboard') loadDashboard();
         else if (tab === 'products') loadProducts();
         else if (tab === 'orders') loadOrders();
@@ -982,25 +835,24 @@
         await openDatabase();
         checkAuth();
         
-        // Sincroniza em tempo real as abas a cada 3 segundos sem travar a tela
+        // Sincroniza em tempo real as abas a cada 3 segundos
         setInterval(async () => {
-            if (typeof db !== 'undefined' && db) {
+            if (db && localStorage.getItem('admin_logged') === 'true') {
                 const dashboardAtivo = document.getElementById('dashboardTab')?.classList.contains('active');
                 const pedidosAtivo = document.getElementById('ordersTab')?.classList.contains('active');
                 const usersAtivo = document.getElementById('usersTab')?.classList.contains('active');
                 const logsAtivo = document.getElementById('logsTab')?.classList.contains('active');
                 
-                if (dashboardAtivo) {
-                    await loadDashboard();
-                }
-                if (pedidosAtivo) {
-                    await loadOrders();
-                }
-                if (usersAtivo) {
-                    await loadUsers();
-                }
-                if (logsAtivo) {
-                    await loadLogs();
+                if (dashboardAtivo) await loadDashboard();
+                if (pedidosAtivo) await loadOrders();
+                if (usersAtivo) await loadUsers();
+                if (logsAtivo) await loadLogs();
+                
+                // Atualiza badge de status
+                const syncBadge = document.getElementById('syncStatus');
+                if(syncBadge) {
+                    syncBadge.style.opacity = '0.5';
+                    setTimeout(() => { if(syncBadge) syncBadge.style.opacity = '1'; }, 200);
                 }
             }
         }, 3000);
