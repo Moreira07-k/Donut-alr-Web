@@ -2,63 +2,95 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donut ALR - Delivery de Doces 🍩</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Donut ALR | Delivery de Doces 🍩</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff6f9; }
         
-        .header { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        /* Header */
+        .header { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 1rem; }
         .logo { font-size: 1.5rem; font-weight: bold; color: #ff6b9d; }
-        .cart-btn { background: #ff6b9d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 25px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-        .cart-badge { background: white; color: #ff6b9d; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
+        .cart-btn { background: #ff6b9d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 25px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        .cart-badge { background: white; color: #ff6b9d; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         
+        /* Container */
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         .hero { background: linear-gradient(135deg, #ff6b9d, #ff4081); color: white; padding: 3rem; border-radius: 20px; text-align: center; margin-bottom: 2rem; }
+        .hero h1 { font-size: 2rem; margin-bottom: 0.5rem; }
         .section-title { font-size: 1.8rem; color: #4a2030; margin-bottom: 1.5rem; }
+        
+        /* Produtos */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
         .product-card { background: white; border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .product-card:hover { transform: translateY(-5px); }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
         .product-img { height: 160px; background: linear-gradient(135deg, #ffd4e8, #eed6f8); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
         .product-info { padding: 1rem; }
-        .product-title { font-weight: bold; }
+        .product-title { font-weight: bold; font-size: 1.1rem; color: #4a2030; }
         .product-price { color: #ff6b9d; font-weight: bold; font-size: 1.2rem; margin: 0.5rem 0; }
-        .btn-add { background: #ff6b9d; color: white; border: none; padding: 0.5rem; border-radius: 25px; width: 100%; cursor: pointer; font-weight: bold; }
+        .btn-add { background: #ff6b9d; color: white; border: none; padding: 0.5rem; border-radius: 25px; width: 100%; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        .btn-add:hover { background: #ff4081; }
         
-        .cart-sidebar { position: fixed; top: 0; right: 0; width: 380px; height: 100%; background: white; z-index: 1000; transform: translateX(100%); transition: transform 0.3s; display: flex; flex-direction: column; box-shadow: -2px 0 10px rgba(0,0,0,0.1); }
+        /* Carrinho Sidebar */
+        .cart-sidebar { position: fixed; top: 0; right: 0; width: 400px; max-width: 90vw; height: 100%; background: white; z-index: 1001; transform: translateX(100%); transition: transform 0.3s; display: flex; flex-direction: column; box-shadow: -2px 0 20px rgba(0,0,0,0.15); }
         .cart-sidebar.open { transform: translateX(0); }
-        .cart-header { padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .cart-header { padding: 1rem 1.5rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #ff6b9d; color: white; }
+        .cart-header h3 { color: white; }
+        .close-cart { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
         .cart-body { flex: 1; overflow-y: auto; padding: 1rem; }
+        .cart-empty { text-align: center; padding: 2rem; color: #999; }
         .cart-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid #f0f0f0; }
+        .cart-item-emoji { font-size: 2rem; }
         .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: bold; color: #4a2030; }
+        .cart-item-price { color: #ff6b9d; font-size: 0.9rem; }
         .qty-ctrl { display: flex; align-items: center; gap: 0.5rem; }
-        .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #ddd; background: white; cursor: pointer; }
-        .cart-footer { padding: 1rem; border-top: 1px solid #eee; }
+        .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #ddd; background: white; cursor: pointer; font-weight: bold; }
+        .qty-num { min-width: 20px; text-align: center; }
+        .cart-footer { padding: 1rem 1.5rem; border-top: 1px solid #eee; background: #fafafa; }
+        .cart-summary { margin-bottom: 1rem; }
         .cart-summary-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
-        .cart-summary-row.total { font-weight: bold; border-top: 1px solid #eee; padding-top: 0.5rem; margin-top: 0.5rem; }
-        .btn-checkout { background: #2ecc71; color: white; border: none; padding: 0.8rem; border-radius: 25px; width: 100%; cursor: pointer; font-weight: bold; }
+        .cart-summary-row.total { font-weight: bold; font-size: 1.2rem; border-top: 1px solid #ddd; padding-top: 0.5rem; margin-top: 0.5rem; }
+        .btn-checkout { background: #2ecc71; color: white; border: none; padding: 0.8rem; border-radius: 30px; width: 100%; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s; }
+        .btn-checkout:hover { background: #27ae60; }
+        .btn-checkout:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-secondary { background: #f0f0f0; color: #666; border: none; padding: 0.6rem; border-radius: 30px; width: 100%; cursor: pointer; margin-top: 0.5rem; }
         
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        /* Modal */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .overlay.show { opacity: 1; pointer-events: all; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center; z-index: 1001; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center; z-index: 1002; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 20px; padding: 2rem; max-width: 400px; width: 90%; }
-        .modal-content input, .modal-content select { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 10px; }
-        .btn-primary { background: #ff6b9d; color: white; border: none; padding: 0.8rem; border-radius: 25px; width: 100%; cursor: pointer; font-weight: bold; }
+        .modal-content { background: white; border-radius: 20px; padding: 2rem; max-width: 450px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h3 { margin-bottom: 1rem; color: #4a2030; }
+        .modal-content input, .modal-content select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 1rem; font-family: inherit; }
+        .modal-content input:focus { outline: none; border-color: #ff6b9d; }
+        .btn-primary { background: #ff6b9d; color: white; border: none; padding: 0.8rem; border-radius: 30px; width: 100%; cursor: pointer; font-weight: bold; }
+        .btn-primary:hover { background: #ff4081; }
         
+        /* Auth */
         .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; }
         .login-overlay.hidden { display: none; }
         .login-box { background: white; border-radius: 20px; padding: 2rem; max-width: 400px; width: 90%; text-align: center; }
+        .login-box h2 { color: #ff6b9d; margin-bottom: 1rem; }
         .login-box input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 10px; }
         .login-box button { width: 100%; padding: 0.8rem; background: #ff6b9d; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
         .auth-toggle { display: flex; gap: 1rem; margin-bottom: 1rem; }
-        .auth-toggle-btn { flex: 1; padding: 0.6rem; border: none; background: #f0f0f0; border-radius: 10px; cursor: pointer; }
+        .auth-toggle-btn { flex: 1; padding: 0.6rem; border: none; background: #f0f0f0; border-radius: 10px; cursor: pointer; font-weight: bold; }
         .auth-toggle-btn.active { background: #ff6b9d; color: white; }
         
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 0.5rem 1rem; border-radius: 50px; z-index: 2001; opacity: 0; transition: opacity 0.3s; }
+        /* Toast */
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 0.8rem 1.5rem; border-radius: 50px; z-index: 2001; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         .toast.show { opacity: 1; }
         
-        @media (max-width: 768px) { .container { padding: 1rem; } .cart-sidebar { width: 100%; } }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .hero h1 { font-size: 1.5rem; }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+            .cart-sidebar { width: 100%; }
+            .header { flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
 <body>
@@ -66,23 +98,23 @@
 <!-- Login Overlay -->
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
-        <div style="font-size: 3rem;">🍩</div>
-        <h2 style="color: #ff6b9d;">Donut ALR</h2>
-        <p>Faça login para continuar</p>
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🍩</div>
+        <h2>Donut ALR</h2>
+        <p style="margin-bottom: 1rem;">Faça login para continuar</p>
         <div class="auth-toggle">
-            <button class="auth-toggle-btn active" onclick="switchAuth('login')">Entrar</button>
-            <button class="auth-toggle-btn" onclick="switchAuth('cadastro')">Cadastrar</button>
+            <button class="auth-toggle-btn active" onclick="switchAuthMode('login')">Entrar</button>
+            <button class="auth-toggle-btn" onclick="switchAuthMode('cadastro')">Cadastrar</button>
         </div>
-        <div id="loginForm">
+        <div id="authLoginForm">
             <input type="email" id="loginEmail" placeholder="E-mail">
             <input type="password" id="loginSenha" placeholder="Senha">
             <button onclick="fazerLogin()">Entrar</button>
         </div>
-        <div id="cadastroForm" style="display: none;">
+        <div id="authCadastroForm" style="display: none;">
             <input type="text" id="cadNome" placeholder="Nome completo">
             <input type="email" id="cadEmail" placeholder="E-mail">
             <input type="tel" id="cadTelefone" placeholder="WhatsApp">
-            <input type="password" id="cadSenha" placeholder="Senha (mín 6 caracteres)">
+            <input type="password" id="cadSenha" placeholder="Senha (mínimo 6 caracteres)">
             <button onclick="fazerCadastro()">Criar conta</button>
         </div>
         <p id="authMsg" style="margin-top: 1rem; font-size: 0.8rem; color: #e74c3c;"></p>
@@ -92,11 +124,13 @@
 <!-- Header -->
 <header class="header">
     <div class="logo">🍩 Donut ALR <small style="font-size: 0.7rem;">Floriano - PI</small></div>
-    <button class="cart-btn" onclick="openCart()">🛒 Carrinho <span class="cart-badge" id="cartCount">0</span></button>
+    <button class="cart-btn" onclick="openCart()">
+        🛒 Carrinho <span class="cart-badge" id="cartCount">0</span>
+    </button>
 </header>
 
 <!-- Hero -->
-<div class="hero" style="margin: 1rem 2rem; max-width: 1200px;">
+<div class="hero">
     <h1>🍩 Os melhores donuts de Floriano!</h1>
     <p>Artesanais, feitos com amor e entregues onde você estiver</p>
 </div>
@@ -104,20 +138,24 @@
 <!-- Produtos -->
 <div class="container">
     <h2 class="section-title">🍩 Nosso Cardápio</h2>
-    <div class="products-grid" id="productsGrid"><p style="text-align:center;color:#999;">Carregando produtos...</p></div>
+    <div class="products-grid" id="productsGrid">
+        <div style="text-align: center; padding: 2rem;">Carregando produtos...</div>
+    </div>
 </div>
 
 <!-- Carrinho Sidebar -->
 <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-header">
         <h3>🛒 Meu Carrinho</h3>
-        <button onclick="closeCart()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">✕</button>
+        <button class="close-cart" onclick="closeCart()">✕</button>
     </div>
-    <div class="cart-body" id="cartBody"><div style="text-align: center; padding: 2rem;">Carrinho vazio</div></div>
+    <div class="cart-body" id="cartBody">
+        <div class="cart-empty">Carrinho vazio</div>
+    </div>
     <div class="cart-footer">
         <div id="cartSummary"></div>
         <button class="btn-checkout" id="checkoutBtn" onclick="abrirCheckout()">✅ Finalizar Pedido</button>
-        <button onclick="limparCarrinho()" style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: #f0f0f0; border: none; border-radius: 25px; cursor: pointer;">🗑️ Limpar</button>
+        <button class="btn-secondary" onclick="limparCarrinho()">🗑️ Limpar Carrinho</button>
     </div>
 </div>
 
@@ -125,39 +163,52 @@
 <div id="checkoutModal" class="modal">
     <div class="modal-content">
         <h3>📝 Finalizar Pedido</h3>
-        <input type="text" id="endereco" placeholder="Endereço completo" required>
+        <input type="text" id="endereco" placeholder="Endereço completo (Rua, Número, Bairro)" required>
         <select id="pagamento">
             <option value="PIX">💳 PIX</option>
             <option value="Cartão">💳 Cartão</option>
             <option value="Dinheiro">💰 Dinheiro</option>
         </select>
-        <div id="checkoutTotal" style="font-weight: bold; margin: 1rem 0;"></div>
-        <button class="btn-primary" onclick="finalizarPedido()">Confirmar Pedido</button>
-        <button onclick="closeModal('checkoutModal')" style="margin-top: 0.5rem; width: 100%; padding: 0.5rem; background: #f0f0f0; border: none; border-radius: 25px; cursor: pointer;">Cancelar</button>
+        <div id="checkoutTotal" style="font-weight: bold; margin: 1rem 0; text-align: center;"></div>
+        <button class="btn-primary" onclick="finalizarPedido()">✅ Confirmar Pedido</button>
+        <button class="btn-secondary" onclick="closeModal('checkoutModal')">Cancelar</button>
     </div>
 </div>
 
 <!-- Product Modal -->
 <div id="productModal" class="modal">
     <div class="modal-content">
-        <button onclick="closeModal('productModal')" style="float: right; background: none; border: none; font-size: 1.2rem; cursor: pointer;">✕</button>
-        <div id="modalEmoji" style="font-size: 4rem; text-align: center;"></div>
-        <h3 id="modalTitle"></h3>
-        <p id="modalDesc"></p>
-        <div id="modalPrice" style="font-size: 1.5rem; color: #ff6b9d; margin: 1rem 0;"></div>
-        <button class="btn-primary" id="modalAddBtn">Adicionar ao Carrinho</button>
+        <button style="float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer;" onclick="closeModal('productModal')">✕</button>
+        <div id="modalProductEmoji" style="font-size: 4rem; text-align: center;"></div>
+        <h3 id="modalProductTitle"></h3>
+        <p id="modalProductDesc"></p>
+        <div id="modalProductPrice" style="font-size: 1.5rem; color: #ff6b9d; margin: 1rem 0;"></div>
+        <button class="btn-primary" id="modalAddBtn" onclick="">Adicionar ao Carrinho</button>
     </div>
 </div>
 
+<!-- Perfil Modal -->
+<div id="perfilModal" class="modal">
+    <div class="modal-content">
+        <button style="float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer;" onclick="closeModal('perfilModal')">✕</button>
+        <h3>👤 Meu Perfil</h3>
+        <div id="perfilContent"></div>
+        <button class="btn-secondary" onclick="fazerLogout()" style="margin-top: 1rem;">🚪 Sair da Conta</button>
+    </div>
+</div>
+
+<!-- Overlay -->
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <!-- Firebase SDK -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
-        getFirestore, collection, addDoc, getDocs, doc, updateDoc,
-        onSnapshot, query, orderBy, serverTimestamp, where
+        getFirestore, collection, addDoc, getDocs, query, where,
+        onSnapshot, orderBy, serverTimestamp, doc, updateDoc
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // ============================================================
@@ -176,11 +227,13 @@
     const db = getFirestore(app);
 
     // ============================================================
-    // ESTADO
+    // ESTADO GLOBAL
     // ============================================================
     let usuarioAtual = null;
     let carrinho = [];
+    let produtos = [];
 
+    // Produtos padrão (fallback)
     const PRODUTOS_PADRAO = [
         { nome: "Donut Clássico Homer", preco: 9.50, emoji: "🍩", descricao: "Cobertura de chocolate com confeitos", categoria: "Donuts", ativo: true },
         { nome: "Donut Chocolate Belga", preco: 12.00, emoji: "🍫", descricao: "Chocolate belga derretido", categoria: "Donuts", ativo: true },
@@ -200,23 +253,25 @@
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2500);
     }
-    window.showToast = showToast;
 
     // ============================================================
-    // AUTENTICAÇÃO (Firestore)
+    // AUTENTICAÇÃO
     // ============================================================
-    window.switchAuth = function(mode) {
-        const loginForm = document.getElementById('loginForm');
-        const cadastroForm = document.getElementById('cadastroForm');
+    window.switchAuthMode = function(mode) {
+        const loginForm = document.getElementById('authLoginForm');
+        const cadastroForm = document.getElementById('authCadastroForm');
         const btns = document.querySelectorAll('.auth-toggle-btn');
+        
         if (mode === 'login') {
             loginForm.style.display = 'block';
             cadastroForm.style.display = 'none';
-            btns[0].classList.add('active'); btns[1].classList.remove('active');
+            btns[0].classList.add('active');
+            btns[1].classList.remove('active');
         } else {
             loginForm.style.display = 'none';
             cadastroForm.style.display = 'block';
-            btns[1].classList.add('active'); btns[0].classList.remove('active');
+            btns[1].classList.add('active');
+            btns[0].classList.remove('active');
         }
     };
 
@@ -225,20 +280,30 @@
         const senha = document.getElementById('loginSenha').value;
         const msg = document.getElementById('authMsg');
 
-        if (!email || !senha) { msg.textContent = 'Preencha todos os campos'; return; }
+        if (!email || !senha) {
+            msg.textContent = 'Preencha todos os campos';
+            return;
+        }
 
         try {
-            const snap = await getDocs(query(collection(db, 'users'), where('email', '==', email), where('senha', '==', senha)));
-            if (snap.empty) { msg.textContent = 'E-mail ou senha incorretos'; return; }
+            const q = query(collection(db, 'users'), where('email', '==', email), where('senha', '==', senha));
+            const snap = await getDocs(q);
+            
+            if (snap.empty) {
+                msg.textContent = 'E-mail ou senha incorretos';
+                return;
+            }
 
-            const user = snap.docs[0].data();
-            usuarioAtual = { id: snap.docs[0].id, email: user.email, nome: user.nome, telefone: user.telefone };
+            const userDoc = snap.docs[0];
+            const userData = userDoc.data();
+            usuarioAtual = { id: userDoc.id, email: userData.email, nome: userData.nome, telefone: userData.telefone };
             localStorage.setItem('donut_usuario', JSON.stringify(usuarioAtual));
+            
             document.getElementById('loginOverlay').classList.add('hidden');
-            showToast(`🍩 Bem-vindo, ${user.nome}!`);
-            carregarProdutos();
-        } catch (e) {
-            console.error(e);
+            showToast(`🍩 Bem-vindo, ${userData.nome}!`);
+            
+        } catch (error) {
+            console.error('Erro no login:', error);
             msg.textContent = 'Erro ao fazer login';
         }
     };
@@ -250,16 +315,32 @@
         const senha = document.getElementById('cadSenha').value;
         const msg = document.getElementById('authMsg');
 
-        if (!nome || !email || !senha) { msg.textContent = 'Preencha todos os campos'; return; }
-        if (senha.length < 6) { msg.textContent = 'Senha deve ter mínimo 6 caracteres'; return; }
+        if (!nome || !email || !senha) {
+            msg.textContent = 'Preencha todos os campos';
+            return;
+        }
+
+        if (senha.length < 6) {
+            msg.textContent = 'Senha deve ter mínimo 6 caracteres';
+            return;
+        }
 
         try {
             const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
-            if (!existing.empty) { msg.textContent = 'E-mail já cadastrado'; return; }
+            if (!existing.empty) {
+                msg.textContent = 'E-mail já cadastrado';
+                return;
+            }
 
-            const novoUsuario = { nome, email, telefone, senha, dataCadastro: new Date().toLocaleDateString('pt-BR'), criadoEm: serverTimestamp() };
+            const novoUsuario = {
+                nome, email, telefone, senha,
+                dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                criadoEm: serverTimestamp()
+            };
+            
             const docRef = await addDoc(collection(db, 'users'), novoUsuario);
-
+            
+            // Registrar log
             await addDoc(collection(db, 'logs'), {
                 data: new Date().toLocaleString('pt-BR'),
                 usuario: nome,
@@ -270,13 +351,22 @@
 
             usuarioAtual = { id: docRef.id, email, nome, telefone };
             localStorage.setItem('donut_usuario', JSON.stringify(usuarioAtual));
+            
             document.getElementById('loginOverlay').classList.add('hidden');
             showToast(`🎉 Cadastro realizado! Bem-vindo, ${nome}!`);
-            carregarProdutos();
-        } catch (e) {
-            console.error(e);
+            
+        } catch (error) {
+            console.error('Erro no cadastro:', error);
             msg.textContent = 'Erro ao cadastrar';
         }
+    };
+
+    window.fazerLogout = function() {
+        usuarioAtual = null;
+        localStorage.removeItem('donut_usuario');
+        closeModal('perfilModal');
+        showToast('👋 Até logo!');
+        document.getElementById('loginOverlay').classList.remove('hidden');
     };
 
     function verificarSessao() {
@@ -284,7 +374,6 @@
         if (saved) {
             usuarioAtual = JSON.parse(saved);
             document.getElementById('loginOverlay').classList.add('hidden');
-            carregarProdutos();
         }
     }
 
@@ -309,17 +398,25 @@
 
     window.addToCart = function(produto) {
         const existing = carrinho.find(i => i.id === produto.id);
-        if (existing) { existing.qtd++; } else { carrinho.push({ ...produto, qtd: 1 }); }
+        if (existing) {
+            existing.qtd++;
+        } else {
+            carrinho.push({ ...produto, qtd: 1 });
+        }
         salvarCarrinho();
         renderCart();
-        showToast(`✅ ${produto.nome} adicionado!`);
+        showToast(`✅ ${produto.nome} adicionado ao carrinho!`);
     };
 
     window.changeQty = function(id, delta) {
         const idx = carrinho.findIndex(i => i.id === id);
         if (idx === -1) return;
         const novoQtd = carrinho[idx].qtd + delta;
-        if (novoQtd <= 0) { carrinho.splice(idx, 1); } else { carrinho[idx].qtd = novoQtd; }
+        if (novoQtd <= 0) {
+            carrinho.splice(idx, 1);
+        } else {
+            carrinho[idx].qtd = novoQtd;
+        }
         salvarCarrinho();
         renderCart();
     };
@@ -334,33 +431,40 @@
     function renderCart() {
         const body = document.getElementById('cartBody');
         const summary = document.getElementById('cartSummary');
+        
         if (!carrinho.length) {
-            body.innerHTML = '<div style="text-align: center; padding: 2rem;">Carrinho vazio</div>';
+            body.innerHTML = '<div class="cart-empty">🛒 Carrinho vazio</div>';
             if (summary) summary.innerHTML = '';
+            document.getElementById('checkoutBtn').disabled = true;
             return;
         }
+        
         body.innerHTML = carrinho.map(item => `
             <div class="cart-item">
-                <div style="font-size: 2rem;">${item.emoji}</div>
+                <div class="cart-item-emoji">${item.emoji}</div>
                 <div class="cart-item-info">
-                    <div style="font-weight: bold;">${item.nome}</div>
-                    <div style="color: #ff6b9d;">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>
+                    <div class="cart-item-name">${item.nome}</div>
+                    <div class="cart-item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>
                 </div>
                 <div class="qty-ctrl">
                     <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
-                    <span>${item.qtd}</span>
+                    <span class="qty-num">${item.qtd}</span>
                     <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
                 </div>
             </div>
         `).join('');
+        
         const subtotal = carrinho.reduce((s, i) => s + i.preco * i.qtd, 0);
         const frete = subtotal >= 50 ? 0 : 7.90;
         const total = subtotal + frete;
+        
         summary.innerHTML = `
             <div class="cart-summary-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span></div>
             <div class="cart-summary-row"><span>Frete</span><span>${frete === 0 ? 'Grátis' : 'R$ ' + frete.toFixed(2).replace('.', ',')}</span></div>
             <div class="cart-summary-row total"><span>Total</span><span>R$ ${total.toFixed(2).replace('.', ',')}</span></div>
         `;
+        
+        document.getElementById('checkoutBtn').disabled = false;
     }
 
     // ============================================================
@@ -377,22 +481,28 @@
         document.getElementById('overlay').classList.remove('show');
     };
 
-    window.openModal = function(id) {
+    function openModal(id) {
         document.getElementById(id).classList.add('active');
         document.getElementById('overlay').classList.add('show');
-    };
+    }
 
-    window.closeModal = function(id) {
+    function closeModal(id) {
         document.getElementById(id).classList.remove('active');
         document.getElementById('overlay').classList.remove('show');
-    };
+    }
+
+    window.closeModal = closeModal;
+    window.openModal = openModal;
 
     window.abrirCheckout = function() {
         if (!usuarioAtual) {
             document.getElementById('loginOverlay').classList.remove('hidden');
             return;
         }
-        if (!carrinho.length) { showToast('❌ Carrinho vazio!'); return; }
+        if (!carrinho.length) {
+            showToast('❌ Carrinho vazio!');
+            return;
+        }
         const total = carrinho.reduce((s, i) => s + i.preco * i.qtd, 0);
         const frete = total >= 50 ? 0 : 7.90;
         document.getElementById('checkoutTotal').innerHTML = `Total: R$ ${(total + frete).toFixed(2).replace('.', ',')}`;
@@ -404,7 +514,10 @@
         const endereco = document.getElementById('endereco').value.trim();
         const pagamento = document.getElementById('pagamento').value;
 
-        if (!endereco) { showToast('⚠️ Informe o endereço!'); return; }
+        if (!endereco) {
+            showToast('⚠️ Informe o endereço de entrega!');
+            return;
+        }
 
         const subtotal = carrinho.reduce((s, i) => s + i.preco * i.qtd, 0);
         const frete = subtotal >= 50 ? 0 : 7.90;
@@ -415,11 +528,11 @@
             email: usuarioAtual.email,
             whatsapp: usuarioAtual.telefone || 'Não informado',
             itens: carrinho.map(i => ({ nome: i.nome, qtd: i.qtd, preco: i.preco })),
-            subtotal,
-            frete,
-            total,
-            endereco,
-            pagamento,
+            subtotal: subtotal,
+            frete: frete,
+            total: total,
+            endereco: endereco,
+            pagamento: pagamento,
             status: 'pending',
             data: new Date().toLocaleString('pt-BR'),
             criadoEm: serverTimestamp()
@@ -452,6 +565,7 @@
             salvarCarrinho();
             closeModal('checkoutModal');
             renderCart();
+            
         } catch (error) {
             console.error('Erro:', error);
             showToast('❌ Erro ao finalizar pedido!');
@@ -459,13 +573,63 @@
     };
 
     // ============================================================
-    // PRODUTOS (Firebase — tempo real)
+    // PERFIL
+    // ============================================================
+    window.abrirPerfil = async function() {
+        if (!usuarioAtual) {
+            document.getElementById('loginOverlay').classList.remove('hidden');
+            return;
+        }
+        
+        try {
+            const userDoc = await getDocs(query(collection(db, 'users'), where('email', '==', usuarioAtual.email)));
+            const userData = userDoc.docs[0]?.data();
+            
+            const pedidosSnap = await getDocs(query(collection(db, 'pedidos'), where('email', '==', usuarioAtual.email)));
+            const pedidos = pedidosSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+            
+            const cupons = userData?.cupons || [];
+            
+            const content = document.getElementById('perfilContent');
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <div style="font-size: 3rem;">🍩</div>
+                    <div style="font-weight: bold; font-size: 1.2rem;">${usuarioAtual.nome}</div>
+                    <div style="color: #666; font-size: 0.8rem;">${usuarioAtual.email}</div>
+                    <div style="color: #666; font-size: 0.8rem;">📱 ${usuarioAtual.telefone || 'Não informado'}</div>
+                </div>
+                <div style="margin: 1rem 0;">
+                    <div style="font-weight: bold;">📦 Meus Pedidos (${pedidos.length})</div>
+                    ${pedidos.slice(0, 5).map(p => `
+                        <div style="background: #f8f8f8; border-radius: 10px; padding: 0.5rem; margin-top: 0.5rem;">
+                            <div>📅 ${p.data}</div>
+                            <div>💰 R$ ${p.total.toFixed(2).replace('.', ',')}</div>
+                            <div style="font-size: 0.8rem; color: ${p.status === 'completed' ? '#2ecc71' : '#f39c12'}">${p.status === 'completed' ? '✅ Concluído' : '⏳ Pendente'}</div>
+                        </div>
+                    `).join('')}
+                    ${pedidos.length === 0 ? '<div style="text-align: center; color: #999;">Nenhum pedido ainda</div>' : ''}
+                </div>
+                <div>
+                    <div style="font-weight: bold;">🎟️ Meus Cupons (${cupons.length})</div>
+                    ${cupons.map(c => `<div style="background: #ffeaa7; border-radius: 10px; padding: 0.3rem 0.5rem; margin-top: 0.3rem; font-size: 0.8rem;">${c}</div>`).join('')}
+                    ${cupons.length === 0 ? '<div style="text-align: center; color: #999;">Nenhum cupom ainda</div>' : ''}
+                </div>
+            `;
+            
+            openModal('perfilModal');
+        } catch (error) {
+            console.error('Erro ao carregar perfil:', error);
+            showToast('Erro ao carregar perfil');
+        }
+    };
+
+    // ============================================================
+    // PRODUTOS (Firebase com tempo real)
     // ============================================================
     async function carregarProdutos() {
         try {
             const snap = await getDocs(collection(db, 'produtos'));
-
-            // Se não há produtos, insere os padrão
+            
             if (snap.empty) {
                 for (const p of PRODUTOS_PADRAO) {
                     await addDoc(collection(db, 'produtos'), p);
@@ -473,32 +637,60 @@
                 carregarProdutos();
                 return;
             }
-
-            const produtos = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.ativo !== false);
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = produtos.map(p => `
-                <div class="product-card" onclick="abrirModal(${JSON.stringify(p).replace(/"/g, '&quot;')})">
-                    <div class="product-img">${p.emoji || '🍩'}</div>
-                    <div class="product-info">
-                        <div class="product-title">${p.nome}</div>
-                        <div class="product-price">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</div>
-                        <button class="btn-add" onclick="event.stopPropagation(); addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})">+ Adicionar</button>
-                    </div>
-                </div>
-            `).join('');
+            
+            produtos = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.ativo !== false);
+            renderizarProdutos();
         } catch (error) {
             console.error('Erro ao carregar produtos:', error);
-            document.getElementById('productsGrid').innerHTML = '<p style="text-align:center;color:red;">Erro ao carregar produtos. Verifique a conexão.</p>';
+            renderizarProdutosFallback();
         }
     }
 
-    window.abrirModal = function(produto) {
-        document.getElementById('modalEmoji').textContent = produto.emoji || '🍩';
-        document.getElementById('modalTitle').textContent = produto.nome;
-        document.getElementById('modalDesc').textContent = produto.descricao || 'Delicioso donut artesanal';
-        document.getElementById('modalPrice').textContent = `R$ ${Number(produto.preco).toFixed(2).replace('.', ',')}`;
+    function renderizarProdutos() {
+        const grid = document.getElementById('productsGrid');
+        if (!produtos.length) {
+            grid.innerHTML = '<div style="text-align: center; padding: 2rem;">Nenhum produto disponível</div>';
+            return;
+        }
+        
+        grid.innerHTML = produtos.map(p => `
+            <div class="product-card" onclick="abrirModalProduto(${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                <div class="product-img">${p.emoji || '🍩'}</div>
+                <div class="product-info">
+                    <div class="product-title">${p.nome}</div>
+                    <div class="product-price">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</div>
+                    <button class="btn-add" onclick="event.stopPropagation(); addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})">+ Adicionar</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderizarProdutosFallback() {
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = PRODUTOS_PADRAO.map(p => `
+            <div class="product-card" onclick="abrirModalProduto(${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                <div class="product-img">${p.emoji}</div>
+                <div class="product-info">
+                    <div class="product-title">${p.nome}</div>
+                    <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+                    <button class="btn-add" onclick="event.stopPropagation(); addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})">+ Adicionar</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    window.abrirModalProduto = function(produto) {
+        document.getElementById('modalProductEmoji').textContent = produto.emoji || '🍩';
+        document.getElementById('modalProductTitle').textContent = produto.nome;
+        document.getElementById('modalProductDesc').textContent = produto.descricao || 'Delicioso donut artesanal';
+        document.getElementById('modalProductPrice').textContent = `R$ ${Number(produto.preco).toFixed(2).replace('.', ',')}`;
+        
         const btn = document.getElementById('modalAddBtn');
-        btn.onclick = () => { addToCart(produto); closeModal('productModal'); };
+        btn.onclick = () => {
+            addToCart(produto);
+            closeModal('productModal');
+        };
+        
         openModal('productModal');
     };
 
@@ -507,6 +699,16 @@
     // ============================================================
     verificarSessao();
     carregarCarrinho();
+    carregarProdutos();
+    
+    // Botão do header
+    document.getElementById('headerLoginBtn')?.addEventListener('click', () => {
+        if (usuarioAtual) {
+            abrirPerfil();
+        } else {
+            document.getElementById('loginOverlay').classList.remove('hidden');
+        }
+    });
 </script>
 </body>
 </html>
