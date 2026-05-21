@@ -1,1617 +1,660 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Donut ALR | Delivery de Doces em Floriano 🍩</title>
-  <style>
-    /* ===== ESTILOS COMPLETOS (mantidos da versão anterior) ===== */
-    :root {
-      --bg: #fff6f9;
-      --card: #fff;
-      --pink: #ff6b9d;
-      --pink-light: #ffb3d0;
-      --rose: #ff4081;
-      --peach: #ffd4e8;
-      --lavender: #eed6f8;
-      --mint: #c8f7e0;
-      --mint-dark: #2ecc71;
-      --yellow: #fff3b0;
-      --brown: #4a2030;
-      --brown-mid: #7a4055;
-      --brown-light: #b07090;
-      --gray: #f7f0f3;
-      --gray-2: #eee0e8;
-      --text: #2d1020;
-      --shadow-sm: 0 2px 8px rgba(200,80,120,0.12);
-      --shadow-md: 0 8px 28px rgba(200,80,120,0.18);
-      --shadow-lg: 0 20px 60px rgba(200,80,120,0.22);
-      --radius: 20px;
-      --radius-sm: 12px;
-      --gradient: linear-gradient(135deg,#ff6b9d 0%,#ff4081 100%);
-      --warning: #ff9800;
-      --success: #4caf50;
-      --danger: #f44336;
-    }
-    [data-theme="dark"] {
-      --bg: #1a0d14; --card: #2a1520; --peach: #3a1a2a; --gray: #2a1520;
-      --gray-2: #3a2030; --brown: #f5c6d8; --brown-mid: #d4a0b8; --brown-light: #a07088;
-      --text: #f5e6ee;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text); transition: background 0.3s; }
-    a { text-decoration:none; }
-
-    /* ===== AUTH SCREEN (tela inicial de cadastro/login) ===== */
-    .login-required-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #2d0a1a 0%, #1a0510 50%, #0d0308 100%);
-      z-index: 10000; display: flex; align-items: center; justify-content: center;
-      overflow-y: auto; padding: 1rem;
-    }
-    .login-required-overlay.hidden { display: none; }
-
-    @keyframes slideUp {
-      from { transform: translateY(40px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .auth-screen {
-      width: 100%; max-width: 900px; display: grid;
-      grid-template-columns: 1fr 1fr; min-height: 540px;
-      border-radius: 28px; overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.7);
-      animation: slideUp 0.5s ease;
-    }
-    @media (max-width: 680px) {
-      .auth-screen { grid-template-columns: 1fr; min-height: auto; }
-      .auth-screen-left { display: none; }
-    }
-
-    /* Lado esquerdo – branding */
-    .auth-screen-left {
-      background: var(--gradient); padding: 3rem 2.5rem;
-      display: flex; flex-direction: column; justify-content: center;
-      position: relative; overflow: hidden;
-    }
-    .auth-screen-left::before {
-      content: ''; position: absolute; top: -60px; right: -60px;
-      width: 240px; height: 240px; background: rgba(255,255,255,0.08); border-radius: 50%;
-    }
-    .auth-screen-left::after {
-      content: ''; position: absolute; bottom: -80px; left: -40px;
-      width: 200px; height: 200px; background: rgba(255,255,255,0.06); border-radius: 50%;
-    }
-    .auth-brand-logo { font-size: 3.5rem; margin-bottom: 1rem; position: relative; z-index: 1; }
-    .auth-brand-title { font-family: "Syne", sans-serif; font-size: 2rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 0.8rem; position: relative; z-index: 1; }
-    .auth-brand-sub { color: rgba(255,255,255,0.8); font-size: 0.88rem; line-height: 1.6; margin-bottom: 2rem; position: relative; z-index: 1; }
-    .auth-brand-feats { display: flex; flex-direction: column; gap: 0.7rem; position: relative; z-index: 1; }
-    .auth-feat { display: flex; align-items: center; gap: 0.8rem; color: rgba(255,255,255,0.9); font-size: 0.85rem; }
-    .auth-feat-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-
-    /* Lado direito – formulário */
-    .auth-screen-right {
-      background: #fff; padding: 2.5rem;
-      display: flex; flex-direction: column; justify-content: center; overflow-y: auto;
-    }
-    [data-theme="dark"] .auth-screen-right { background: #2a1520; }
-
-    .auth-screen-title { font-family: "Syne", sans-serif; font-size: 1.5rem; font-weight: 800; color: #4a2030; margin-bottom: 0.25rem; }
-    [data-theme="dark"] .auth-screen-title { color: #f5c6d8; }
-    .auth-screen-sub { color: #b07090; font-size: 0.82rem; margin-bottom: 1.5rem; }
-
-    /* Toggle abas */
-    .auth-toggle {
-      display: flex; background: #f5eef2; border-radius: 12px; padding: 4px;
-      margin-bottom: 1.6rem; gap: 3px;
-    }
-    [data-theme="dark"] .auth-toggle { background: #3a1a2a; }
-    .auth-toggle-btn {
-      flex: 1; padding: 0.6rem; border: none; border-radius: 9px;
-      font-weight: 700; font-size: 0.87rem; cursor: pointer;
-      background: transparent; color: #b07090; transition: all 0.2s;
-    }
-    .auth-toggle-btn.active { background: var(--gradient); color: #fff; box-shadow: 0 4px 14px rgba(255,64,129,0.3); }
-
-    /* Inputs dentro da auth screen */
-    .auth-screen-right .auth-field {
-      width: 100%; padding: 0.78rem 1rem; border: 1.5px solid #eee0e8;
-      border-radius: 11px; background: #fff6f9; margin-bottom: 0.85rem;
-      font-size: 0.9rem; transition: border-color 0.2s; color: #2d1020;
-      font-family: inherit;
-    }
-    [data-theme="dark"] .auth-screen-right .auth-field { background: #1a0d14; border-color: #3a2030; color: #f5e6ee; }
-    .auth-screen-right .auth-field:focus { outline: none; border-color: #ff6b9d; background: #fff; }
-    [data-theme="dark"] .auth-screen-right .auth-field:focus { background: #200d18; }
-
-    .auth-screen-right .auth-btn-submit {
-      width: 100%; background: var(--gradient); color: #fff; border: none;
-      padding: 0.9rem; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
-      cursor: pointer; margin-top: 0.2rem; font-family: inherit;
-      box-shadow: 0 6px 20px rgba(255,64,129,0.3); transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .auth-screen-right .auth-btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(255,64,129,0.42); }
-
-    .auth-screen-msg { font-size: 0.83rem; text-align: center; margin-top: 0.8rem; min-height: 1.2em; }
-    .auth-screen-msg.ok { color: #2ecc71; font-weight: 600; }
-    .auth-screen-msg.err { color: #e74c3c; font-weight: 600; }
-
-    /* ===== CONTEÚDO PRINCIPAL ===== */
-    .main-content { display: none; }
-    .main-content.visible { display: block; }
-
-    /* Senha strength */
-    .senha-strength { height: 4px; border-radius: 99px; margin: -0.5rem 0 0.7rem; transition: 0.3s; }
-    .strength-fraca { background: #e74c3c; width: 33%; }
-    .strength-media { background: #f39c12; width: 66%; }
-    .strength-forte { background: #2ecc71; width: 100%; }
-
-    /* Auth msg (modais internos) */
-    .auth-msg { font-size: 0.85rem; margin-top: 0.5rem; text-align: center; min-height: 1.2em; }
-    .auth-msg.ok { color: #2ecc71; }
-    .auth-msg.err { color: #e74c3c; }
-
-    /* Perfil tabs */
-    .perfil-tab-btn { flex: 1; background: var(--gray); border: none; padding: 0.4rem 0.2rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
-    .perfil-tab-btn:hover { background: var(--peach); }
-
-    /* Status Banner */
-    .status-banner { background:var(--mint-dark); color:#fff; text-align:center; padding:0.45rem; font-size:0.82rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:0.5rem; }
-    .status-dot { width:8px; height:8px; background:#aeffd8; border-radius:50%; animation:pulse 1.5s infinite; }
-    .status-dot.fechado { background:#ff6b6b; animation:none; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.8)} }
-
-    /* Header */
-    .site-header { position:sticky; top:0; z-index:700; background:rgba(255,246,249,0.97); backdrop-filter:blur(20px); border-bottom:1.5px solid rgba(255,180,210,0.3); }
-    .navbar { max-width:1300px; margin:0 auto; padding:0 1.5rem; height:68px; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
-    .logo-area { display:flex; align-items:center; gap:12px; }
-    .logo-blob { width:46px; height:46px; background:var(--gradient); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; }
-    .logo-text { font-family:'Syne',sans-serif; font-size:1.35rem; font-weight:800; color:var(--brown); }
-    .logo-text em { display:block; font-style:normal; font-size:0.62rem; font-weight:600; color:var(--pink); }
-    .nav-links { display:flex; gap:0.5rem; list-style:none; }
-    .nav-links a { font-weight:600; color:var(--brown-mid); padding:0.45rem 0.95rem; border-radius:99px; cursor:pointer; }
-    .nav-links a:hover { background:var(--peach); color:var(--pink); }
-    .header-actions { display:flex; gap:0.7rem; align-items:center; }
-    .cart-btn { background:var(--gradient); color:#fff; border:none; padding:0.55rem 1.1rem; border-radius:99px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:7px; }
-    .cart-badge { background:#fff; color:var(--rose); border-radius:50%; width:20px; height:20px; font-size:0.72rem; font-weight:800; display:flex; align-items:center; justify-content:center; }
-    .dark-toggle, .login-btn { background:var(--gray); border:none; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:1.1rem; }
-    .login-btn { width:auto; padding:0 1rem; border-radius:99px; font-size:0.85rem; font-weight:700; }
-
-    /* Hero */
-    .hero { max-width:1300px; margin:0 auto; padding:3rem 1.5rem; display:grid; grid-template-columns:1fr 400px; gap:3rem; align-items:center; }
-    .hero-badge { display:inline-flex; background:var(--yellow); color:var(--brown); padding:0.35rem 1rem; border-radius:99px; font-size:0.82rem; font-weight:700; margin-bottom:1rem; }
-    .hero-text h1 { font-size:3rem; font-weight:800; color:var(--brown); }
-    .hero-text h1 .accent { color:var(--pink); }
-    .hero-text p { color:var(--brown-light); margin:1rem 0; }
-    .btn-primary { background:var(--gradient); color:#fff; border:none; padding:0.85rem 1.8rem; border-radius:99px; font-weight:700; cursor:pointer; }
-    .btn-outline { background:transparent; color:var(--pink); border:2px solid var(--pink-light); padding:0.82rem 1.6rem; border-radius:99px; font-weight:700; cursor:pointer; }
-    .hero-card { background:var(--card); border-radius:24px; padding:1.5rem; box-shadow:var(--shadow-lg); }
-
-    /* Stats */
-    .stats-bar { background:var(--gradient); padding:1.2rem 1.5rem; }
-    .stats-inner { max-width:1300px; margin:0 auto; display:flex; justify-content:center; gap:4rem; }
-    .stat { text-align:center; color:#fff; }
-    .stat-num { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; }
-
-    /* Ofertas */
-    .offers-banner { background: linear-gradient(135deg, #ff6b9d, #ff4081); margin: 1rem auto; border-radius: 20px; max-width: 1300px; margin-left: 1.5rem; margin-right: 1.5rem; }
-    .offers-container { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .offer-text { color: white; }
-    .offer-timer { background: rgba(255,255,255,0.2); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 700; font-size: 1.2rem; }
-
-    /* Cardápio */
-    .section { max-width:1300px; margin:0 auto; padding:3rem 1.5rem; }
-    .section-title { font-family:'Syne',sans-serif; font-size:1.9rem; font-weight:800; color:var(--brown); }
-    .section-title .accent { color:var(--pink); }
-    .search-wrap { position:relative; max-width:400px; margin-bottom:1.5rem; }
-    .search-input { width:100%; padding:0.7rem 1rem 0.7rem 2.8rem; border:1.5px solid var(--gray-2); border-radius:99px; background:var(--card); }
-    .search-icon { position:absolute; left:1rem; top:50%; transform:translateY(-50%); }
-    .tab-nav { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem; }
-    .tab-btn { background:var(--gray); border:none; padding:0.5rem 1.2rem; border-radius:99px; font-weight:600; cursor:pointer; color:var(--brown-mid); }
-    .tab-btn.active { background:var(--gradient); color:#fff; }
-    .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.5rem; }
-    .product-card { background:var(--card); border-radius:var(--radius); overflow:hidden; border:1px solid rgba(255,180,210,0.2); cursor:pointer; transition:0.2s; }
-    .product-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-md); }
-    .product-img-wrap { aspect-ratio:1; background:linear-gradient(135deg,#ffd4e8,#eed6f8); display:flex; align-items:center; justify-content:center; font-size:4rem; position:relative; }
-    .product-badge { position:absolute; top:8px; right:8px; background:var(--gradient); color:#fff; border-radius:99px; padding:0.15rem 0.55rem; font-size:0.7rem; }
-    .product-tag { position:absolute; top:8px; left:8px; background:var(--yellow); color:var(--brown); border-radius:99px; padding:0.15rem 0.55rem; font-size:0.7rem; }
-    .product-info { padding:1rem; }
-    .product-footer { display:flex; justify-content:space-between; align-items:center; margin-top:0.8rem; }
-    .product-price { font-weight:800; font-size:1.2rem; color:var(--pink); }
-    .btn-add { background:var(--gradient); color:#fff; border:none; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer; }
-
-    /* Combos */
-    .combos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.5rem; }
-    .combo-card { background:var(--card); border-radius:var(--radius); padding:1.2rem; border:2px solid var(--pink-light); position:relative; }
-    .combo-badge { position:absolute; top:-10px; right:16px; background:var(--warning); color:#fff; padding:0.25rem 0.8rem; border-radius:50px; font-size:0.7rem; font-weight:700; }
-    .combo-price { font-size:1.3rem; font-weight:800; color:var(--pink); }
-    .combo-original { text-decoration:line-through; font-size:0.8rem; color:var(--brown-light); margin-right:0.5rem; }
-
-    /* Pagamento */
-    .payment-section { margin:1rem 0; }
-    .payment-title { font-weight:700; margin-bottom:0.5rem; }
-    .payment-options { display:flex; gap:0.8rem; flex-wrap:wrap; }
-    .payment-option { display:flex; align-items:center; gap:0.5rem; padding:0.5rem 1rem; border:1.5px solid var(--gray-2); border-radius:40px; cursor:pointer; }
-    .payment-option.selected { border-color:var(--pink); background:var(--peach); }
-
-    /* Bebidas */
-    .drinks-section-bg { background:var(--gradient-soft); }
-    .drinks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
-    .drink-card { background:var(--card); border-radius:var(--radius-sm); padding:1rem; display:flex; align-items:center; gap:1rem; }
-    .drink-thumb { width:50px; height:50px; background:var(--yellow); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.8rem; }
-
-    /* Delivery */
-    .delivery-wrapper { background:var(--gradient); padding:3rem 1.5rem; }
-    .calc-box { background:var(--card); border-radius:24px; padding:1.8rem; max-width:550px; margin:0 auto; }
-    .cep-row { display:flex; gap:0.5rem; margin-bottom:1rem; }
-    .cep-input { flex:1; padding:0.75rem; border:1.5px solid var(--gray-2); border-radius:12px; background:var(--card); }
-    .btn-buscar { background:var(--gradient); color:#fff; border:none; padding:0.75rem 1.2rem; border-radius:12px; font-weight:700; cursor:pointer; }
-    .endereco-fields { display:none; grid-template-columns:1fr 1fr; gap:0.5rem; margin-top:1rem; }
-    .endereco-fields input { padding:0.7rem; border:1.5px solid var(--gray-2); border-radius:12px; background:var(--card); }
-    .frete-resultado { display:none; margin-top:1rem; background:var(--peach); border-radius:16px; padding:1rem; text-align:center; }
-    .frete-resultado.show { display:block; }
-    .frete-valor { font-size:1.6rem; font-weight:800; color:var(--pink); }
-
-    /* Carrinho Sidebar */
-    .cart-sidebar { position:fixed; top:0; right:0; width:400px; max-width:90vw; height:100%; background:var(--card); z-index:1001; transform:translateX(100%); transition:transform 0.3s; display:flex; flex-direction:column; }
-    .cart-sidebar.open { transform:translateX(0); }
-    .cart-header { padding:1rem; border-bottom:1px solid var(--gray-2); display:flex; justify-content:space-between; }
-    .cart-body { flex:1; overflow-y:auto; padding:1rem; }
-    .cart-footer { padding:1rem; border-top:1px solid var(--gray-2); }
-    .cart-item { display:flex; align-items:center; gap:0.8rem; padding:0.8rem 0; border-bottom:1px solid var(--peach); }
-    .qty-ctrl { display:flex; align-items:center; gap:0.5rem; }
-    .qty-btn { background:var(--gray); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; font-weight:700; }
-    .btn-checkout { width:100%; background:var(--gradient); color:#fff; border:none; padding:0.9rem; border-radius:14px; font-weight:700; cursor:pointer; margin-top:0.8rem; }
-
-    /* Modais */
-    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:0.3s; }
-    .modal-overlay.open { opacity:1; pointer-events:all; }
-    .modal-box { background:var(--card); border-radius:28px; padding:2rem; max-width:450px; width:90%; max-height:85vh; overflow-y:auto; position:relative; }
-    .modal-close { position:absolute; top:1rem; right:1rem; background:var(--gray); border:none; width:36px; height:36px; border-radius:50%; cursor:pointer; }
-    .auth-input { width:100%; padding:0.75rem; border:1.5px solid var(--gray-2); border-radius:12px; background:var(--bg); margin-bottom:1rem; }
-    .auth-submit { width:100%; background:var(--gradient); color:#fff; border:none; padding:0.9rem; border-radius:12px; font-weight:700; cursor:pointer; }
-    /* auth-tabs removidas - substituídas por auth-toggle */
-
-    /* Toast */
-    .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--brown); color:#fff; padding:0.7rem 1.5rem; border-radius:99px; z-index:3000; opacity:0; transition:0.2s; pointer-events:none; }
-    .toast.show { opacity:1; }
-
-    /* Game Banner */
-    .game-banner { background:var(--gradient); padding:2rem 1.5rem; }
-    .game-banner-inner { max-width:1300px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
-    .game-card { background:rgba(255,255,255,0.18); border-radius:20px; padding:1.2rem; cursor:pointer; text-align:center; color:#fff; }
-    .game-card-icon { font-size:2rem; margin-bottom:0.5rem; }
-
-    /* Surpresa, Quiz, Roda */
-    .surprise-box, .roda-container { text-align:center; }
-    .surprise-donut { font-size:4rem; animation:float 3s infinite; }
-    @keyframes float { 0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)} }
-    .quiz-opt { background:var(--bg); border:1.5px solid var(--gray-2); border-radius:12px; padding:0.75rem; margin-bottom:0.5rem; cursor:pointer; width:100%; text-align:left; }
-    .quiz-opt.certa { border-color:#2ecc71; background:#c8f7e0; }
-    .quiz-opt.errada { border-color:#e74c3c; background:#fde8e8; }
-    .roda-wrap { position:relative; width:260px; height:260px; margin:0 auto; }
-    #rodaCanvas { border-radius:50%; }
-    .roda-ponteiro { position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:1.8rem; }
-
-    /* Footer */
-    footer { background:var(--brown); color:rgba(255,255,255,0.8); padding:3rem 1.5rem; }
-    .footer-inner { max-width:1300px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:2rem; }
-
-    /* Mobile */
-    .mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--gray-2); padding:0.5rem; z-index:800; }
-    @media (max-width:768px) { .mobile-nav { display:block; } .nav-links { display:none; } .hero { grid-template-columns:1fr; } }
-    .wa-fab { position:fixed; bottom:80px; right:16px; width:52px; height:52px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.2); z-index:900; }
-    @media (min-width:769px) { .wa-fab { bottom:20px; } }
-    .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:1000; opacity:0; pointer-events:none; transition:0.3s; }
-    .overlay.show { opacity:1; pointer-events:all; }
-    .confetti-canvas { position:fixed; inset:0; pointer-events:none; z-index:9999; display:none; }
-  </style>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donut ALR - Delivery de Doces 🍩</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff6f9; }
+        
+        /* Header */
+        .header { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #ff6b9d; }
+        .logo span { font-size: 1.8rem; }
+        .cart-btn { background: #ff6b9d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 30px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        .cart-badge { background: white; color: #ff6b9d; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        
+        /* Container */
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        
+        /* Hero */
+        .hero { background: linear-gradient(135deg, #ff6b9d, #ff4081); color: white; padding: 3rem; border-radius: 20px; text-align: center; margin-bottom: 2rem; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; }
+        
+        /* Produtos */
+        .section-title { font-size: 1.8rem; color: #4a2030; margin-bottom: 1.5rem; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+        .product-card { background: white; border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .product-img { height: 180px; background: linear-gradient(135deg, #ffd4e8, #eed6f8); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+        .product-info { padding: 1rem; }
+        .product-title { font-weight: bold; font-size: 1.1rem; color: #4a2030; }
+        .product-price { color: #ff6b9d; font-weight: bold; font-size: 1.3rem; margin: 0.5rem 0; }
+        .btn-add { background: #ff6b9d; color: white; border: none; padding: 0.6rem; border-radius: 30px; width: 100%; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        .btn-add:hover { background: #ff4081; }
+        
+        /* Carrinho Sidebar */
+        .cart-sidebar { position: fixed; top: 0; right: 0; width: 400px; max-width: 90vw; height: 100%; background: white; z-index: 1001; transform: translateX(100%); transition: transform 0.3s; display: flex; flex-direction: column; box-shadow: -2px 0 20px rgba(0,0,0,0.15); }
+        .cart-sidebar.open { transform: translateX(0); }
+        .cart-header { padding: 1rem 1.5rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #ff6b9d; color: white; }
+        .cart-header h3 { color: white; }
+        .close-cart { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .cart-body { flex: 1; overflow-y: auto; padding: 1rem; }
+        .cart-empty { text-align: center; padding: 2rem; color: #999; }
+        .cart-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid #f0f0f0; }
+        .cart-item-emoji { font-size: 2rem; }
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: bold; color: #4a2030; }
+        .cart-item-price { color: #ff6b9d; font-size: 0.9rem; }
+        .qty-ctrl { display: flex; align-items: center; gap: 0.5rem; }
+        .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #ddd; background: white; cursor: pointer; font-weight: bold; }
+        .qty-num { min-width: 20px; text-align: center; }
+        .cart-footer { padding: 1rem 1.5rem; border-top: 1px solid #eee; background: #fafafa; }
+        .cart-summary { margin-bottom: 1rem; }
+        .cart-summary-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .cart-summary-row.total { font-weight: bold; font-size: 1.2rem; border-top: 1px solid #ddd; padding-top: 0.5rem; margin-top: 0.5rem; }
+        .btn-checkout { background: #2ecc71; color: white; border: none; padding: 0.8rem; border-radius: 30px; width: 100%; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s; }
+        .btn-checkout:hover { background: #27ae60; }
+        .btn-checkout:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-secondary { background: #f0f0f0; color: #666; border: none; padding: 0.6rem; border-radius: 30px; width: 100%; cursor: pointer; margin-top: 0.5rem; }
+        
+        /* Modal */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .overlay.show { opacity: 1; pointer-events: all; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center; z-index: 1002; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 20px; padding: 2rem; max-width: 450px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h3 { margin-bottom: 1rem; color: #4a2030; }
+        .modal-content input, .modal-content select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 1rem; font-family: inherit; }
+        .modal-content input:focus { outline: none; border-color: #ff6b9d; }
+        .btn-primary { background: #ff6b9d; color: white; border: none; padding: 0.8rem; border-radius: 30px; width: 100%; cursor: pointer; font-weight: bold; }
+        .auth-toggle { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .auth-toggle-btn { flex: 1; padding: 0.6rem; border: none; background: #f0f0f0; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .auth-toggle-btn.active { background: #ff6b9d; color: white; }
+        
+        /* Checkout Modal */
+        .payment-options { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .payment-option { flex: 1; padding: 0.8rem; border: 2px solid #ddd; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .payment-option.selected { border-color: #ff6b9d; background: #fff0f5; }
+        
+        /* Login Overlay */
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+        .login-overlay.hidden { display: none; }
+        .login-box { background: white; border-radius: 20px; padding: 2rem; max-width: 400px; width: 90%; text-align: center; }
+        .login-box h2 { color: #ff6b9d; margin-bottom: 1rem; }
+        .login-box input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 10px; }
+        .login-box button { width: 100%; padding: 0.8rem; background: #ff6b9d; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        
+        /* Toast */
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 0.8rem 1.5rem; border-radius: 50px; z-index: 2001; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .toast.show { opacity: 1; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+            .cart-sidebar { width: 100%; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Auth Screen Overlay (tela de Cadastro/Login) -->
-<div class="login-required-overlay" id="loginRequiredOverlay">
-  <div class="auth-screen">
-    <!-- Lado esquerdo: branding -->
-    <div class="auth-screen-left">
-      <div class="auth-brand-logo">🍩</div>
-      <div class="auth-brand-title">Os melhores doces de Floriano!</div>
-      <div class="auth-brand-sub">Crie sua conta gratuita e aproveite descontos exclusivos, acompanhe seus pedidos e ganhe prêmios toda semana.</div>
-      <div class="auth-brand-feats">
-        <div class="auth-feat"><div class="auth-feat-icon">🚚</div><span>Entrega rápida em Floriano-PI</span></div>
-        <div class="auth-feat"><div class="auth-feat-icon">🎁</div><span>Cupons e promoções exclusivas</span></div>
-        <div class="auth-feat"><div class="auth-feat-icon">⭐</div><span>Avaliação 4.9 · 500+ pedidos</span></div>
-        <div class="auth-feat"><div class="auth-feat-icon">🎡</div><span>Roda da sorte e quiz com prêmios</span></div>
-      </div>
+<!-- Login Overlay -->
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🍩</div>
+        <h2>Donut ALR</h2>
+        <p style="margin-bottom: 1rem;">Faça login para continuar</p>
+        <div class="auth-toggle">
+            <button class="auth-toggle-btn active" onclick="switchAuthMode('login')">Entrar</button>
+            <button class="auth-toggle-btn" onclick="switchAuthMode('cadastro')">Cadastrar</button>
+        </div>
+        <div id="authLoginForm">
+            <input type="email" id="loginEmail" placeholder="E-mail">
+            <input type="password" id="loginSenha" placeholder="Senha">
+            <button onclick="fazerLogin()">Entrar</button>
+        </div>
+        <div id="authCadastroForm" style="display: none;">
+            <input type="text" id="cadNome" placeholder="Nome completo">
+            <input type="email" id="cadEmail" placeholder="E-mail">
+            <input type="tel" id="cadTelefone" placeholder="WhatsApp">
+            <input type="password" id="cadSenha" placeholder="Senha (mínimo 6 caracteres)">
+            <button onclick="fazerCadastro()">Criar conta</button>
+        </div>
+        <p id="authMsg" style="margin-top: 1rem; font-size: 0.8rem; color: #e74c3c;"></p>
     </div>
-    <!-- Lado direito: formulário -->
-    <div class="auth-screen-right">
-      <div class="auth-screen-title" id="authScreenTitle">Criar conta</div>
-      <div class="auth-screen-sub" id="authScreenSub">Preencha os dados abaixo para começar</div>
-      <!-- Toggle Cadastro / Login -->
-      <div class="auth-toggle">
-        <button class="auth-toggle-btn active" id="toggleCadastro" onclick="switchAuthScreen('cadastro')">✨ Cadastrar</button>
-        <button class="auth-toggle-btn" id="toggleLogin" onclick="switchAuthScreen('login')">🔑 Já tenho conta</button>
-      </div>
-      <!-- Formulário de Cadastro -->
-      <div id="authScreenCadastro">
-        <input type="text" id="cadNome" class="auth-field" placeholder="👤 Nome completo">
-        <input type="email" id="cadEmail" class="auth-field" placeholder="📧 E-mail">
-        <input type="tel" id="cadTelefone" class="auth-field" placeholder="📱 WhatsApp (89) 99999-9999" oninput="mascararTelefone(this)">
-        <input type="password" id="cadSenha" class="auth-field" placeholder="🔒 Senha (mín. 6 caracteres)" oninput="avaliarSenha(this.value)">
-        <div class="senha-strength" id="senhaStrength"></div>
-        <input type="password" id="cadSenhaConf" class="auth-field" placeholder="🔒 Confirmar senha">
-        <button class="auth-btn-submit" onclick="fazerCadastro()">🎉 Criar minha conta</button>
-      </div>
-      <!-- Formulário de Login -->
-      <div id="authScreenLogin" style="display:none">
-        <input type="email" id="loginEmail" class="auth-field" placeholder="📧 Seu e-mail">
-        <input type="password" id="loginSenha" class="auth-field" placeholder="🔒 Sua senha">
-        <button class="auth-btn-submit" onclick="fazerLogin()">🍩 Entrar na minha conta</button>
-      </div>
-      <div class="auth-screen-msg" id="authScreenMsg"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Status Banner -->
-<div class="status-banner" id="statusBanner">
-  <span class="status-dot" id="statusDot"></span>
-  <span id="horarioStatus">Verificando horário...</span>
 </div>
 
 <!-- Header -->
-<header class="site-header">
-  <nav class="navbar">
-    <a href="#" class="logo-area">
-      <div class="logo-blob">🍩</div>
-      <div class="logo-text">Donut ALR<em>Floriano · PI</em></div>
-    </a>
-    <ul class="nav-links">
-      <li><a onclick="navTo('#cardapio')">Cardápio</a></li>
-      <li><a onclick="navTo('#bebidas')">Bebidas</a></li>
-      <li><a onclick="navTo('#delivery')">Delivery</a></li>
-      <li><a onclick="navTo('#contato')">Contato</a></li>
-    </ul>
-    <div class="header-actions">
-      <button class="dark-toggle" id="darkToggle">🌙</button>
-      <button class="login-btn" id="headerLoginBtn">👤 Entrar</button>
-      <button class="cart-btn" id="cartBtn">🛒 Carrinho <span class="cart-badge" id="cartCount">0</span></button>
+<header class="header">
+    <div class="logo">
+        <span>🍩</span> Donut ALR
     </div>
-  </nav>
+    <button class="cart-btn" onclick="openCart()">
+        🛒 Carrinho <span class="cart-badge" id="cartCount">0</span>
+    </button>
 </header>
 
-<!-- Conteúdo Principal -->
-<div class="main-content" id="mainContent">
-
-  <!-- Ofertas -->
-  <div class="offers-banner">
-    <div class="offers-container">
-      <div class="offer-text"><h3>🔥 OFERTA RELÂMPAGO</h3><p>20% OFF em Donuts com cupom <strong>DONUT20</strong></p></div>
-      <div class="offer-timer" id="offerTimer">02:00:00</div>
-    </div>
-  </div>
-
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-text">
-      <div class="hero-badge">⭐ 4.9 · 500+ pedidos</div>
-      <h1>Os melhores doces<br />de <span class="accent">Floriano</span> 🍩</h1>
-      <p>Donuts artesanais, cupcakes decorados e bebidas especiais. Entrega em toda Floriano-PI e Barão de Grajaú.</p>
-      <div class="hero-cta">
-        <button class="btn-primary" onclick="navTo('#cardapio')">🍩 Pedir agora</button>
-        <button class="btn-outline" onclick="navTo('#delivery')">🚚 Ver entrega</button>
-      </div>
-    </div>
-    <div class="hero-right">
-      <div class="hero-card">
-        <div class="hero-card-header"><strong>Pedido em andamento</strong> <span style="color:#2ecc71;">✓ A caminho</span></div>
-        <div style="margin:0.5rem 0;">🍩 Donut Nutella Love <span style="float:right;">R$ 16,90</span></div>
-        <div>🧁 Cupcake Red Velvet <span style="float:right;">R$ 17,90</span></div>
-        <div>🍓 Milk Shake Morango <span style="float:right;">R$ 18,90</span></div>
-        <hr style="margin:0.8rem 0;">
-        <div><strong>Total com frete</strong> <span style="float:right;">R$ 61,60</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats -->
-  <div class="stats-bar">
-    <div class="stats-inner">
-      <div class="stat"><div class="stat-num">500+</div><div>Pedidos</div></div>
-      <div class="stat"><div class="stat-num">⭐4.9</div><div>Avaliação</div></div>
-      <div class="stat"><div class="stat-num">30+</div><div>Produtos</div></div>
-      <div class="stat"><div class="stat-num">20+</div><div>Bairros</div></div>
-    </div>
-  </div>
-
-  <!-- Games -->
-  <div class="game-banner">
-    <div class="game-banner-inner">
-      <div class="game-card" onclick="openModal('surpriseModal')"><div class="game-card-icon">🎁</div><div>Caixa Surpresa</div></div>
-      <div class="game-card" onclick="openModal('quizModal')"><div class="game-card-icon">🧠</div><div>Quiz do Donut</div></div>
-      <div class="game-card" onclick="openModal('rodaModal')"><div class="game-card-icon">🎡</div><div>Roda da Sorte</div></div>
-      <div class="game-card" onclick="renderPerfil(); openModal('perfilModal')"><div class="game-card-icon">👤</div><div>Meu Perfil</div></div>
-    </div>
-  </div>
-
-  <!-- Cardápio -->
-  <section class="section" id="cardapio">
-    <h2 class="section-title">Nosso <span class="accent">Cardápio</span></h2>
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" class="search-input" id="searchInput" placeholder="Buscar donut, cupcake...">
-    </div>
-    <div class="tab-nav" id="tabNav">
-      <button class="tab-btn active" data-cat="all">🍬 Todos</button>
-      <button class="tab-btn" data-cat="donuts">🍩 Donuts</button>
-      <button class="tab-btn" data-cat="cupcakes">🧁 Cupcakes</button>
-      <button class="tab-btn" data-cat="bolos">🎂 Bolos</button>
-      <button class="tab-btn" data-cat="combos">🎁 Combos</button>
-    </div>
-    <div class="products-grid" id="productsGrid"></div>
-  </section>
-
-  <!-- Combos Especiais -->
-  <section class="section" id="combosSection">
-    <h2 class="section-title">🎁 <span class="accent">Combos</span> Especiais</h2>
-    <div class="combos-grid" id="combosGrid"></div>
-  </section>
-
-  <!-- Bebidas -->
-  <div class="drinks-section-bg" id="bebidas">
-    <div class="section">
-      <h2 class="section-title">🥤 <span class="accent">Bebidas</span></h2>
-      <div class="drinks-grid" id="drinksGrid"></div>
-    </div>
-  </div>
-
-  <!-- Delivery -->
-  <div class="delivery-wrapper" id="delivery">
-    <div class="delivery-inner">
-      <div class="delivery-title"><h2>🚚 Calcule o Frete</h2><p>Entregamos em toda Floriano-PI e Barão de Grajaú</p></div>
-      <div class="calc-box">
-        <h3>📍 Digite seu CEP</h3>
-        <div class="cep-row">
-          <input type="text" class="cep-input" id="cepInput" placeholder="Ex: 64800-000" maxlength="9">
-          <button class="btn-buscar" id="buscarCepBtn">🔍 Buscar</button>
-        </div>
-        <div class="endereco-fields" id="enderecoFields">
-          <input type="text" id="endRua" placeholder="Rua" readonly>
-          <input type="text" id="endBairro" placeholder="Bairro" readonly>
-          <input type="text" id="endCidade" placeholder="Cidade" readonly>
-          <input type="text" id="endNumero" placeholder="Número *">
-          <input type="text" id="endComplemento" placeholder="Complemento" style="grid-column:span 2;">
-        </div>
-        <button class="btn-calc" id="calcFreteBtn" style="width:100%; margin-top:1rem; background:var(--gradient); color:#fff; border:none; padding:0.75rem; border-radius:12px; font-weight:700; cursor:pointer;">🚚 Calcular Frete</button>
-        <div class="frete-resultado" id="freteResultado">
-          <div id="freteInfo"></div>
-          <div class="frete-valor" id="freteValorDisplay">-</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Contato -->
-  <section class="section" id="contato">
-    <h2 class="section-title">📬 <span class="accent">Contato</span></h2>
-    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-      <a href="https://wa.me/5589994112913" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">💬 WhatsApp (89) 9 9411-2913</a>
-      <a href="https://instagram.com/donutalr" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">📸 @donutalr</a>
-    </div>
-  </section>
-
-  <footer>
-    <div class="footer-inner">
-      <div><div style="display:flex; gap:10px; margin-bottom:0.75rem;"><div class="logo-blob" style="width:38px;height:38px;">🍩</div><span style="font-weight:800;">Donut ALR</span></div><p>Doces artesanais feitos com amor em Floriano-PI.</p></div>
-      <div><div class="footer-col-title">Cardápio</div><ul><li><a onclick="navTo('#cardapio')">Donuts</a></li><li><a onclick="navTo('#cardapio')">Cupcakes</a></li><li><a onclick="navTo('#bebidas')">Bebidas</a></li></ul></div>
-      <div><div class="footer-col-title">Ajuda</div><ul><li><a onclick="navTo('#delivery')">Calcular frete</a></li><li><a onclick="navTo('#contato')">Suporte</a></li></ul></div>
-    </div>
-    <div class="footer-bottom">© 2026 Donut ALR · Floriano-PI · Todos os direitos reservados</div>
-  </footer>
+<!-- Hero -->
+<div class="hero">
+    <h1>🍩 Os melhores donuts de Floriano!</h1>
+    <p>Artesanais, feitos com amor e entregues onde você estiver</p>
 </div>
 
-<!-- Mobile Nav -->
-<nav class="mobile-nav">
-  <div class="mobile-nav-inner" style="display:flex; justify-content:space-around;">
-    <button class="mnav-item" onclick="navTo('#cardapio')"><span>🍩</span><span>Cardápio</span></button>
-    <button class="mnav-item" onclick="navTo('#bebidas')"><span>🥤</span><span>Bebidas</span></button>
-    <button class="mnav-item" onclick="openCart()"><span>🛒</span><span class="mnav-badge" id="mobileCartCount" style="display:none">0</span><span>Carrinho</span></button>
-    <button class="mnav-item" onclick="openModal('surpriseModal')"><span>🎁</span><span>Surpresa</span></button>
-    <button class="mnav-item" onclick="renderPerfil(); openModal('perfilModal')"><span>👤</span><span>Perfil</span></button>
-  </div>
-</nav>
-
-<!-- Overlay -->
-<div class="overlay" id="overlay"></div>
+<!-- Produtos -->
+<div class="container">
+    <h2 class="section-title">🍩 Nosso Cardápio</h2>
+    <div class="products-grid" id="productsGrid"></div>
+</div>
 
 <!-- Carrinho Sidebar -->
 <div class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header"><h3>🛒 Meu Carrinho</h3><button class="close-btn" id="closeCartBtn">✕</button></div>
-  <div class="cart-body" id="cartBody"><div class="cart-empty">Carrinho vazio</div></div>
-  <div class="cart-footer" id="cartFooterArea">
-    <div class="coupon-section" style="margin-bottom:0.8rem;">
-      <div style="display:flex; gap:0.5rem;"><input type="text" id="couponInput" placeholder="CUPOM" class="coupon-input" style="flex:1; padding:0.6rem; border-radius:10px; border:1px solid var(--gray-2);"><button class="coupon-btn" onclick="aplicarCupom()" style="background:var(--gradient); color:#fff; border:none; padding:0.6rem 1rem; border-radius:10px;">Aplicar</button></div>
-      <div class="coupon-status" id="couponStatus"></div>
+    <div class="cart-header">
+        <h3>🛒 Meu Carrinho</h3>
+        <button class="close-cart" onclick="closeCart()">✕</button>
     </div>
-    <div class="payment-section">
-      <div class="payment-title">💳 Forma de Pagamento</div>
-      <div class="payment-options" id="paymentOptions">
-        <div class="payment-option selected" data-payment="pix"><input type="radio" name="payment" id="paymentPix" value="pix" checked><label for="paymentPix">PIX</label></div>
-        <div class="payment-option" data-payment="card"><input type="radio" name="payment" id="paymentCard" value="cartao"><label for="paymentCard">Cartão</label></div>
-        <div class="payment-option" data-payment="cash"><input type="radio" name="payment" id="paymentCash" value="especie"><label for="paymentCash">Espécie</label></div>
-      </div>
+    <div class="cart-body" id="cartBody">
+        <div class="cart-empty">Carrinho vazio</div>
     </div>
-    <div class="cart-summary" id="cartSummary"></div>
-    <button class="btn-checkout" id="checkoutBtn">✅ Finalizar Pedido</button>
-    <button class="btn-secondary" onclick="limparCarrinho()" style="width:100%; margin-top:0.5rem; background:var(--gray); border:none; padding:0.7rem; border-radius:12px;">🗑️ Limpar Carrinho</button>
-  </div>
+    <div class="cart-footer" id="cartFooter">
+        <div id="cartSummary"></div>
+        <button class="btn-checkout" id="checkoutBtn" onclick="abrirCheckout()">✅ Finalizar Pedido</button>
+        <button class="btn-secondary" onclick="limparCarrinho()">🗑️ Limpar Carrinho</button>
+    </div>
 </div>
 
-<!-- Modais -->
-<div id="productModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('productModal')">✕</button><div id="modalProductImgWrap" style="font-size:5rem; text-align:center;"></div><h3 id="modalProductTitle"></h3><p id="modalProductDesc"></p><div id="modalProductAction"></div></div></div>
+<!-- Checkout Modal -->
+<div id="checkoutModal" class="modal">
+    <div class="modal-content">
+        <h3>📝 Finalizar Pedido</h3>
+        <input type="text" id="endereco" placeholder="Endereço completo (Rua, Número, Bairro)" required>
+        <div class="payment-options">
+            <div class="payment-option selected" data-payment="pix" onclick="selectPayment('pix')">💳 PIX</div>
+            <div class="payment-option" data-payment="card" onclick="selectPayment('card')">💳 Cartão</div>
+            <div class="payment-option" data-payment="cash" onclick="selectPayment('cash')">💰 Dinheiro</div>
+        </div>
+        <div id="checkoutTotal" style="font-weight: bold; margin: 1rem 0; text-align: center;"></div>
+        <button class="btn-primary" onclick="finalizarPedido()">✅ Confirmar Pedido</button>
+        <button class="btn-secondary" onclick="closeModal('checkoutModal')" style="margin-top: 0.5rem;">Cancelar</button>
+    </div>
+</div>
 
-<div id="perfilModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('perfilModal')">✕</button><div class="modal-title">👤 Meu Perfil</div><div id="perfilContent"></div></div></div>
-<div id="surpriseModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('surpriseModal')">✕</button><div class="surprise-box"><span class="surprise-donut" id="surpriseEmoji">🎁</span><div class="surprise-title">Caixa Surpresa!</div><div class="surprise-sub" id="surpriseSub">Clique para ganhar um cupom</div><div class="surprise-result" id="surpriseResult"></div><button class="btn-primary" id="surpriseBtn" style="width:100%">🎁 Abrir Caixa</button></div></div></div>
-<div id="quizModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('quizModal')">✕</button><div class="modal-title">🧠 Quiz do Donut</div><div id="quizContent"></div></div></div>
-<div id="rodaModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('rodaModal')">✕</button><div class="modal-title">🎡 Roda da Sorte</div><div class="roda-container"><div class="roda-wrap"><div class="roda-ponteiro">▼</div><canvas id="rodaCanvas" width="260" height="260"></canvas></div><button class="btn-girar" id="btnGirar" onclick="girarRoda()">🎡 Girar</button><div class="roda-result" id="rodaResult"></div></div></div></div>
-<div id="enderecoModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('enderecoModal')">✕</button><div class="modal-title">🏠 Endereço de Entrega</div><input type="text" id="modalEndRua" placeholder="Rua" class="auth-input"><div style="display:flex; gap:0.5rem;"><input type="text" id="modalEndNumero" placeholder="Número *" class="auth-input" style="flex:1"><input type="text" id="modalEndComplemento" placeholder="Complemento" class="auth-input" style="flex:2"></div><input type="text" id="modalEndBairro" placeholder="Bairro" class="auth-input"><input type="text" id="modalEndCidade" placeholder="Cidade" class="auth-input"><div id="enderecoMsg" class="auth-msg"></div><button class="auth-submit" onclick="confirmarEndereco()">Confirmar e Enviar</button></div></div>
-<div id="avaliacaoModal" class="modal-overlay"><div class="modal-box" style="text-align:center"><div class="surprise-donut">🍩</div><div class="modal-title">Obrigado pelo pedido!</div><div class="stars-row" id="starsRow"><button class="star-btn" data-v="1" onclick="selecionarEstrela(1)">★</button><button class="star-btn" data-v="2" onclick="selecionarEstrela(2)">★</button><button class="star-btn" data-v="3" onclick="selecionarEstrela(3)">★</button><button class="star-btn" data-v="4" onclick="selecionarEstrela(4)">★</button><button class="star-btn" data-v="5" onclick="selecionarEstrela(5)">★</button></div><div id="avaliacaoMsg"></div><button class="auth-submit" id="btnEnviarAvaliacao" onclick="enviarAvaliacao()" disabled>Enviar Avaliação</button><button class="btn-secondary" onclick="closeModal('avaliacaoModal')" style="width:100%; margin-top:0.5rem;">Agora não</button></div></div>
+<!-- Product Modal -->
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <button style="float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer;" onclick="closeModal('productModal')">✕</button>
+        <div id="modalProductEmoji" style="font-size: 4rem; text-align: center;"></div>
+        <h3 id="modalProductTitle"></h3>
+        <p id="modalProductDesc"></p>
+        <div id="modalProductPrice" style="font-size: 1.5rem; color: #ff6b9d; margin: 1rem 0;"></div>
+        <button class="btn-primary" id="modalAddBtn" onclick="">Adicionar ao Carrinho</button>
+    </div>
+</div>
 
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
-<a href="https://wa.me/5589994112913" target="_blank" class="wa-fab">💬</a>
-<canvas class="confetti-canvas" id="confettiCanvas"></canvas>
 
 <script>
-// ============================================================
-// DADOS
-// ============================================================
-const PRODUTOS = [
-  { id:1, name:"Donut Glitter Rosa", emoji:"🍩", desc:"Cobertura rosé com confeitos", price:12.9, category:"donuts", badge:"❤️" },
-  { id:2, name:"Donut Nutella Love", emoji:"🍩", desc:"Recheio cremoso de Nutella", price:16.9, category:"donuts", badge:"⭐", tag:"Mais pedido" },
-  { id:3, name:"Donut Coração", emoji:"💕", desc:"Geleia de morango", price:18.9, category:"donuts", badge:"💖" },
-  { id:4, name:"Donut Oreo Crush", emoji:"🍩", desc:"Creme branco com Oreo", price:15.9, category:"donuts", badge:"🔥", tag:"Novo" },
-  { id:5, name:"Donut Pistache", emoji:"🍩", desc:"Creme de pistache", price:19.9, category:"donuts", badge:"✨", tag:"Premium" },
-  { id:6, name:"Cupcake Red Velvet", emoji:"🧁", desc:"Cream cheese", price:17.9, category:"cupcakes", badge:"⭐", tag:"Top" },
-  { id:7, name:"Cupcake Unicórnio", emoji:"🦄", desc:"Glitter comestível", price:22.9, category:"cupcakes", badge:"🦄" },
-  { id:8, name:"Cupcake Morango", emoji:"🍓", desc:"Morangos frescos", price:15.5, category:"cupcakes" },
-  { id:9, name:"Bolo Brigadeiro", emoji:"🍫", desc:"Camadas de brigadeiro", price:16.9, category:"bolos" },
-  { id:10, name:"Bolo Morango", emoji:"🍓", desc:"Chantilly e morangos", price:18.9, category:"bolos", badge:"❤️" }
-];
+    // ============================================================
+    // BANCO DE DADOS INDEXEDDB (MESMO DO ADMIN)
+    // ============================================================
+    const DB_NAME = 'DonutALR_DB';
+    const DB_VERSION = 1;
+    let db = null;
+    let usuarioAtual = null;
+    let carrinho = [];
+    let selectedPayment = 'pix';
 
-const COMBOS = [
-  { id:101, name:"Combo Casal", emoji:"💑", desc:"2 Donuts + 2 Bebidas", price:49.9, originalPrice:68.7, badge:"-27%", category:"combos" },
-  { id:102, name:"Kit Festa 12 Peças", emoji:"🎉", desc:"Donuts + Cupcakes sortidos", price:69.9, originalPrice:94.9, badge:"-26%", category:"combos" },
-  { id:103, name:"Box Presenteável", emoji:"🎀", desc:"4 Donuts gourmet", price:44.9, originalPrice:59.6, badge:"-25%", category:"combos" }
-];
+    // Produtos padrão (fallback)
+    const PRODUTOS_PADRAO = [
+        { id: 1, nome: "Donut Clássico Homer", preco: 9.50, emoji: "🍩", descricao: "Cobertura de chocolate com confeitos coloridos" },
+        { id: 2, nome: "Donut Chocolate Belga", preco: 12.00, emoji: "🍫", descricao: "Chocolate belga derretido" },
+        { id: 3, nome: "Donut Ninho com Nutella", preco: 15.00, emoji: "🥜", descricao: "Creme de Ninho e Nutella" },
+        { id: 4, nome: "Donut Glitter Rosa", preco: 12.90, emoji: "🌸", descricao: "Cobertura rosé com glitter comestível" },
+        { id: 5, nome: "Donut Oreo Crush", preco: 13.90, emoji: "🍪", descricao: "Creme branco com pedaços de Oreo" },
+        { id: 6, nome: "Donut Morango", preco: 11.90, emoji: "🍓", descricao: "Cobertura de morango com granulado" }
+    ];
 
-const BEBIDAS = [
-  { id:201, name:"Milk Shake Morango", emoji:"🍓", desc:"Sorvete artesanal", price:18.9 },
-  { id:202, name:"Milk Shake Nutella", emoji:"🍫", desc:"Nutella com sorvete", price:21.9 },
-  { id:203, name:"Suco de Laranja", emoji:"🍊", desc:"Natural", price:9.9 },
-  { id:204, name:"Refrigerante Lata", emoji:"🥤", desc:"Coca, Guaraná", price:7.9 }
-];
-
-const CUPONS = {
-  'BEMVINDO10': { tipo:'percentual', valor:10, minPedido:30, desc:'10% OFF' },
-  'FRETEGRATIS': { tipo:'frete', valor:100, minPedido:50, desc:'Frete grátis' },
-  'DONUT20': { tipo:'percentual', valor:20, minPedido:50, desc:'20% OFF' },
-  'ALR5': { tipo:'fixo', valor:5, minPedido:20, desc:'R$5 OFF' },
-  'DONUT15': { tipo:'percentual', valor:15, minPedido:0, desc:'15% OFF' },
-  'SORTE10': { tipo:'percentual', valor:10, minPedido:0, desc:'10% OFF' },
-  'SORTE15': { tipo:'percentual', valor:15, minPedido:0, desc:'15% OFF' },
-  'SORTE20': { tipo:'percentual', valor:20, minPedido:0, desc:'20% OFF' },
-  'SURPRESA5': { tipo:'fixo', valor:5, minPedido:0, desc:'R$5 OFF' },
-  'SURPRESA10': { tipo:'percentual', valor:10, minPedido:0, desc:'10% OFF' }
-};
-
-const WHATSAPP = "5589994112913";
-const VALOR_MINIMO_PEDIDO = 15;
-const MAX_ITENS_POR_PRODUTO = 10;
-
-let carrinho = [];
-let freteAtual = 7.9;
-let bairroAtual = { nome:"Centro", frete:7.9 };
-let cupomAtivo = null;
-let currentCat = 'all';
-let searchTerm = '';
-let usuarioAtual = null;
-let enderecoCadastrado = { rua:"", bairro:"", cidade:"", numero:"", complemento:"" };
-let freteCalculado = 7.9;
-let avaliacaoEstrela = 0;
-
-// ============================================================
-// UTILITÁRIOS
-// ============================================================
-async function sha256(msg) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-function isLojaAberta() {
-  const agora = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
-  const dia = agora.getDay(), hora = agora.getHours();
-  return dia >= 1 && dia <= 5 && hora >= 8 && hora < 18;
-}
-
-function mascararTelefone(input) {
-  let v = input.value.replace(/\D/g,'');
-  if (v.length > 11) v = v.slice(0,11);
-  if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-  else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
-  else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
-  else if (v.length > 0) v = '(' + v;
-  input.value = v;
-}
-
-function validarSenhaForte(senha) {
-  return senha.length >= 6 && /[0-9]/.test(senha) && /[A-Z]/.test(senha);
-}
-
-function showToast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 2500);
-}
-
-function navTo(id) {
-  const el = document.querySelector(id);
-  if (el) el.scrollIntoView({ behavior:"smooth" });
-}
-
-// ============================================================
-// AUTENTICAÇÃO - CORRIGIDA
-// ============================================================
-function mostrarLoginOverlay() {
-  document.getElementById('loginRequiredOverlay').classList.remove('hidden');
-  document.getElementById('mainContent').classList.remove('visible');
-}
-
-function esconderLoginOverlay() {
-  document.getElementById('loginRequiredOverlay').classList.add('hidden');
-  document.getElementById('mainContent').classList.add('visible');
-}
-
-function carregarSessao() {
-  try {
-    const s = localStorage.getItem('donut_session');
-    if (s) {
-      usuarioAtual = JSON.parse(s);
-      const perfil = getPerfilUsuario(usuarioAtual.email);
-      if (perfil && perfil.endereco) {
-        enderecoCadastrado = perfil.endereco;
-      }
-      atualizarHeaderLogin();
-      esconderLoginOverlay();
-    } else {
-      mostrarLoginOverlay();
-      atualizarHeaderLogin();
+    // ============================================================
+    // INICIALIZAR INDEXEDDB
+    // ============================================================
+    function openDatabase() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => {
+                db = request.result;
+                console.log("✅ Conectado ao IndexedDB");
+                resolve(db);
+            };
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                
+                if (!db.objectStoreNames.contains('produtos')) {
+                    const store = db.createObjectStore('produtos', { keyPath: 'id', autoIncrement: true });
+                    store.createIndex('categoria', 'categoria', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('pedidos')) {
+                    db.createObjectStore('pedidos', { keyPath: 'id', autoIncrement: true });
+                }
+                if (!db.objectStoreNames.contains('users')) {
+                    db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+                }
+                if (!db.objectStoreNames.contains('logs')) {
+                    db.createObjectStore('logs', { keyPath: 'id', autoIncrement: true });
+                }
+                
+                // Adicionar produtos iniciais
+                const transaction = db.transaction(['produtos'], 'readwrite');
+                const store = transaction.objectStore('produtos');
+                store.count().onsuccess = (e) => {
+                    if (e.target.result === 0) {
+                        PRODUTOS_PADRAO.forEach(p => store.add(p));
+                    }
+                };
+            };
+        });
     }
-  } catch(e) {
-    mostrarLoginOverlay();
-    atualizarHeaderLogin();
-  }
-}
 
-function getUsuarios() {
-  try { return JSON.parse(localStorage.getItem("donut_usuarios") || "{}"); } catch(e) { return {}; }
-}
-function salvarUsuarios(u) { localStorage.setItem("donut_usuarios", JSON.stringify(u)); }
-function getPerfilUsuario(email) { return getUsuarios()[email] || null; }
-function salvarCupomUsuario(email, codigo) {
-  const u = getUsuarios();
-  if (!u[email]) return;
-  u[email].cupons = u[email].cupons || [];
-  if (!u[email].cupons.includes(codigo)) u[email].cupons.push(codigo);
-  salvarUsuarios(u);
-}
-function salvarEnderecoUsuario(email, endereco) {
-  const u = getUsuarios();
-  if (!u[email]) return;
-  u[email].endereco = endereco;
-  salvarUsuarios(u);
-}
-
-function atualizarHeaderLogin() {
-  const btn = document.getElementById('headerLoginBtn');
-  if (usuarioAtual) {
-    btn.textContent = `👤 ${usuarioAtual.nome.split(' ')[0]}`;
-    btn.onclick = () => { renderPerfil(); openModal('perfilModal'); };
-  } else {
-    btn.textContent = '👤 Entrar';
-    btn.onclick = () => mostrarLoginOverlay();
-  }
-}
-
-function switchAuthScreen(t) {
-  const tCad = document.getElementById('toggleCadastro');
-  const tLog = document.getElementById('toggleLogin');
-  const fCad = document.getElementById('authScreenCadastro');
-  const fLog = document.getElementById('authScreenLogin');
-  const title = document.getElementById('authScreenTitle');
-  const sub = document.getElementById('authScreenSub');
-  if (t === 'cadastro') {
-    tCad.classList.add('active'); tLog.classList.remove('active');
-    fCad.style.display = 'block'; fLog.style.display = 'none';
-    if(title) title.textContent = 'Criar conta';
-    if(sub) sub.textContent = 'Preencha os dados abaixo para começar';
-  } else {
-    tLog.classList.add('active'); tCad.classList.remove('active');
-    fLog.style.display = 'block'; fCad.style.display = 'none';
-    if(title) title.textContent = 'Bem-vindo de volta!';
-    if(sub) sub.textContent = 'Entre com seu e-mail e senha';
-  }
-  setAuthMsg('');
-}
-
-// Mantida para compatibilidade com modal de perfil etc.
-function switchAuthTab(t) { switchAuthScreen(t); }
-
-function setAuthMsg(msg, ok) {
-  const el = document.getElementById('authScreenMsg');
-  if(el) { el.textContent = msg || ''; el.className = 'auth-screen-msg ' + (msg ? (ok ? 'ok' : 'err') : ''); }
-}
-
-function avaliarSenha(v) {
-  const el = document.getElementById('senhaStrength');
-  if (!el) return;
-  if (!v) { el.className = 'senha-strength'; return; }
-  const forte = v.length >= 8 && /[0-9]/.test(v) && /[A-Z]/.test(v);
-  const media = v.length >= 6;
-  el.className = 'senha-strength ' + (forte ? 'strength-forte' : media ? 'strength-media' : 'strength-fraca');
-}
-
-async function fazerLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const senha = document.getElementById('loginSenha').value;
-  if (!email || !senha) { setAuthMsg('Preencha todos os campos.', false); return; }
-  const hash = await sha256(senha);
-  const usuarios = getUsuarios();
-  if (!usuarios[email] || usuarios[email].senhaHash !== hash) {
-    setAuthMsg('❌ E-mail ou senha incorretos.', false); return;
-  }
-  usuarioAtual = { email, nome: usuarios[email].nome, telefone: usuarios[email].telefone };
-  localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
-  // Carregar endereço salvo
-  const perfil = getPerfilUsuario(email);
-  if (perfil && perfil.endereco) enderecoCadastrado = perfil.endereco;
-  setAuthMsg(`✅ Bem-vindo, ${usuarioAtual.nome}!`, true);
-  atualizarHeaderLogin();
-  setTimeout(() => { esconderLoginOverlay(); }, 900);
-  showToast(`🍩 Olá, ${usuarioAtual.nome}!`);
-}
-
-async function fazerCadastro() {
-  const nome = document.getElementById('cadNome').value.trim();
-  const email = document.getElementById('cadEmail').value.trim();
-  const telefone = document.getElementById('cadTelefone').value.trim();
-  const senha = document.getElementById('cadSenha').value;
-  const conf = document.getElementById('cadSenhaConf').value;
-  if (!nome || !email || !senha) { setAuthMsg('Preencha todos os campos.', false); return; }
-  if (senha !== conf) { setAuthMsg('❌ As senhas não coincidem.', false); return; }
-  if (!validarSenhaForte(senha)) { setAuthMsg('❌ Senha deve ter mínimo 6 caracteres, 1 número e 1 letra maiúscula.', false); return; }
-  
-  const usuarios = getUsuarios();
-  if (usuarios[email]) { setAuthMsg('❌ E-mail já cadastrado!', false); return; }
-  
-  const hash = await sha256(senha);
-  usuarios[email] = { nome, telefone, senhaHash: hash, cupons: [], dataCadastro: new Date().toLocaleDateString('pt-BR') };
-  salvarUsuarios(usuarios);
-  
-  // Login automático
-  usuarioAtual = { email, nome, telefone };
-  localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
-  atualizarHeaderLogin();
-  
-  setAuthMsg('✅ Cadastro realizado! Seja bem-vindo(a)! 🎉', true);
-  showToast('🎉 Cadastro realizado com sucesso!');
-  lancarConfete();
-  setTimeout(() => { esconderLoginOverlay(); }, 1100);
-}
-
-function fazerLogout() {
-  usuarioAtual = null;
-  localStorage.removeItem('donut_session');
-  atualizarHeaderLogin();
-  closeModal('perfilModal');
-  showToast('👋 Até logo!');
-  mostrarLoginOverlay();
-  switchAuthScreen('login');
-}
-
-// ============================================================
-// CARRINHO
-// ============================================================
-function salvarCarrinho() {
-  try { localStorage.setItem("donut_carrinho", JSON.stringify(carrinho)); } catch(e) {}
-  atualizarBadge();
-}
-
-function carregarCarrinho() {
-  try {
-    const s = localStorage.getItem("donut_carrinho");
-    if (s) carrinho = JSON.parse(s);
-  } catch(e) { carrinho = []; }
-  atualizarBadge();
-}
-
-function atualizarBadge() {
-  const total = carrinho.reduce((s,i) => s + (i.qtd || 1), 0);
-  const badge = document.getElementById("cartCount");
-  if (badge) badge.textContent = total;
-  const mb = document.getElementById("mobileCartCount");
-  if (mb) { mb.textContent = total; mb.style.display = total > 0 ? "flex" : "none"; }
-}
-
-function addToCart(item) {
-  const exist = carrinho.find(i => i.id === item.id);
-  if (exist) {
-    if (exist.qtd >= MAX_ITENS_POR_PRODUTO) { showToast(`⚠️ Máximo ${MAX_ITENS_POR_PRODUTO} unidades`); return; }
-    exist.qtd++;
-  } else {
-    carrinho.push({ id:item.id, name:item.name, emoji:item.emoji, price:item.price, qtd:1, desc:item.desc || '' });
-  }
-  salvarCarrinho();
-  renderCart();
-  showToast(`${item.emoji} ${item.name} adicionado!`);
-}
-
-function changeQty(id, delta) {
-  const idx = carrinho.findIndex(i => i.id === id);
-  if (idx === -1) return;
-  const novoQtd = carrinho[idx].qtd + delta;
-  if (novoQtd > MAX_ITENS_POR_PRODUTO) { showToast(`⚠️ Máximo ${MAX_ITENS_POR_PRODUTO} unidades`); return; }
-  if (novoQtd <= 0) carrinho.splice(idx, 1);
-  else carrinho[idx].qtd = novoQtd;
-  salvarCarrinho();
-  renderCart();
-}
-
-function limparCarrinho() {
-  if (!carrinho.length) return;
-  carrinho = [];
-  salvarCarrinho();
-  renderCart();
-  atualizarBadge();
-  showToast("🗑️ Carrinho esvaziado");
-}
-
-function calcTotais() {
-  const subtotal = carrinho.reduce((s,i) => s + i.price * i.qtd, 0);
-  let frete = subtotal >= 80 ? 0 : freteAtual;
-  let desconto = 0;
-  if (cupomAtivo && CUPONS[cupomAtivo]) {
-    const c = CUPONS[cupomAtivo];
-    if (subtotal >= (c.minPedido||0)) {
-      if (c.tipo === 'percentual') desconto = subtotal * (c.valor/100);
-      else if (c.tipo === 'fixo') desconto = c.valor;
-      else if (c.tipo === 'frete') frete = 0;
+    // ============================================================
+    // FUNÇÕES CRUD
+    // ============================================================
+    async function getAll(storeName) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], 'readonly');
+            const store = transaction.objectStore(storeName);
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
     }
-  }
-  return { subtotal, frete, desconto, total: Math.max(0, subtotal - desconto + frete) };
-}
 
-function renderCart() {
-  const body = document.getElementById("cartBody");
-  const summary = document.getElementById("cartSummary");
-  if (!body) return;
-
-  if (!carrinho.length) {
-    body.innerHTML = `<div class="cart-empty">🛒 Carrinho vazio</div>`;
-    if (summary) summary.innerHTML = "";
-    const cb = document.getElementById("checkoutBtn");
-    if (cb) { cb.disabled = true; cb.style.opacity = "0.5"; }
-    return;
-  }
-
-  body.innerHTML = carrinho.map(i => `
-    <div class="cart-item">
-      <div class="cart-item-emoji">${i.emoji}</div>
-      <div class="cart-item-info">
-        <div class="cart-item-name">${i.name}</div>
-        <div class="cart-item-price">R$ ${i.price.toFixed(2).replace('.',',')}</div>
-      </div>
-      <div class="qty-ctrl">
-        <button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button>
-        <span class="qty-num">${i.qtd}</span>
-        <button class="qty-btn" onclick="changeQty(${i.id},1)">+</button>
-      </div>
-    </div>
-  `).join('');
-
-  const { subtotal, frete, desconto, total } = calcTotais();
-  if (summary) {
-    summary.innerHTML = `
-      <div class="cart-summary-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace('.',',')}</span></div>
-      <div class="cart-summary-row"><span>Frete (${bairroAtual.nome})</span><span>${frete===0?"Grátis":"R$ "+frete.toFixed(2).replace('.',',')}</span></div>
-      ${desconto>0 ? `<div class="cart-summary-row"><span>🎟 Desconto</span><span>-R$ ${desconto.toFixed(2).replace('.',',')}</span></div>` : ''}
-      <div class="cart-summary-row total"><span>Total</span><span>R$ ${total.toFixed(2).replace('.',',')}</span></div>
-    `;
-  }
-
-  const cb = document.getElementById("checkoutBtn");
-  if (cb) {
-    const bloqueado = subtotal < VALOR_MINIMO_PEDIDO || !isLojaAberta();
-    cb.disabled = bloqueado;
-    cb.style.opacity = bloqueado ? "0.5" : "1";
-  }
-}
-
-function aplicarCupom() {
-  const val = document.getElementById("couponInput").value.trim().toUpperCase();
-  const status = document.getElementById("couponStatus");
-  if (!val) { if(status) status.textContent = ""; return; }
-  const cupom = CUPONS[val];
-  if (!cupom) {
-    cupomAtivo = null;
-    if(status) { status.className = "coupon-status err"; status.textContent = "❌ Cupom inválido"; }
-    renderCart(); return;
-  }
-  const subtotal = carrinho.reduce((s,i) => s + i.price * i.qtd, 0);
-  if (subtotal < (cupom.minPedido||0)) {
-    if(status) { status.className = "coupon-status err"; status.textContent = `⚠️ Mínimo R$ ${cupom.minPedido.toFixed(2).replace('.',',')}`; }
-    return;
-  }
-  cupomAtivo = val;
-  if(status) { status.className = "coupon-status ok"; status.textContent = `✅ ${cupom.desc} aplicado!`; }
-  renderCart();
-  showToast(`🎟 Cupom ${val} aplicado!`);
-}
-
-// ============================================================
-// HISTÓRICO
-// ============================================================
-function salvarHistorico(pedido) {
-  try {
-    const k = `donut_hist_${usuarioAtual?.email || 'guest'}`;
-    const hist = JSON.parse(localStorage.getItem(k) || "[]");
-    hist.unshift(pedido);
-    localStorage.setItem(k, JSON.stringify(hist.slice(0,15)));
-  } catch(e) {}
-}
-
-function carregarHistorico() {
-  try {
-    const k = `donut_hist_${usuarioAtual?.email || 'guest'}`;
-    return JSON.parse(localStorage.getItem(k) || "[]");
-  } catch(e) { return []; }
-}
-
-function repetirPedido(idx) {
-  const hist = carregarHistorico();
-  const pedido = hist[idx];
-  if (!pedido) return;
-  pedido.itens.forEach(i => {
-    const e = carrinho.find(c => c.id === i.id);
-    if (e) { e.qtd = Math.min(e.qtd + i.qtd, MAX_ITENS_POR_PRODUTO); }
-    else { carrinho.push({ ...i, qtd: Math.min(i.qtd, MAX_ITENS_POR_PRODUTO) }); }
-  });
-  salvarCarrinho();
-  renderCart();
-  closeModal('perfilModal');
-  openCart();
-  showToast("🔄 Pedido repetido!");
-}
-
-// ============================================================
-// CHECKOUT
-// ============================================================
-function getSelectedPayment() {
-  const sel = document.querySelector('input[name="payment"]:checked');
-  return sel ? sel.value : "pix";
-}
-
-function finalizarPedido() {
-  if (!carrinho.length) { showToast("❌ Carrinho vazio!"); return; }
-  if (!isLojaAberta()) { showToast("⏰ Loja fechada! Seg–Sex 08-18h"); return; }
-  const { subtotal } = calcTotais();
-  if (subtotal < VALOR_MINIMO_PEDIDO) { showToast(`❌ Pedido mínimo: R$ ${VALOR_MINIMO_PEDIDO.toFixed(2).replace('.',',')}`); return; }
-
-  document.getElementById('modalEndRua').value = enderecoCadastrado.rua || '';
-  document.getElementById('modalEndBairro').value = enderecoCadastrado.bairro || '';
-  document.getElementById('modalEndCidade').value = enderecoCadastrado.cidade || '';
-  document.getElementById('modalEndNumero').value = enderecoCadastrado.numero || '';
-  document.getElementById('modalEndComplemento').value = enderecoCadastrado.complemento || '';
-  closeCart();
-  openModal('enderecoModal');
-}
-
-function confirmarEndereco() {
-  const rua = document.getElementById('modalEndRua').value.trim();
-  const numero = document.getElementById('modalEndNumero').value.trim();
-  const bairro = document.getElementById('modalEndBairro').value.trim();
-  const cidade = document.getElementById('modalEndCidade').value.trim();
-  const complemento = document.getElementById('modalEndComplemento').value.trim();
-  const msgEl = document.getElementById('enderecoMsg');
-
-  if (!rua) { msgEl.textContent = '⚠️ Informe a rua.'; return; }
-  if (!numero) { msgEl.textContent = '⚠️ Informe o número.'; return; }
-  if (!bairro) { msgEl.textContent = '⚠️ Informe o bairro.'; return; }
-
-  enderecoCadastrado = { rua, bairro, cidade, numero, complemento };
-  
-  // Salvar endereço no perfil do usuário
-  if (usuarioAtual) {
-    salvarEnderecoUsuario(usuarioAtual.email, enderecoCadastrado);
-  }
-
-  let endCompleto = `${rua}, ${numero}`;
-  if (complemento) endCompleto += `, ${complemento}`;
-  endCompleto += ` — ${bairro}, ${cidade || 'Floriano - PI'}`;
-
-  const { frete, desconto, total } = calcTotais();
-  const pedidoId = Date.now();
-  const agora = new Date();
-  const pagamento = getSelectedPayment();
-  const pagTexto = pagamento === "pix" ? "PIX" : pagamento === "cartao" ? "Cartão" : "Dinheiro";
-
-  let msg = "🍩 *NOVO PEDIDO - Donut ALR*\n";
-  msg += `🆔 Pedido #${pedidoId}\n`;
-  msg += `👤 Cliente: ${usuarioAtual?.nome || 'Visitante'}\n`;
-  msg += `📱 WhatsApp: ${usuarioAtual?.telefone || 'Não informado'}\n\n`;
-  msg += `*ITENS:*\n`;
-  carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} x${i.qtd} = R$ ${(i.price*i.qtd).toFixed(2).replace('.',',')}\n`; });
-  msg += `\n📍 Endereço: ${endCompleto}`;
-  msg += `\n🚚 Frete: ${frete===0?"Grátis":"R$ "+frete.toFixed(2).replace('.',',')}`;
-  if (desconto>0) msg += `\n🎟 Desconto (${cupomAtivo}): -R$ ${desconto.toFixed(2).replace('.',',')}`;
-  msg += `\n💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}`;
-  msg += `\n💳 Pagamento: ${pagTexto}\n\n_Pedido via site Donut ALR_`;
-
-  const data = agora.toLocaleDateString('pt-BR') + " " + agora.toLocaleTimeString('pt-BR',{hour:"2-digit",minute:"2-digit"});
-  salvarHistorico({ id:pedidoId, data, itens:[...carrinho], total, endereco:endCompleto, pagamento:pagTexto });
-
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-  lancarConfete();
-  showToast("🎉 Pedido enviado com sucesso!");
-
-  carrinho = []; cupomAtivo = null;
-  const couponInput = document.getElementById("couponInput");
-  if(couponInput) couponInput.value = "";
-  salvarCarrinho();
-  renderCart();
-  closeModal('enderecoModal');
-
-  setTimeout(() => {
-    avaliacaoEstrela = 0;
-    document.querySelectorAll('.star-btn').forEach(s => s.classList.remove('active'));
-    const btn = document.getElementById('btnEnviarAvaliacao');
-    if(btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
-    openModal('avaliacaoModal');
-  }, 2000);
-}
-
-// ============================================================
-// FRETE / CEP
-// ============================================================
-async function buscarCEP(cep) {
-  const c = cep.replace(/\D/g,'');
-  if (c.length !== 8) return null;
-  try {
-    const res = await fetch(`https://viacep.com.br/ws/${c}/json/`);
-    const data = await res.json();
-    return data.erro ? null : data;
-  } catch(e) { return null; }
-}
-
-function calcularFretePorBairro(bairro) {
-  const map = { "centro":7.9, "bom jesus":8.9, "catete":8.9, "taboca":9.9, "angico":10.9, "pantanal":12.9, "barão de grajaú":14.9 };
-  const key = (bairro||'').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-  for (let k in map) { if (key.includes(k)) return map[k]; }
-  return 12.9;
-}
-
-async function buscarCepEndereco() {
-  const cep = document.getElementById('cepInput').value;
-  if (!cep) { showToast('Digite um CEP'); return; }
-  showToast('🔍 Buscando...');
-  const dados = await buscarCEP(cep);
-  if (!dados) { showToast('❌ CEP não encontrado!'); return; }
-
-  document.getElementById('endRua').value = dados.logradouro || '';
-  document.getElementById('endBairro').value = dados.bairro || '';
-  document.getElementById('endCidade').value = `${dados.localidade} - ${dados.uf}`;
-  document.getElementById('enderecoFields').style.display = 'grid';
-
-  enderecoCadastrado.rua = dados.logradouro || '';
-  enderecoCadastrado.bairro = dados.bairro || '';
-  enderecoCadastrado.cidade = dados.localidade || '';
-
-  const frete = calcularFretePorBairro(dados.bairro);
-  freteCalculado = frete;
-  bairroAtual = { nome: dados.bairro || 'Centro', frete };
-  freteAtual = frete;
-
-  document.getElementById('freteInfo').innerHTML = `<strong>📍 ${dados.bairro || 'Região'}</strong>`;
-  document.getElementById('freteValorDisplay').innerHTML = frete===0?"🎉 GRÁTIS":`R$ ${frete.toFixed(2).replace('.',',')}`;
-  document.getElementById('freteResultado').classList.add('show');
-  renderCart();
-  showToast(`Frete: ${frete===0?"Grátis":"R$ "+frete.toFixed(2)}`);
-}
-
-function calcularFrete() {
-  if (!enderecoCadastrado.bairro) { showToast("⚠️ Busque um CEP primeiro!"); return; }
-  const subtotal = carrinho.reduce((s,i) => s + i.price*i.qtd, 0);
-  const frete = subtotal >= 80 ? 0 : freteCalculado;
-  document.getElementById('freteInfo').innerHTML = `<strong>📍 ${enderecoCadastrado.bairro}</strong>`;
-  document.getElementById('freteValorDisplay').innerHTML = frete===0?"🎉 GRÁTIS":`R$ ${frete.toFixed(2).replace('.',',')}`;
-  document.getElementById('freteResultado').classList.add('show');
-  renderCart();
-  showToast(`Frete: ${frete===0?"Grátis":"R$ "+frete.toFixed(2).replace('.',',')}`);
-}
-
-// ============================================================
-// RENDER PRODUTOS - CORRIGIDO (inclui combos na busca)
-// ============================================================
-function renderProdutos(skeleton = false) {
-  const grid = document.getElementById("productsGrid");
-  if (!grid) return;
-  if (skeleton) {
-    grid.innerHTML = '<div style="text-align:center; padding:2rem;">Carregando...</div>';
-    return;
-  }
-
-  let list;
-  if (currentCat === 'combos') {
-    list = [...COMBOS];
-  } else if (currentCat === 'all') {
-    list = [...PRODUTOS, ...COMBOS];
-  } else {
-    list = PRODUTOS.filter(p => p.category === currentCat);
-  }
-
-  if (searchTerm) {
-    list = list.filter(p =>
-      p.name.toLowerCase().includes(searchTerm) ||
-      (p.desc||'').toLowerCase().includes(searchTerm)
-    );
-  }
-
-  if (!list.length) {
-    grid.innerHTML = `<div class="no-results">😔 Nenhum produto encontrado</div>`;
-    return;
-  }
-
-  grid.innerHTML = list.map(p => `
-    <div class="product-card" onclick="abrirModalProduto(${p.id})">
-      <div class="product-img-wrap">
-        ${p.emoji}
-        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
-        ${p.tag ? `<div class="product-tag">${p.tag}</div>` : ''}
-      </div>
-      <div class="product-info">
-        <div class="product-title">${p.name}</div>
-        <div class="product-desc">${p.desc || ''}</div>
-        <div class="product-footer">
-          <div class="product-price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-          <button class="btn-add" onclick="event.stopPropagation(); addToCart(${JSON.stringify({id:p.id,name:p.name,emoji:p.emoji,price:p.price,desc:p.desc||''}).replace(/"/g,'&quot;')})">+</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function abrirModalProduto(id) {
-  const produto = [...PRODUTOS, ...COMBOS].find(p => p.id === id);
-  if (!produto) return;
-  document.getElementById('modalProductImgWrap').innerHTML = produto.emoji;
-  document.getElementById('modalProductTitle').textContent = produto.name;
-  document.getElementById('modalProductDesc').textContent = produto.desc || '';
-  document.getElementById('modalProductPrice')?.remove();
-  const action = document.getElementById('modalProductAction');
-  if(action) action.innerHTML = `<button class="btn-primary" style="width:100%" onclick="addToCart(${JSON.stringify(produto).replace(/"/g,'&quot;')}); closeModal('productModal')">Adicionar ao Pedido 🛒</button>`;
-  openModal('productModal');
-}
-
-function renderCombos() {
-  const grid = document.getElementById('combosGrid');
-  if (!grid) return;
-  grid.innerHTML = COMBOS.map(c => `
-    <div class="combo-card">
-      <div class="combo-badge">${c.badge}</div>
-      <div style="font-size:2.5rem;">${c.emoji}</div>
-      <h3>${c.name}</h3>
-      <p>${c.desc}</p>
-      <div class="combo-price"><span class="combo-original">R$ ${c.originalPrice.toFixed(2).replace('.',',')}</span> R$ ${c.price.toFixed(2).replace('.',',')}</div>
-      <button class="btn-primary" style="width:100%; margin-top:0.8rem;" onclick="addToCart(${JSON.stringify(c).replace(/"/g,'&quot;')})">🎁 Adicionar Combo</button>
-    </div>
-  `).join('');
-}
-
-function renderBebidas_grid() {
-  const grid = document.getElementById("drinksGrid");
-  if (!grid) return;
-  grid.innerHTML = BEBIDAS.map(d => `
-    <div class="drink-card">
-      <div class="drink-thumb">${d.emoji}</div>
-      <div class="drink-info">
-        <div class="drink-name">${d.name}</div>
-        <div class="drink-desc">${d.desc}</div>
-        <div class="drink-price">R$ ${d.price.toFixed(2).replace('.',',')}</div>
-      </div>
-      <button class="drink-add" style="background:var(--gradient); border:none; width:34px; height:34px; border-radius:50%; color:#fff; cursor:pointer;" onclick="addToCart(${JSON.stringify(d).replace(/"/g,'&quot;')})">+</button>
-    </div>
-  `).join('');
-}
-
-// ============================================================
-// PERFIL
-// ============================================================
-function getSelosFidelidade() { return Math.floor(carregarHistorico().length / 10); }
-
-function renderPerfil() {
-  const el = document.getElementById('perfilContent');
-  if (!el) return;
-  if (!usuarioAtual) {
-    el.innerHTML = `<div style="text-align:center;padding:2rem"><p>Você não está logado.</p><br><button class="btn-primary" onclick="closeModal('perfilModal');mostrarLoginOverlay()">Fazer Login</button></div>`;
-    return;
-  }
-  const perfil = getPerfilUsuario(usuarioAtual.email);
-  const cupons = perfil?.cupons || [];
-  const hist = carregarHistorico();
-  const selos = getSelosFidelidade();
-  el.innerHTML = `
-    <div class="perfil-header" style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
-      <div class="perfil-avatar" style="width:60px; height:60px; background:var(--gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.8rem;">🍩</div>
-      <div><div class="perfil-name" style="font-weight:800;">${perfil?.nome || usuarioAtual.nome}</div><div class="perfil-email" style="font-size:0.8rem;">${usuarioAtual.email}</div></div>
-    </div>
-    <div class="fidelidade-card" style="background:var(--peach); border-radius:12px; padding:0.8rem; text-align:center; margin-bottom:1rem;">
-      <div>🎯 Programa Fidelidade</div>
-      <div style="display:flex; justify-content:center; gap:0.3rem; margin:0.5rem 0;">${Array(10).fill(0).map((_,i) => `<span style="font-size:1.3rem; opacity:${i<selos?1:0.3};">🍩</span>`).join('')}</div>
-      <div style="font-size:0.75rem;">${selos} selos • Faltam ${10-(hist.length%10)} pedidos</div>
-    </div>
-    <div class="perfil-tabs" style="display:flex; gap:0.3rem; margin-bottom:1rem;">
-      <button class="perfil-tab-btn" onclick="switchPerfilTab('cupons')">🎟 Cupons (${cupons.length})</button>
-      <button class="perfil-tab-btn" onclick="switchPerfilTab('hist')">📜 Histórico (${hist.length})</button>
-      <button class="perfil-tab-btn" onclick="switchPerfilTab('config')">⚙️ Config</button>
-    </div>
-    <div id="perfilTabContent"></div>
-  `;
-  renderPerfilTab('cupons', cupons, hist);
-}
-
-function switchPerfilTab(tab) {
-  const perfil = getPerfilUsuario(usuarioAtual?.email);
-  renderPerfilTab(tab, perfil?.cupons||[], carregarHistorico());
-}
-
-function renderPerfilTab(tab, cupons, hist) {
-  const el = document.getElementById('perfilTabContent');
-  if (!el) return;
-  if (tab === 'cupons') {
-    if (!cupons.length) { el.innerHTML = '<div class="history-empty">Nenhum cupom ainda<br><small>Jogue os games!</small></div>'; return; }
-    el.innerHTML = `<div style="display:flex; flex-direction:column; gap:0.5rem;">${cupons.map(c => `<div style="background:var(--peach); border-radius:10px; padding:0.6rem; display:flex; justify-content:space-between;"><span><strong>${c}</strong><br><small>${CUPONS[c]?.desc || 'Cupom especial'}</small></span><button class="cupom-chip-copy" onclick="usarCupomPerfil('${c}')" style="background:var(--pink); color:#fff; border:none; padding:0.3rem 0.8rem; border-radius:6px;">Usar</button></div>`).join('')}</div>`;
-  } else if (tab === 'hist') {
-    if (!hist.length) { el.innerHTML = '<div class="history-empty">Nenhum pedido ainda</div>'; return; }
-    el.innerHTML = hist.map((p,idx) => `<div style="background:var(--card); border:1px solid var(--gray-2); border-radius:12px; padding:0.8rem; margin-bottom:0.5rem;"><div style="display:flex; justify-content:space-between;"><span>📅 ${p.data}</span><span style="font-weight:800;">R$ ${p.total.toFixed(2).replace('.',',')}</span></div><div style="font-size:0.75rem; margin:0.3rem 0;">${p.itens.map(i=>`${i.emoji} ${i.name} x${i.qtd}`).join(' · ')}</div><button class="btn-repeat" onclick="repetirPedido(${idx})" style="background:var(--peach); border:none; padding:0.3rem 0.8rem; border-radius:20px;">🔄 Repetir</button></div>`).join('');
-  } else {
-    el.innerHTML = `<div style="display:flex; flex-direction:column; gap:0.8rem;"><button class="btn-primary" onclick="openModal('surpriseModal');closeModal('perfilModal')">🎁 Caixa Surpresa</button><button class="btn-primary" onclick="openModal('quizModal');closeModal('perfilModal')">🧠 Quiz do Donut</button><button class="btn-primary" onclick="openModal('rodaModal');closeModal('perfilModal')">🎡 Roda da Sorte</button><button style="background:#fee; border:none; padding:0.8rem; border-radius:12px; font-weight:700; cursor:pointer; color:#c0392b;" onclick="fazerLogout()">🚪 Sair da Conta</button></div>`;
-  }
-}
-
-function usarCupomPerfil(codigo) {
-  const inp = document.getElementById('couponInput');
-  if (inp) inp.value = codigo;
-  closeModal('perfilModal');
-  openCart();
-  setTimeout(() => aplicarCupom(), 350);
-}
-
-// ============================================================
-// AVALIAÇÃO
-// ============================================================
-function selecionarEstrela(v) {
-  avaliacaoEstrela = v;
-  document.querySelectorAll('.star-btn').forEach((s,i) => s.classList.toggle('active', i < v));
-  const btn = document.getElementById('btnEnviarAvaliacao');
-  if(btn) { btn.disabled = false; btn.style.opacity = '1'; }
-}
-
-function enviarAvaliacao() {
-  if (!avaliacaoEstrela) return;
-  showToast(`${'⭐'.repeat(avaliacaoEstrela)} Obrigado!`);
-  closeModal('avaliacaoModal');
-}
-
-// ============================================================
-// GAMES
-// ============================================================
-const SURPRESAS = [
-  { cupom:'SURPRESA5', desc:'R$5 OFF', emoji:'💸' },
-  { cupom:'SURPRESA10', desc:'10% OFF', emoji:'🎊' },
-  { cupom:'FRETEGRATIS', desc:'Frete grátis', emoji:'🚚' },
-  { cupom:'DONUT20', desc:'20% OFF', emoji:'🔥' }
-];
-
-function abrirCaixaSurpresa() {
-  const hoje = new Date().toDateString();
-  if (localStorage.getItem('donut_surpresa_dia') === hoje) {
-    showToast('⏰ Você já abriu hoje! Volte amanhã.');
-    return;
-  }
-  const sorteio = SURPRESAS[Math.floor(Math.random() * SURPRESAS.length)];
-  const resultDiv = document.getElementById('surpriseResult');
-  if(resultDiv) {
-    resultDiv.innerHTML = `<div>🎉 Você ganhou!</div><div class="surprise-cupom">${sorteio.cupom}</div><div>${sorteio.desc}</div>`;
-    resultDiv.classList.add('show');
-  }
-  const surpriseBtn = document.getElementById('surpriseBtn');
-  if(surpriseBtn) {
-    surpriseBtn.textContent = '🎟 Usar Cupom';
-    surpriseBtn.onclick = () => {
-      const inp = document.getElementById('couponInput');
-      if(inp) inp.value = sorteio.cupom;
-      closeModal('surpriseModal');
-      openCart();
-      setTimeout(() => aplicarCupom(), 350);
-    };
-  }
-  localStorage.setItem('donut_surpresa_dia', hoje);
-  if (usuarioAtual) salvarCupomUsuario(usuarioAtual.email, sorteio.cupom);
-  lancarConfete();
-}
-
-const PERGUNTAS = [
-  { q:"Qual o principal ingrediente do glazê de donut?", opts:["Açúcar","Farinha","Ovo","Leite"], certa:0 },
-  { q:"O donut foi popularizado em qual país?", opts:["Brasil","França","EUA","Japão"], certa:2 },
-  { q:"O que torna o Donut ALR especial?", opts:["Ingredientes selecionados","Feito com amor","Entrega rápida","Todas as anteriores"], certa:3 }
-];
-let quizQ = 0, quizAcertos = 0, quizRespondida = false;
-
-function iniciarQuiz() { quizQ=0; quizAcertos=0; renderQuizQ(); }
-function renderQuizQ() {
-  const el = document.getElementById('quizContent');
-  if (!el) return;
-  if (quizQ >= PERGUNTAS.length) {
-    const ganhou = quizAcertos/PERGUNTAS.length >= 0.6;
-    el.innerHTML = `<div class="quiz-result"><div class="quiz-score">${quizAcertos}/${PERGUNTAS.length}</div>${ganhou ? `<div class="quiz-cupom-reveal"><div class="quiz-cupom-code">DONUT15</div><button class="coupon-btn" onclick="usarCupomPerfil('DONUT15');closeModal('quizModal')">Usar Cupom</button></div>` : '<button class="btn-primary" onclick="iniciarQuiz()">Tentar novamente</button>'}</div>`;
-    if(ganhou && usuarioAtual) salvarCupomUsuario(usuarioAtual.email, 'DONUT15');
-    if(ganhou) lancarConfete();
-    return;
-  }
-  const p = PERGUNTAS[quizQ];
-  el.innerHTML = `<div class="quiz-progress"><div style="height:6px; background:var(--gray-2); border-radius:99px;"><div style="width:${(quizQ/PERGUNTAS.length)*100}%; height:100%; background:var(--gradient); border-radius:99px;"></div></div></div><div class="quiz-question">${p.q}</div><div class="quiz-opts">${p.opts.map((o,i)=>`<button class="quiz-opt" onclick="responderQuiz(${i})">${o}</button>`).join('')}</div><div id="quizFeedback"></div>`;
-  quizRespondida = false;
-}
-function responderQuiz(idx) {
-  if (quizRespondida) return;
-  quizRespondida = true;
-  const p = PERGUNTAS[quizQ];
-  const opts = document.querySelectorAll('.quiz-opt');
-  opts.forEach((b,i) => { if(i===p.certa) b.classList.add('certa'); else if(i===idx) b.classList.add('errada'); b.disabled=true; });
-  const fb = document.getElementById('quizFeedback');
-  if (idx===p.certa) { quizAcertos++; if(fb){fb.textContent='✅ Correto!'; fb.style.color='green';} }
-  else { if(fb){fb.textContent=`❌ Certa: "${p.opts[p.certa]}"`; fb.style.color='red';} }
-  setTimeout(() => { quizQ++; renderQuizQ(); }, 1200);
-}
-
-const RODA_FATIAS = [
-  { label:'10% OFF', cupom:'SORTE10', cor:'#ff6b9d' }, { label:'Frete Grátis', cupom:'FRETEGRATIS', cor:'#2ecc71' },
-  { label:'15% OFF', cupom:'SORTE15', cor:'#9b59b6' }, { label:'R$5 OFF', cupom:'ALR5', cor:'#f39c12' },
-  { label:'Tente novamente', cupom:'', cor:'#e0e0e0' }, { label:'20% OFF', cupom:'SORTE20', cor:'#e74c3c' }
-];
-let rodaGirando = false, rodaAngle = 0;
-
-function desenharRoda(angle) {
-  const canvas = document.getElementById('rodaCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d'), cx=130, cy=130, r=120, n=RODA_FATIAS.length, slice=(2*Math.PI)/n;
-  ctx.clearRect(0,0,260,260);
-  RODA_FATIAS.forEach((f,i) => {
-    const start=angle+i*slice, end=start+slice;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
-    ctx.fillStyle=f.cor; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
-    ctx.save(); ctx.translate(cx,cy); ctx.rotate(start+slice/2); ctx.textAlign='right'; ctx.fillStyle='#fff';
-    ctx.font='bold 11px sans-serif'; ctx.fillText(f.label,r-10,4); ctx.restore();
-  });
-  ctx.beginPath(); ctx.arc(cx,cy,18,0,2*Math.PI); ctx.fillStyle='#fff'; ctx.fill();
-  ctx.fillStyle='#ff4081'; ctx.font='bold 14px sans-serif'; ctx.fillText('🍩',cx,cy+5);
-}
-
-function girarRoda() {
-  const hoje = new Date().toDateString();
-  if (localStorage.getItem('donut_roda_dia')===hoje) { showToast('⏰ Você já girou hoje!'); return; }
-  if (rodaGirando) return;
-  rodaGirando=true;
-  const btnGirar = document.getElementById('btnGirar');
-  if(btnGirar) btnGirar.disabled=true;
-  const n=RODA_FATIAS.length, giros=5+Math.random()*5, fatiaAlvo=Math.floor(Math.random()*n);
-  const slice=(2*Math.PI)/n, alvoAngle=2*Math.PI*giros-(fatiaAlvo*slice+slice/2);
-  const inicio=rodaAngle, duracao=4000, startTime=performance.now();
-  function animar(now) {
-    const t=Math.min((now-startTime)/duracao,1), ease=1-Math.pow(1-t,4);
-    rodaAngle=inicio+alvoAngle*ease; desenharRoda(rodaAngle);
-    if (t<1) { requestAnimationFrame(animar); return; }
-    rodaGirando=false;
-    const premio=RODA_FATIAS[fatiaAlvo];
-    const resultDiv = document.getElementById('rodaResult');
-    if(resultDiv) {
-      resultDiv.innerHTML = premio.cupom ? `<div class="roda-premio">🎉 ${premio.label}</div><div>Cupom: <strong>${premio.cupom}</strong> <button class="coupon-btn" onclick="usarCupomPerfil('${premio.cupom}');closeModal('rodaModal')">Usar</button></div>` : `<div>😅 ${premio.label}</div>`;
-      resultDiv.classList.add('show');
+    async function add(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            const request = store.add(data);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
     }
-    if(premio.cupom && usuarioAtual) salvarCupomUsuario(usuarioAtual.email, premio.cupom);
-    if(premio.cupom) lancarConfete();
-    localStorage.setItem('donut_roda_dia', hoje);
-    if(btnGirar) btnGirar.disabled=false;
-  }
-  requestAnimationFrame(animar);
-}
 
-// ============================================================
-// CONFETE
-// ============================================================
-function lancarConfete() {
-  const canvas=document.getElementById("confettiCanvas");
-  if(!canvas) return;
-  const ctx=canvas.getContext("2d");
-  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-  canvas.style.display="block";
-  const cores=["#ff6b9d","#ff4081","#ffd4e8","#eed6f8","#fff3b0","#c8f7e0"];
-  const ps=Array.from({length:100},()=>({
-    x:Math.random()*canvas.width, y:-Math.random()*300, r:3+Math.random()*5,
-    cor:cores[Math.floor(Math.random()*cores.length)], vx:(Math.random()-0.5)*3, vy:2+Math.random()*3,
-    rot:Math.random()*360, rspd:(Math.random()-0.5)*5
-  }));
-  let frame;
-  (function animar() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    let vivas=0;
-    ps.forEach(p=>{
-      if(p.y<canvas.height+50){
-        vivas++; p.x+=p.vx; p.y+=p.vy; p.rot+=p.rspd; p.vy+=0.1;
-        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.fillStyle=p.cor;
-        ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); ctx.restore();
-      }
-    });
-    if(vivas>0) frame=requestAnimationFrame(animar);
-    else{canvas.style.display="none";ctx.clearRect(0,0,canvas.width,canvas.height);}
-  })();
-  setTimeout(()=>{cancelAnimationFrame(frame);canvas.style.display="none";},4000);
-}
-
-// ============================================================
-// MODAIS
-// ============================================================
-function openModal(id) {
-  const m = document.getElementById(id);
-  if(m) m.classList.add('open');
-  if(id==='rodaModal') setTimeout(()=>desenharRoda(rodaAngle),100);
-  if(id==='quizModal') iniciarQuiz();
-}
-function closeModal(id) {
-  const m = document.getElementById(id);
-  if(m) m.classList.remove('open');
-}
-function setupModalClickOutside(id, onCloseCallback) {
-  const m = document.getElementById(id);
-  if (!m) return;
-  m.addEventListener('click', function(e) {
-    if (e.target === m) {
-      m.classList.remove('open');
-      if (onCloseCallback) onCloseCallback();
+    // ============================================================
+    // AUTENTICAÇÃO
+    // ============================================================
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
     }
-  });
-}
-function openCart() {
-  document.getElementById("cartSidebar").classList.add("open");
-  document.getElementById("overlay").classList.add("show");
-  renderCart();
-}
-function closeCart() {
-  document.getElementById("cartSidebar").classList.remove("open");
-  document.getElementById("overlay").classList.remove("show");
-}
 
-function atualizarStatusHorario() {
-  const agora=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
-  const dia=agora.getDay(), hora=agora.getHours();
-  const aberto=dia>=1&&dia<=5&&hora>=8&&hora<18;
-  const statusEl=document.getElementById("horarioStatus");
-  const dot=document.getElementById("statusDot");
-  if(statusEl) statusEl.textContent=aberto?"Aberto agora · Seg–Sex 08-18h":"Fechado · Voltamos Seg–Sex 08-18h";
-  if(dot) dot.classList.toggle("fechado",!aberto);
-}
+    function switchAuthMode(mode) {
+        const loginForm = document.getElementById('authLoginForm');
+        const cadastroForm = document.getElementById('authCadastroForm');
+        const btns = document.querySelectorAll('.auth-toggle-btn');
+        
+        if (mode === 'login') {
+            loginForm.style.display = 'block';
+            cadastroForm.style.display = 'none';
+            btns[0].classList.add('active');
+            btns[1].classList.remove('active');
+        } else {
+            loginForm.style.display = 'none';
+            cadastroForm.style.display = 'block';
+            btns[1].classList.add('active');
+            btns[0].classList.remove('active');
+        }
+    }
 
-function setTheme(theme) {
-  document.documentElement.setAttribute("data-theme",theme);
-  const btn=document.getElementById("darkToggle");
-  if(btn) btn.textContent=theme==="dark"?"☀️":"🌙";
-  localStorage.setItem("donut_theme",theme);
-}
-function toggleDark() { setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark"); }
-function initDarkMode() { setTheme(localStorage.getItem("donut_theme")||"light"); }
+    async function fazerLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const senha = document.getElementById('loginSenha').value;
+        
+        if (!email || !senha) {
+            document.getElementById('authMsg').textContent = 'Preencha todos os campos';
+            return;
+        }
+        
+        const users = await getAll('users');
+        const user = users.find(u => u.email === email && u.senha === senha);
+        
+        if (!user) {
+            document.getElementById('authMsg').textContent = 'E-mail ou senha incorretos';
+            return;
+        }
+        
+        usuarioAtual = user;
+        localStorage.setItem('donut_usuario', JSON.stringify({ email: user.email, nome: user.nome }));
+        
+        document.getElementById('loginOverlay').classList.add('hidden');
+        showToast(`🍩 Bem-vindo, ${user.nome}!`);
+        carregarProdutos();
+    }
 
-function startOfferTimer() {
-  let time = 2*3600;
-  const interval = setInterval(() => {
-    if(time<=0){ const el=document.getElementById('offerTimer'); if(el) el.textContent='ENCERRADA'; clearInterval(interval); return; }
-    const h=String(Math.floor(time/3600)).padStart(2,'0');
-    const m=String(Math.floor((time%3600)/60)).padStart(2,'0');
-    const s=String(time%60).padStart(2,'0');
-    const el=document.getElementById('offerTimer');
-    if(el) el.textContent=`${h}:${m}:${s}`;
-    time--;
-  },1000);
-}
+    async function fazerCadastro() {
+        const nome = document.getElementById('cadNome').value.trim();
+        const email = document.getElementById('cadEmail').value.trim();
+        const telefone = document.getElementById('cadTelefone').value.trim();
+        const senha = document.getElementById('cadSenha').value;
+        
+        if (!nome || !email || !senha) {
+            document.getElementById('authMsg').textContent = 'Preencha todos os campos';
+            return;
+        }
+        
+        if (senha.length < 6) {
+            document.getElementById('authMsg').textContent = 'Senha deve ter no mínimo 6 caracteres';
+            return;
+        }
+        
+        const users = await getAll('users');
+        if (users.find(u => u.email === email)) {
+            document.getElementById('authMsg').textContent = 'E-mail já cadastrado';
+            return;
+        }
+        
+        const novoUsuario = {
+            nome, email, telefone, senha,
+            dataCadastro: new Date().toLocaleDateString('pt-BR')
+        };
+        
+        await add('users', novoUsuario);
+        await add('logs', {
+            data: new Date().toLocaleString('pt-BR'),
+            usuario: nome,
+            acao: 'Cadastro',
+            detalhes: `Novo cliente cadastrado: ${email}`
+        });
+        
+        usuarioAtual = novoUsuario;
+        localStorage.setItem('donut_usuario', JSON.stringify({ email, nome }));
+        
+        document.getElementById('loginOverlay').classList.add('hidden');
+        showToast(`🎉 Cadastro realizado! Bem-vindo, ${nome}!`);
+        carregarProdutos();
+    }
 
-function initPaymentSelection() {
-  document.querySelectorAll('.payment-option').forEach(opt => {
-    opt.addEventListener('click', function() {
-      const radio = this.querySelector('input[type="radio"]');
-      if(radio) { radio.checked=true; document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected')); this.classList.add('selected'); }
-    });
-  });
-}
+    function verificarSessao() {
+        const saved = localStorage.getItem('donut_usuario');
+        if (saved) {
+            usuarioAtual = JSON.parse(saved);
+            document.getElementById('loginOverlay').classList.add('hidden');
+            carregarProdutos();
+        }
+    }
 
-// ============================================================
-// INIT
-// ============================================================
-document.addEventListener("DOMContentLoaded", function() {
-  initDarkMode();
-  carregarSessao();
-  carregarCarrinho();
-  atualizarStatusHorario();
-  setInterval(atualizarStatusHorario, 60000);
-  startOfferTimer();
-  initPaymentSelection();
-  renderProdutos(true);
-  setTimeout(() => { renderProdutos(); renderCombos(); renderBebidas_grid(); }, 300);
+    // ============================================================
+    // CARRINHO
+    // ============================================================
+    function salvarCarrinho() {
+        localStorage.setItem('donut_carrinho', JSON.stringify(carrinho));
+        atualizarBadge();
+    }
 
-  // Eventos
-  document.getElementById("headerLoginBtn")?.addEventListener('click', () => usuarioAtual ? (renderPerfil(), openModal('perfilModal')) : mostrarLoginOverlay());
-  document.getElementById("cartBtn")?.addEventListener('click', openCart);
-  document.getElementById("closeCartBtn")?.addEventListener('click', closeCart);
-  document.getElementById("overlay")?.addEventListener('click', closeCart);
-  document.getElementById("checkoutBtn")?.addEventListener('click', finalizarPedido);
-  document.getElementById("buscarCepBtn")?.addEventListener('click', buscarCepEndereco);
-  document.getElementById("calcFreteBtn")?.addEventListener('click', calcularFrete);
-  document.getElementById("darkToggle")?.addEventListener('click', toggleDark);
+    function carregarCarrinho() {
+        const saved = localStorage.getItem('donut_carrinho');
+        if (saved) carrinho = JSON.parse(saved);
+        atualizarBadge();
+    }
 
-  // Fechar modais ao clicar fora
-  ['productModal','perfilModal','surpriseModal','quizModal','rodaModal','enderecoModal','avaliacaoModal'].forEach(id => {
-    setupModalClickOutside(id);
-  });
-  
-  // Endereço (input em vez de change)
-  document.getElementById("endNumero")?.addEventListener('input', e => { enderecoCadastrado.numero = e.target.value; });
-  document.getElementById("endComplemento")?.addEventListener('input', e => { enderecoCadastrado.complemento = e.target.value; });
-  
-  // Busca
-  const searchInput = document.getElementById("searchInput");
-  if(searchInput) {
-    searchInput.addEventListener("input", function(e) {
-      searchTerm = e.target.value.toLowerCase().trim();
-      renderProdutos();
-    });
-  }
-  
-  // Tabs
-  document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.addEventListener("click", function() {
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      this.classList.add("active");
-      currentCat = this.dataset.cat;
-      renderProdutos();
-    });
-  });
-  
-  // Cupom Enter
-  document.getElementById("couponInput")?.addEventListener("keydown", e => { if(e.key==="Enter") aplicarCupom(); });
-  
-  // Surpresa
-  document.getElementById("surpriseBtn")?.addEventListener('click', abrirCaixaSurpresa);
-  
-  // Format CEP
-  const cepInput = document.getElementById("cepInput");
-  if(cepInput) {
-    cepInput.addEventListener('input', function() {
-      let v = this.value.replace(/\D/g,'');
-      if(v.length>8) v=v.slice(0,8);
-      if(v.length>5) v=v.slice(0,5)+'-'+v.slice(5);
-      this.value=v;
-    });
-  }
-});
+    function atualizarBadge() {
+        const total = carrinho.reduce((s, i) => s + (i.qtd || 1), 0);
+        document.getElementById('cartCount').textContent = total;
+    }
+
+    function addToCart(produto) {
+        const existing = carrinho.find(i => i.id === produto.id);
+        if (existing) {
+            existing.qtd++;
+        } else {
+            carrinho.push({ ...produto, qtd: 1 });
+        }
+        salvarCarrinho();
+        renderCart();
+        showToast(`✅ ${produto.nome} adicionado ao carrinho!`);
+    }
+
+    function changeQty(id, delta) {
+        const idx = carrinho.findIndex(i => i.id === id);
+        if (idx === -1) return;
+        const novoQtd = carrinho[idx].qtd + delta;
+        if (novoQtd <= 0) {
+            carrinho.splice(idx, 1);
+        } else {
+            carrinho[idx].qtd = novoQtd;
+        }
+        salvarCarrinho();
+        renderCart();
+    }
+
+    function limparCarrinho() {
+        carrinho = [];
+        salvarCarrinho();
+        renderCart();
+        showToast('🗑️ Carrinho esvaziado');
+    }
+
+    function renderCart() {
+        const body = document.getElementById('cartBody');
+        const summary = document.getElementById('cartSummary');
+        
+        if (!carrinho.length) {
+            body.innerHTML = '<div class="cart-empty">🛒 Carrinho vazio</div>';
+            summary.innerHTML = '';
+            document.getElementById('checkoutBtn').disabled = true;
+            return;
+        }
+        
+        body.innerHTML = carrinho.map(item => `
+            <div class="cart-item">
+                <div class="cart-item-emoji">${item.emoji}</div>
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${item.nome}</div>
+                    <div class="cart-item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>
+                </div>
+                <div class="qty-ctrl">
+                    <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+                    <span class="qty-num">${item.qtd}</span>
+                    <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                </div>
+            </div>
+        `).join('');
+        
+        const subtotal = carrinho.reduce((s, i) => s + i.preco * i.qtd, 0);
+        const frete = subtotal >= 50 ? 0 : 7.90;
+        const total = subtotal + frete;
+        
+        summary.innerHTML = `
+            <div class="cart-summary-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span></div>
+            <div class="cart-summary-row"><span>Frete</span><span>${frete === 0 ? 'Grátis' : 'R$ ' + frete.toFixed(2).replace('.', ',')}</span></div>
+            <div class="cart-summary-row total"><span>Total</span><span>R$ ${total.toFixed(2).replace('.', ',')}</span></div>
+        `;
+        
+        document.getElementById('checkoutBtn').disabled = false;
+    }
+
+    // ============================================================
+    // CHECKOUT
+    // ============================================================
+    function openCart() {
+        renderCart();
+        document.getElementById('cartSidebar').classList.add('open');
+        document.getElementById('overlay').classList.add('show');
+    }
+
+    function closeCart() {
+        document.getElementById('cartSidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+        document.getElementById('overlay').classList.add('show');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+        document.getElementById('overlay').classList.remove('show');
+    }
+
+    function abrirCheckout() {
+        if (!usuarioAtual) {
+            document.getElementById('loginOverlay').classList.remove('hidden');
+            return;
+        }
+        if (!carrinho.length) {
+            showToast('❌ Carrinho vazio!');
+            return;
+        }
+        const total = carrinho.reduce((s, i) => s + i.preco * i.qtd, 0);
+        const frete = total >= 50 ? 0 : 7.90;
+        document.getElementById('checkoutTotal').innerHTML = `Total: R$ ${(total + frete).toFixed(2).replace('.', ',')}`;
+        closeCart();
+        openModal('checkoutModal');
+    }
+
+    function selectPayment(method) {
+        selectedPayment = method;
+        document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+        document.querySelector(`.payment-option[data-payment="${method}"]`).classList.add('selected');
+    }
+
+    async function finalizarPedido() {
+        const endereco = document.getElementById('endereco').value.trim();
+        
+        if (!endereco) {
+            showToast('⚠️ Informe o endereço de entrega!');
+            return;
+        }
+        
+        const subtotal = carrinho.reduce((s, i) => s + i.preco * i.qtd, 0);
+        const frete = subtotal >= 50 ? 0 : 7.90;
+        const total = subtotal + frete;
+        
+        const pagamentoTexto = {
+            'pix': 'PIX',
+            'card': 'Cartão',
+            'cash': 'Dinheiro'
+        }[selectedPayment];
+        
+        const pedido = {
+            cliente: usuarioAtual.nome,
+            email: usuarioAtual.email,
+            whatsapp: usuarioAtual.telefone || 'Não informado',
+            itens: carrinho.map(i => ({ nome: i.nome, qtd: i.qtd, preco: i.preco })),
+            subtotal: subtotal,
+            frete: frete,
+            total: total,
+            endereco: endereco,
+            pagamento: pagamentoTexto,
+            status: 'pending',
+            data: new Date().toLocaleString('pt-BR')
+        };
+        
+        try {
+            const pedidoId = await add('pedidos', pedido);
+            await add('logs', {
+                data: new Date().toLocaleString('pt-BR'),
+                usuario: usuarioAtual.nome,
+                acao: 'Novo Pedido',
+                detalhes: `Pedido #${pedidoId} - R$ ${total.toFixed(2)}`
+            });
+            
+            showToast(`🎉 Pedido #${pedidoId} realizado com sucesso!`);
+            
+            // Gerar mensagem para WhatsApp
+            let msg = `🍩 *NOVO PEDIDO - Donut ALR*\n`;
+            msg += `👤 Cliente: ${usuarioAtual.nome}\n`;
+            msg += `📞 WhatsApp: ${usuarioAtual.telefone || 'Não informado'}\n`;
+            msg += `📍 Endereço: ${endereco}\n\n`;
+            msg += `*ITENS:*\n`;
+            carrinho.forEach(i => msg += `• ${i.emoji} ${i.nome} x${i.qtd} = R$ ${(i.preco * i.qtd).toFixed(2)}\n`);
+            msg += `\n💰 *TOTAL: R$ ${total.toFixed(2)}*\n`;
+            msg += `💳 Pagamento: ${pagamentoTexto}`;
+            
+            window.open(`https://wa.me/5589994112913?text=${encodeURIComponent(msg)}`, '_blank');
+            
+            carrinho = [];
+            salvarCarrinho();
+            closeModal('checkoutModal');
+            renderCart();
+            
+        } catch (error) {
+            console.error('Erro ao salvar pedido:', error);
+            showToast('❌ Erro ao processar pedido!');
+        }
+    }
+
+    // ============================================================
+    // PRODUTOS
+    // ============================================================
+    async function carregarProdutos() {
+        try {
+            const produtos = await getAll('produtos');
+            const grid = document.getElementById('productsGrid');
+            
+            if (produtos && produtos.length > 0) {
+                grid.innerHTML = produtos.map(p => `
+                    <div class="product-card" onclick="abrirModalProduto(${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                        <div class="product-img">${p.emoji || '🍩'}</div>
+                        <div class="product-info">
+                            <div class="product-title">${p.nome}</div>
+                            <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+                            <button class="btn-add" onclick="event.stopPropagation(); addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})">+ Adicionar</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                grid.innerHTML = PRODUTOS_PADRAO.map(p => `
+                    <div class="product-card" onclick='abrirModalProduto(${JSON.stringify(p)})'>
+                        <div class="product-img">${p.emoji}</div>
+                        <div class="product-info">
+                            <div class="product-title">${p.nome}</div>
+                            <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+                            <button class="btn-add" onclick="event.stopPropagation(); addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})">+ Adicionar</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        } catch (error) {
+            console.error('Erro ao carregar produtos:', error);
+        }
+    }
+
+    function abrirModalProduto(produto) {
+        document.getElementById('modalProductEmoji').textContent = produto.emoji || '🍩';
+        document.getElementById('modalProductTitle').textContent = produto.nome;
+        document.getElementById('modalProductDesc').textContent = produto.descricao || 'Delicioso donut artesanal';
+        document.getElementById('modalProductPrice').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
+        
+        const btn = document.getElementById('modalAddBtn');
+        btn.onclick = () => {
+            addToCart(produto);
+            closeModal('productModal');
+        };
+        
+        openModal('productModal');
+    }
+
+    // ============================================================
+    // INICIALIZAÇÃO
+    // ============================================================
+    async function init() {
+        await openDatabase();
+        verificarSessao();
+        carregarCarrinho();
+    }
+    
+    init();
 </script>
 </body>
 </html>
