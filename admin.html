@@ -274,6 +274,16 @@
             display: none;
         }
 
+        .sync-badge {
+            display: inline-block;
+            background: #2ecc71;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container { padding: 1rem; }
@@ -310,6 +320,7 @@
         <div class="logo">
             <span>🍩</span>
             <span>Donut ALR - Admin</span>
+            <span class="sync-badge">🔄 Sincronizado</span>
         </div>
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
@@ -455,7 +466,47 @@
 
 <script>
     // ============================================================
-    // BANCO DE DADOS INDEXEDDB - MESMA ESTRUTURA DO SITE PRINCIPAL
+    // SINCRONIZAÇÃO COM LOCALSTORAGE DO SITE
+    // ============================================================
+    
+    // Obter usuários cadastrados no site
+    function getUsuariosDoSite() {
+        try {
+            return JSON.parse(localStorage.getItem('donut_usuarios') || '{}');
+        } catch(e) {
+            return {};
+        }
+    }
+
+    // Obter histórico de pedidos de um usuário
+    function getHistoricoPedidosUsuario(email) {
+        try {
+            const key = `donut_hist_${email}`;
+            return JSON.parse(localStorage.getItem(key) || '[]');
+        } catch(e) {
+            return [];
+        }
+    }
+
+    // Obter todos os pedidos (de todos os usuários)
+    function getTodosPedidos() {
+        const usuarios = getUsuariosDoSite();
+        let todosPedidos = [];
+        for (let email in usuarios) {
+            const pedidos = getHistoricoPedidosUsuario(email);
+            todosPedidos = [...todosPedidos, ...pedidos.map(p => ({ ...p, email }))];
+        }
+        return todosPedidos.sort((a, b) => new Date(b.data) - new Date(a.data));
+    }
+
+    // Obter cupons de um usuário
+    function getCuponsUsuario(email) {
+        const usuarios = getUsuariosDoSite();
+        return usuarios[email]?.cupons || [];
+    }
+
+    // ============================================================
+    // BANCO DE DADOS INDEXEDDB
     // ============================================================
     const DB_NAME = 'DonutALR_DB';
     const DB_VERSION = 1;
@@ -479,44 +530,23 @@
                     productStore.createIndex('categoria', 'categoria', { unique: false });
                 }
                 
-                if (!db.objectStoreNames.contains('pedidos')) {
-                    const orderStore = db.createObjectStore('pedidos', { keyPath: 'id', autoIncrement: true });
-                    orderStore.createIndex('status', 'status', { unique: false });
-                    orderStore.createIndex('data', 'data', { unique: false });
-                }
-                
-                if (!db.objectStoreNames.contains('usuarios')) {
-                    const userStore = db.createObjectStore('usuarios', { keyPath: 'id', autoIncrement: true });
-                    userStore.createIndex('email', 'email', { unique: true });
-                }
-                
                 if (!db.objectStoreNames.contains('logs')) {
                     db.createObjectStore('logs', { keyPath: 'id', autoIncrement: true });
                 }
                 
-                // Dados iniciais
-                const transaction = db.transaction(['produtos', 'usuarios'], 'readwrite');
+                // Dados iniciais de produtos
+                const transaction = db.transaction(['produtos'], 'readwrite');
                 const produtos = transaction.objectStore('produtos');
-                const usuarios = transaction.objectStore('usuarios');
                 
                 produtos.count().onsuccess = (e) => {
                     if (e.target.result === 0) {
                         const produtosIniciais = [
                             { nome: "Donut Glitter Rosa", categoria: "donuts", preco: 12.9, descricao: "Cobertura rosé com confeitos", emoji: "🍩", ativo: true },
-                            { nome: "Donut Nutella Love", categoria: "donuts", preco: 16.9, descricao: "Recheio cremoso de Nutella", emoji: "🍩", ativo: true, destaque: true },
-                            { nome: "Cupcake Red Velvet", categoria: "cupcakes", preco: 17.9, descricao: "Cream cheese", emoji: "🧁", ativo: true, destaque: true },
+                            { nome: "Donut Nutella Love", categoria: "donuts", preco: 16.9, descricao: "Recheio cremoso de Nutella", emoji: "🍩", ativo: true },
+                            { nome: "Cupcake Red Velvet", categoria: "cupcakes", preco: 17.9, descricao: "Cream cheese", emoji: "🧁", ativo: true },
                             { nome: "Milk Shake Morango", categoria: "bebidas", preco: 18.9, descricao: "Sorvete artesanal", emoji: "🍓", ativo: true }
                         ];
                         produtosIniciais.forEach(p => produtos.add(p));
-                    }
-                };
-                
-                usuarios.count().onsuccess = (e) => {
-                    if (e.target.result === 0) {
-                        const usuariosIniciais = [
-                            { nome: "Cliente Teste", email: "cliente@teste.com", telefone: "(89) 99999-9999", senha: "senha123", cupons: ["BEMVINDO10"], dataCadastro: new Date().toISOString() }
-                        ];
-                        usuariosIniciais.forEach(u => usuarios.add(u));
                     }
                 };
             };
@@ -625,15 +655,15 @@
     }
 
     // ============================================================
-    // DASHBOARD
+    // DASHBOARD - COM SINCRONIZAÇÃO
     // ============================================================
     async function loadDashboard() {
         const produtos = await getAll('produtos');
-        const pedidos = await getAll('pedidos');
-        const usuarios = await getAll('usuarios');
+        const usuariosDoSite = getUsuariosDoSite();
+        const todosPedidos = getTodosPedidos();
         
-        const totalVendas = pedidos.reduce((sum, p) => sum + (p.total || 0), 0);
-        const pedidosPendentes = pedidos.filter(p => p.status !== 'delivered').length;
+        const totalVendas = todosPedidos.reduce((sum, p) => sum + (p.total || 0), 0);
+        const pedidosPendentes = todosPedidos.filter(p => p.status !== 'delivered' && p.status !== undefined).length;
         
         document.getElementById('statsGrid').innerHTML = `
             <div class="stat-card">
@@ -641,15 +671,15 @@
                 <div class="stat-label">Produtos</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">${pedidos.length}</div>
-                <div class="stat-label">Pedidos</div>
+                <div class="stat-number">${todosPedidos.length}</div>
+                <div class="stat-label">Pedidos Totais</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">${usuarios.length}</div>
+                <div class="stat-number">${Object.keys(usuariosDoSite).length}</div>
                 <div class="stat-label">Clientes</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">R$ ${totalVendas.toFixed(2)}</div>
+                <div class="stat-number">R$ ${totalVendas.toFixed(2).replace('.',',')}</div>
                 <div class="stat-label">Faturamento</div>
             </div>
             <div class="stat-card">
@@ -658,36 +688,25 @@
             </div>
         `;
         
-        const recentOrders = pedidos.slice(-5).reverse();
+        const recentOrders = todosPedidos.slice(0, 5);
         document.getElementById('recentOrders').innerHTML = `
             <table style="width: 100%;">
                 <thead>
-                    <tr><th>ID</th><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></tr>
+                    <tr><th>ID</th><th>Cliente</th><th>Total</th><th>Data</th></tr>
                 </thead>
                 <tbody>
                     ${recentOrders.map(order => `
                         <tr>
                             <td>#${order.id}</td>
-                            <td>${order.cliente || 'Anônimo'}</td>
-                            <td>R$ ${(order.total || 0).toFixed(2)}</td>
-                            <td><span class="status-badge status-${order.status || 'pending'}">${getStatusText(order.status)}</span></td>
+                            <td>${order.email}</td>
+                            <td>R$ ${(order.total || 0).toFixed(2).replace('.',',')}</td>
                             <td>${new Date(order.data).toLocaleDateString('pt-BR')}</td>
                         </tr>
                     `).join('')}
-                    ${recentOrders.length === 0 ? '<tr><td colspan="5" style="text-align: center;">Nenhum pedido encontrado</td></tr>' : ''}
+                    ${recentOrders.length === 0 ? '<tr><td colspan="4" style="text-align: center;">Nenhum pedido encontrado</td></tr>' : ''}
                 </tbody>
             </table>
         `;
-    }
-
-    function getStatusText(status) {
-        const map = {
-            'pending': '⏳ Pendente',
-            'preparing': '🍳 Em preparo',
-            'delivering': '🚚 Saiu para entrega',
-            'delivered': '✅ Entregue'
-        };
-        return map[status] || '⏳ Pendente';
     }
 
     // ============================================================
@@ -701,7 +720,7 @@
                 <td>${p.id}</td>
                 <td>${p.emoji || '🍩'} ${p.nome}</td>
                 <td>${p.categoria}</td>
-                <td>R$ ${p.preco.toFixed(2)}</td>
+                <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
                 <td>${p.ativo ? '✅ Ativo' : '❌ Inativo'}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editProduct(${p.id})">✏️</button>
@@ -778,106 +797,104 @@
     }
 
     // ============================================================
-    // PEDIDOS
+    // PEDIDOS - SINCRONIZADO COM SITE
     // ============================================================
     let currentOrderId = null;
 
-    async function loadOrders() {
-        const pedidos = await getAll('pedidos');
+    function loadOrders() {
+        const todosPedidos = getTodosPedidos();
         const tbody = document.getElementById('ordersTable');
-        tbody.innerHTML = pedidos.sort((a,b) => b.id - a.id).map(p => `
+        tbody.innerHTML = todosPedidos.sort((a,b) => b.id - a.id).map(p => `
             <tr>
                 <td>#${p.id}</td>
-                <td>${p.cliente || 'Anônimo'}</td>
-                <td>R$ ${(p.total || 0).toFixed(2)}</td>
-                <td><span class="status-badge status-${p.status || 'pending'}">${getStatusText(p.status)}</span></td>
+                <td>${p.email}</td>
+                <td>R$ ${(p.total || 0).toFixed(2).replace('.',',')}</td>
+                <td><span class="status-badge status-pending">Recebido</span></td>
                 <td>${new Date(p.data).toLocaleDateString('pt-BR')}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm" onclick="openStatusModal(${p.id})">📝 Status</button>
-                    <button class="btn btn-info btn-sm" onclick="viewOrderDetails(${p.id})">👁️ Detalhes</button>
+                    <button class="btn btn-primary btn-sm" onclick="viewOrderDetails(${p.id})">👁️ Detalhes</button>
                 </td>
             </tr>
         `).join('');
     }
 
-    function openStatusModal(orderId) {
-        currentOrderId = orderId;
-        document.getElementById('statusModal').classList.add('active');
-    }
-
-    function closeStatusModal() {
-        document.getElementById('statusModal').classList.remove('active');
-        currentOrderId = null;
-    }
-
-    async function updateOrderStatus() {
-        if (!currentOrderId) return;
-        const newStatus = document.getElementById('orderStatusSelect').value;
-        const order = await getById('pedidos', currentOrderId);
+    function viewOrderDetails(orderId) {
+        const todosPedidos = getTodosPedidos();
+        const order = todosPedidos.find(o => o.id === orderId);
         if (order) {
-            order.status = newStatus;
-            await update('pedidos', order);
-            addLog('admin', 'atualizar_pedido', `Pedido #${currentOrderId} → ${getStatusText(newStatus)}`);
-            loadOrders();
-            loadDashboard();
-        }
-        closeStatusModal();
-    }
-
-    async function viewOrderDetails(orderId) {
-        const order = await getById('pedidos', orderId);
-        if (order) {
-            alert(`📦 PEDIDO #${orderId}\n\n👤 Cliente: ${order.cliente}\n📱 WhatsApp: ${order.whatsapp || 'N/A'}\n\n🛒 Itens:\n${order.itens?.map(i => `  • ${i.emoji} ${i.nome} x${i.qtd} = R$ ${(i.price * i.qtd).toFixed(2)}`).join('\n') || 'N/A'}\n\n📍 Endereço: ${order.endereco}\n💰 Total: R$ ${(order.total || 0).toFixed(2)}`);
+            let detalhes = `📦 PEDIDO #${orderId}\n\n`;
+            detalhes += `👤 Cliente: ${order.email}\n`;
+            detalhes += `📅 Data: ${new Date(order.data).toLocaleString('pt-BR')}\n`;
+            detalhes += `📍 Endereço: ${order.endereco || 'Não informado'}\n`;
+            detalhes += `💳 Pagamento: ${order.pagamento || 'Não especificado'}\n\n`;
+            detalhes += `🛒 ITENS:\n`;
+            if (order.itens && Array.isArray(order.itens)) {
+                order.itens.forEach(i => {
+                    detalhes += `  • ${i.emoji} ${i.name} x${i.qtd} = R$ ${(i.price * i.qtd).toFixed(2).replace('.',',')}\n`;
+                });
+            }
+            detalhes += `\n💰 TOTAL: R$ ${(order.total || 0).toFixed(2).replace('.',',')}\n`;
+            alert(detalhes);
         }
     }
 
     // ============================================================
-    // USUÁRIOS
+    // USUÁRIOS - SINCRONIZADO COM SITE
     // ============================================================
-    async function loadUsers() {
-        const usuarios = await getAll('usuarios');
-        const pedidos = await getAll('pedidos');
+    function loadUsers() {
+        const usuariosDoSite = getUsuariosDoSite();
         const tbody = document.getElementById('usersTable');
-        tbody.innerHTML = usuarios.map(u => {
-            const userOrders = pedidos.filter(p => p.email === u.email);
+        let contador = 0;
+        
+        tbody.innerHTML = Object.entries(usuariosDoSite).map(([email, user], idx) => {
+            const pedidos = getHistoricoPedidosUsuario(email);
+            contador++;
             return `
                 <tr>
-                    <td>${u.id}</td>
-                    <td>${u.nome}</td>
-                    <td>${u.email}</td>
-                    <td>${u.telefone || '-'}</td>
-                    <td>${userOrders.length}</td>
-                    <td>${u.cupons?.length || 0}</td>
+                    <td>${contador}</td>
+                    <td>${user.nome}</td>
+                    <td>${email}</td>
+                    <td>${user.telefone || '-'}</td>
+                    <td>${pedidos.length}</td>
+                    <td>${user.cupons?.length || 0}</td>
                     <td>
-                        <button class="btn btn-warning btn-sm" onclick="giveCoupon(${u.id})">🎟️</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})">🗑️</button>
+                        <button class="btn btn-warning btn-sm" onclick="giveCouponToUser('${email}')">🎟️</button>
+                        <button class="btn btn-primary btn-sm" onclick="viewUserDetails('${email}')">👁️</button>
                     </td>
                 </tr>
             `;
         }).join('');
-    }
 
-    async function giveCoupon(userId) {
-        const cupom = prompt('Digite o código do cupom:', 'DESCONTO10');
-        if (cupom) {
-            const user = await getById('usuarios', userId);
-            if (user) {
-                user.cupons = user.cupons || [];
-                user.cupons.push(cupom.toUpperCase());
-                await update('usuarios', user);
-                addLog('admin', 'dar_cupom', `${cupom} para ${user.nome}`);
-                loadUsers();
-                alert(`✅ Cupom ${cupom} adicionado!`);
-            }
+        if (Object.keys(usuariosDoSite).length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Nenhum usuário cadastrado</td></tr>';
         }
     }
 
-    async function deleteUser(userId) {
-        if (confirm('Excluir este usuário?')) {
-            const user = await getById('usuarios', userId);
-            await remove('usuarios', userId);
-            addLog('admin', 'excluir_usuario', `Excluiu: ${user?.nome}`);
-            loadUsers();
+    function viewUserDetails(email) {
+        const usuariosDoSite = getUsuariosDoSite();
+        const user = usuariosDoSite[email];
+        const pedidos = getHistoricoPedidosUsuario(email);
+        if (user) {
+            alert(`👤 ${user.nome}\n📧 ${email}\n📱 ${user.telefone || 'N/A'}\n\n📦 Pedidos: ${pedidos.length}\n🎟️ Cupons: ${user.cupons?.join(', ') || 'Nenhum'}`);
+        }
+    }
+
+    function giveCouponToUser(email) {
+        const cupom = prompt('Digite o código do cupom:', 'DESCONTO10');
+        if (cupom) {
+            const usuariosDoSite = getUsuariosDoSite();
+            if (usuariosDoSite[email]) {
+                usuariosDoSite[email].cupons = usuariosDoSite[email].cupons || [];
+                if (!usuariosDoSite[email].cupons.includes(cupom.toUpperCase())) {
+                    usuariosDoSite[email].cupons.push(cupom.toUpperCase());
+                    localStorage.setItem('donut_usuarios', JSON.stringify(usuariosDoSite));
+                    addLog('admin', 'dar_cupom', `${cupom} para ${usuariosDoSite[email].nome}`);
+                    loadUsers();
+                    alert(`✅ Cupom ${cupom} adicionado para ${usuariosDoSite[email].nome}!`);
+                } else {
+                    alert('⚠️ Este usuário já possui este cupom!');
+                }
+            }
         }
     }
 
@@ -910,6 +927,13 @@
         
         document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
+
+        // Recarregar dados ao mudar de aba
+        if (tab === 'dashboard') loadDashboard();
+        else if (tab === 'products') loadProducts();
+        else if (tab === 'orders') loadOrders();
+        else if (tab === 'users') loadUsers();
+        else if (tab === 'logs') loadLogs();
     }
 
     // ============================================================
@@ -918,6 +942,15 @@
     async function init() {
         await openDatabase();
         checkAuth();
+        
+        // Auto-refresh a cada 30 segundos
+        setInterval(() => {
+            if (localStorage.getItem('admin_logged') === 'true') {
+                loadDashboard();
+                loadOrders();
+                loadUsers();
+            }
+        }, 30000);
     }
 
     init();
