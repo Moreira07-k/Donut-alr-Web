@@ -953,6 +953,59 @@
         }, 30000);
     }
 
+ // ============================================================
+    // NAVEGAÇÃO
+    // ============================================================
+    function switchTab(tab) {
+        const tabs = ['dashboard', 'products', 'orders', 'users', 'logs'];
+        tabs.forEach(t => {
+            const el = document.getElementById(`${t}Tab`);
+            if (el) el.classList.remove('active');
+        });
+        document.getElementById(`${tab}Tab`).classList.add('active');
+        
+        document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+        if (event && event.target) event.target.classList.add('active');
+
+        // Recarregar dados imediatamente ao clicar
+        if (tab === 'dashboard') loadDashboard();
+        else if (tab === 'products') loadProducts();
+        else if (tab === 'orders') loadOrders();
+        else if (tab === 'users') loadUsers();
+        else if (tab === 'logs') loadLogs();
+    }
+
+    // ============================================================
+    // INIT (ATUALIZAÇÃO EM TEMPO REAL ULTRA RÁPIDA)
+    // ============================================================
+    async function init() {
+        await openDatabase();
+        checkAuth();
+        
+        // Sincroniza em tempo real as abas a cada 3 segundos sem travar a tela
+        setInterval(async () => {
+            if (typeof db !== 'undefined' && db) {
+                const dashboardAtivo = document.getElementById('dashboardTab')?.classList.contains('active');
+                const pedidosAtivo = document.getElementById('ordersTab')?.classList.contains('active');
+                const usersAtivo = document.getElementById('usersTab')?.classList.contains('active');
+                const logsAtivo = document.getElementById('logsTab')?.classList.contains('active');
+                
+                if (dashboardAtivo) {
+                    await loadDashboard();
+                }
+                if (pedidosAtivo) {
+                    await loadOrders();
+                }
+                if (usersAtivo) {
+                    await loadUsers();
+                }
+                if (logsAtivo) {
+                    await loadLogs();
+                }
+            }
+        }, 3000);
+    }
+
     init();
 </script>
 </body>
