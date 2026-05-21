@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donut ALR - Painel Administrativo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6b9d;
+            --primary-dark: #e8436e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2d1020;
+            --light: #fff6f9;
+            --gray: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: var(--gray);
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        /* Tabelas */
+        .table-container {
+            background: white;
+            border-radius: 16px;
+            overflow-x: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--gray);
+            font-weight: 600;
+        }
+
+        /* Botões */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        /* Formulários */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pending { background: #ffeaa7; color: #d63031; }
+        .status-preparing { background: #74b9ff; color: #0984e3; }
+        .status-delivering { background: #a29bfe; color: #6c5ce7; }
+        .status-delivered { background: #55efc4; color: #00b894; }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Login */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            th, td { padding: 0.5rem; font-size: 0.8rem; }
+            .nav-tabs { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Tela de Login do Admin -->
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
+        <h2 style="color: var(--primary);">Painel Administrativo</h2>
+        <p style="color: #666; margin-bottom: 1.5rem;">Donut ALR - Controle total</p>
+        <div class="form-group">
+            <input type="text" id="adminUser" placeholder="Usuário" style="text-align: center;">
+        </div>
+        <div class="form-group">
+            <input type="password" id="adminPass" placeholder="Senha" style="text-align: center;">
+        </div>
+        <button class="btn btn-primary" onclick="loginAdmin()" style="width: 100%;">🔓 Acessar Painel</button>
+        <p style="margin-top: 1rem; font-size: 0.8rem; color: #999;">
+            Credenciais padrão: admin / admin123
+        </p>
+    </div>
+</div>
+
+<!-- Painel Administrativo -->
+<div id="adminPanel" class="hidden">
+    <div class="header">
+        <div class="logo">
+            <span>🍩</span>
+            <span>Donut ALR - Admin</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="switchTab('products')">🍩 Produtos</button>
+            <button class="nav-tab" onclick="switchTab('orders')">📦 Pedidos</button>
+            <button class="nav-tab" onclick="switchTab('users')">👥 Usuários</button>
+            <button class="nav-tab" onclick="switchTab('logs')">📋 Logs</button>
+            <button class="nav-tab" onclick="logout()">🚪 Sair</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Dashboard -->
+        <div id="dashboardTab" class="tab-content active">
+            <div class="stats-grid" id="statsGrid">
+                <!-- Carregado via JS -->
+            </div>
+            <div class="table-container">
+                <h3 style="padding: 1rem;">📈 Últimos Pedidos</h3>
+                <div id="recentOrders"></div>
+            </div>
+        </div>
+
+        <!-- Produtos -->
+        <div id="productsTab" class="tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2>🍩 Gestão de Produtos</h2>
+                <button class="btn btn-primary" onclick="openProductModal()">+ Novo Produto</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Status</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="productsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pedidos -->
+        <div id="ordersTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem;">📦 Gestão de Pedidos</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="ordersTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Usuários -->
+        <div id="usersTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem;">👥 Gestão de Usuários</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Pedidos</th><th>Cupons</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Logs -->
+        <div id="logsTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem;">📋 Logs do Sistema</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>Data</th><th>Usuário</th><th>Ação</th><th>Detalhes</th></tr>
+                    </thead>
+                    <tbody id="logsTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Produto -->
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="productModalTitle">Novo Produto</h3>
+            <button class="btn btn-danger btn-sm" onclick="closeProductModal()">✕</button>
+        </div>
+        <form id="productForm" onsubmit="saveProduct(event)">
+            <input type="hidden" id="productId">
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" id="productName" required>
+            </div>
+            <div class="form-group">
+                <label>Categoria</label>
+                <select id="productCategory" required>
+                    <option value="donuts">Donuts</option>
+                    <option value="cupcakes">Cupcakes</option>
+                    <option value="bolos">Bolos</option>
+                    <option value="bebidas">Bebidas</option>
+                    <option value="combos">Combos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Preço (R$)</label>
+                <input type="number" step="0.01" id="productPrice" required>
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="productDesc" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Emoji</label>
+                <input type="text" id="productEmoji" placeholder="🍩" maxlength="2">
+            </div>
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button type="button" class="btn" onclick="closeProductModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Status Pedido -->
+<div id="statusModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Atualizar Status</h3>
+            <button class="btn btn-danger btn-sm" onclick="closeStatusModal()">✕</button>
+        </div>
+        <div class="form-group">
+            <label>Status</label>
+            <select id="orderStatusSelect">
+                <option value="pending">⏳ Pendente</option>
+                <option value="preparing">🍳 Em preparo</option>
+                <option value="delivering">🚚 Saiu para entrega</option>
+                <option value="delivered">✅ Entregue</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" onclick="updateOrderStatus()" style="width: 100%;">Atualizar</button>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // BANCO DE DADOS INDEXEDDB - MESMA ESTRUTURA DO SITE PRINCIPAL
+    // ============================================================
+    const DB_NAME = 'DonutALR_DB';
+    const DB_VERSION = 1;
+    let db = null;
+
+    function openDatabase() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => {
+                db = request.result;
+                resolve(db);
+            };
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                
+                if (!db.objectStoreNames.contains('produtos')) {
+                    const productStore = db.createObjectStore('produtos', { keyPath: 'id', autoIncrement: true });
+                    productStore.createIndex('categoria', 'categoria', { unique: false });
+                }
+                
+                if (!db.objectStoreNames.contains('pedidos')) {
+                    const orderStore = db.createObjectStore('pedidos', { keyPath: 'id', autoIncrement: true });
+                    orderStore.createIndex('status', 'status', { unique: false });
+                    orderStore.createIndex('data', 'data', { unique: false });
+                }
+                
+                if (!db.objectStoreNames.contains('usuarios')) {
+                    const userStore = db.createObjectStore('usuarios', { keyPath: 'id', autoIncrement: true });
+                    userStore.createIndex('email', 'email', { unique: true });
+                }
+                
+                if (!db.objectStoreNames.contains('logs')) {
+                    db.createObjectStore('logs', { keyPath: 'id', autoIncrement: true });
+                }
+                
+                // Dados iniciais
+                const transaction = db.transaction(['produtos', 'usuarios'], 'readwrite');
+                const produtos = transaction.objectStore('produtos');
+                const usuarios = transaction.objectStore('usuarios');
+                
+                produtos.count().onsuccess = (e) => {
+                    if (e.target.result === 0) {
+                        const produtosIniciais = [
+                            { nome: "Donut Glitter Rosa", categoria: "donuts", preco: 12.9, descricao: "Cobertura rosé com confeitos", emoji: "🍩", ativo: true },
+                            { nome: "Donut Nutella Love", categoria: "donuts", preco: 16.9, descricao: "Recheio cremoso de Nutella", emoji: "🍩", ativo: true, destaque: true },
+                            { nome: "Cupcake Red Velvet", categoria: "cupcakes", preco: 17.9, descricao: "Cream cheese", emoji: "🧁", ativo: true, destaque: true },
+                            { nome: "Milk Shake Morango", categoria: "bebidas", preco: 18.9, descricao: "Sorvete artesanal", emoji: "🍓", ativo: true }
+                        ];
+                        produtosIniciais.forEach(p => produtos.add(p));
+                    }
+                };
+                
+                usuarios.count().onsuccess = (e) => {
+                    if (e.target.result === 0) {
+                        const usuariosIniciais = [
+                            { nome: "Cliente Teste", email: "cliente@teste.com", telefone: "(89) 99999-9999", senha: "senha123", cupons: ["BEMVINDO10"], dataCadastro: new Date().toISOString() }
+                        ];
+                        usuariosIniciais.forEach(u => usuarios.add(u));
+                    }
+                };
+            };
+        });
+    }
+
+    // CRUD Functions
+    async function getAll(storeName) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], 'readonly');
+            const store = transaction.objectStore(storeName);
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async function getById(storeName, id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], 'readonly');
+            const store = transaction.objectStore(storeName);
+            const request = store.get(id);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async function add(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            const request = store.add(data);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async function update(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            const request = store.put(data);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async function remove(storeName, id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            const request = store.delete(id);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async function addLog(usuario, acao, detalhes) {
+        const log = {
+            data: new Date().toLocaleString('pt-BR'),
+            usuario,
+            acao,
+            detalhes
+        };
+        await add('logs', log);
+    }
+
+    // ============================================================
+    // ADMIN LOGIN
+    // ============================================================
+    function loginAdmin() {
+        const user = document.getElementById('adminUser').value;
+        const pass = document.getElementById('adminPass').value;
+        
+        if (user === 'admin' && pass === 'admin123') {
+            localStorage.setItem('admin_logged', 'true');
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            loadDashboard();
+            loadProducts();
+            loadOrders();
+            loadUsers();
+            loadLogs();
+            addLog('admin', 'login', 'Login realizado no painel administrativo');
+        } else {
+            alert('❌ Credenciais inválidas! Use: admin / admin123');
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('admin_logged');
+        document.getElementById('loginOverlay').classList.remove('hidden');
+        document.getElementById('adminPanel').classList.add('hidden');
+    }
+
+    function checkAuth() {
+        if (localStorage.getItem('admin_logged') === 'true') {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            loadDashboard();
+            loadProducts();
+            loadOrders();
+            loadUsers();
+            loadLogs();
+        }
+    }
+
+    // ============================================================
+    // DASHBOARD
+    // ============================================================
+    async function loadDashboard() {
+        const produtos = await getAll('produtos');
+        const pedidos = await getAll('pedidos');
+        const usuarios = await getAll('usuarios');
+        
+        const totalVendas = pedidos.reduce((sum, p) => sum + (p.total || 0), 0);
+        const pedidosPendentes = pedidos.filter(p => p.status !== 'delivered').length;
+        
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-number">${produtos.length}</div>
+                <div class="stat-label">Produtos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${pedidos.length}</div>
+                <div class="stat-label">Pedidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${usuarios.length}</div>
+                <div class="stat-label">Clientes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">R$ ${totalVendas.toFixed(2)}</div>
+                <div class="stat-label">Faturamento</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${pedidosPendentes}</div>
+                <div class="stat-label">Pedidos Pendentes</div>
+            </div>
+        `;
+        
+        const recentOrders = pedidos.slice(-5).reverse();
+        document.getElementById('recentOrders').innerHTML = `
+            <table style="width: 100%;">
+                <thead>
+                    <tr><th>ID</th><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></tr>
+                </thead>
+                <tbody>
+                    ${recentOrders.map(order => `
+                        <tr>
+                            <td>#${order.id}</td>
+                            <td>${order.cliente || 'Anônimo'}</td>
+                            <td>R$ ${(order.total || 0).toFixed(2)}</td>
+                            <td><span class="status-badge status-${order.status || 'pending'}">${getStatusText(order.status)}</span></td>
+                            <td>${new Date(order.data).toLocaleDateString('pt-BR')}</td>
+                        </tr>
+                    `).join('')}
+                    ${recentOrders.length === 0 ? '<tr><td colspan="5" style="text-align: center;">Nenhum pedido encontrado</td></tr>' : ''}
+                </tbody>
+            </table>
+        `;
+    }
+
+    function getStatusText(status) {
+        const map = {
+            'pending': '⏳ Pendente',
+            'preparing': '🍳 Em preparo',
+            'delivering': '🚚 Saiu para entrega',
+            'delivered': '✅ Entregue'
+        };
+        return map[status] || '⏳ Pendente';
+    }
+
+    // ============================================================
+    // PRODUTOS
+    // ============================================================
+    async function loadProducts() {
+        const produtos = await getAll('produtos');
+        const tbody = document.getElementById('productsTable');
+        tbody.innerHTML = produtos.map(p => `
+            <tr>
+                <td>${p.id}</td>
+                <td>${p.emoji || '🍩'} ${p.nome}</td>
+                <td>${p.categoria}</td>
+                <td>R$ ${p.preco.toFixed(2)}</td>
+                <td>${p.ativo ? '✅ Ativo' : '❌ Inativo'}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="editProduct(${p.id})">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑️</button>
+                    <button class="btn btn-sm" onclick="toggleProductStatus(${p.id})">${p.ativo ? '🔴' : '🟢'}</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function openProductModal(product = null) {
+        document.getElementById('productModalTitle').innerHTML = product ? '✏️ Editar Produto' : '➕ Novo Produto';
+        document.getElementById('productId').value = product?.id || '';
+        document.getElementById('productName').value = product?.nome || '';
+        document.getElementById('productCategory').value = product?.categoria || 'donuts';
+        document.getElementById('productPrice').value = product?.preco || '';
+        document.getElementById('productDesc').value = product?.descricao || '';
+        document.getElementById('productEmoji').value = product?.emoji || '🍩';
+        document.getElementById('productModal').classList.add('active');
+    }
+
+    function closeProductModal() {
+        document.getElementById('productModal').classList.remove('active');
+        document.getElementById('productForm').reset();
+    }
+
+    async function saveProduct(event) {
+        event.preventDefault();
+        const id = document.getElementById('productId').value;
+        const product = {
+            nome: document.getElementById('productName').value,
+            categoria: document.getElementById('productCategory').value,
+            preco: parseFloat(document.getElementById('productPrice').value),
+            descricao: document.getElementById('productDesc').value,
+            emoji: document.getElementById('productEmoji').value || '🍩',
+            ativo: true
+        };
+        
+        if (id) {
+            product.id = parseInt(id);
+            await update('produtos', product);
+            addLog('admin', 'editar_produto', `Editou: ${product.nome}`);
+        } else {
+            await add('produtos', product);
+            addLog('admin', 'criar_produto', `Criou: ${product.nome}`);
+        }
+        
+        closeProductModal();
+        loadProducts();
+        loadDashboard();
+    }
+
+    async function editProduct(id) {
+        const product = await getById('produtos', id);
+        openProductModal(product);
+    }
+
+    async function deleteProduct(id) {
+        if (confirm('Tem certeza?')) {
+            const product = await getById('produtos', id);
+            await remove('produtos', id);
+            addLog('admin', 'excluir_produto', `Excluiu: ${product?.nome}`);
+            loadProducts();
+            loadDashboard();
+        }
+    }
+
+    async function toggleProductStatus(id) {
+        const product = await getById('produtos', id);
+        product.ativo = !product.ativo;
+        await update('produtos', product);
+        addLog('admin', 'toggle_produto', `${product.ativo ? 'Ativou' : 'Desativou'}: ${product.nome}`);
+        loadProducts();
+    }
+
+    // ============================================================
+    // PEDIDOS
+    // ============================================================
+    let currentOrderId = null;
+
+    async function loadOrders() {
+        const pedidos = await getAll('pedidos');
+        const tbody = document.getElementById('ordersTable');
+        tbody.innerHTML = pedidos.sort((a,b) => b.id - a.id).map(p => `
+            <tr>
+                <td>#${p.id}</td>
+                <td>${p.cliente || 'Anônimo'}</td>
+                <td>R$ ${(p.total || 0).toFixed(2)}</td>
+                <td><span class="status-badge status-${p.status || 'pending'}">${getStatusText(p.status)}</span></td>
+                <td>${new Date(p.data).toLocaleDateString('pt-BR')}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="openStatusModal(${p.id})">📝 Status</button>
+                    <button class="btn btn-info btn-sm" onclick="viewOrderDetails(${p.id})">👁️ Detalhes</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function openStatusModal(orderId) {
+        currentOrderId = orderId;
+        document.getElementById('statusModal').classList.add('active');
+    }
+
+    function closeStatusModal() {
+        document.getElementById('statusModal').classList.remove('active');
+        currentOrderId = null;
+    }
+
+    async function updateOrderStatus() {
+        if (!currentOrderId) return;
+        const newStatus = document.getElementById('orderStatusSelect').value;
+        const order = await getById('pedidos', currentOrderId);
+        if (order) {
+            order.status = newStatus;
+            await update('pedidos', order);
+            addLog('admin', 'atualizar_pedido', `Pedido #${currentOrderId} → ${getStatusText(newStatus)}`);
+            loadOrders();
+            loadDashboard();
+        }
+        closeStatusModal();
+    }
+
+    async function viewOrderDetails(orderId) {
+        const order = await getById('pedidos', orderId);
+        if (order) {
+            alert(`📦 PEDIDO #${orderId}\n\n👤 Cliente: ${order.cliente}\n📱 WhatsApp: ${order.whatsapp || 'N/A'}\n\n🛒 Itens:\n${order.itens?.map(i => `  • ${i.emoji} ${i.nome} x${i.qtd} = R$ ${(i.price * i.qtd).toFixed(2)}`).join('\n') || 'N/A'}\n\n📍 Endereço: ${order.endereco}\n💰 Total: R$ ${(order.total || 0).toFixed(2)}`);
+        }
+    }
+
+    // ============================================================
+    // USUÁRIOS
+    // ============================================================
+    async function loadUsers() {
+        const usuarios = await getAll('usuarios');
+        const pedidos = await getAll('pedidos');
+        const tbody = document.getElementById('usersTable');
+        tbody.innerHTML = usuarios.map(u => {
+            const userOrders = pedidos.filter(p => p.email === u.email);
+            return `
+                <tr>
+                    <td>${u.id}</td>
+                    <td>${u.nome}</td>
+                    <td>${u.email}</td>
+                    <td>${u.telefone || '-'}</td>
+                    <td>${userOrders.length}</td>
+                    <td>${u.cupons?.length || 0}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="giveCoupon(${u.id})">🎟️</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    async function giveCoupon(userId) {
+        const cupom = prompt('Digite o código do cupom:', 'DESCONTO10');
+        if (cupom) {
+            const user = await getById('usuarios', userId);
+            if (user) {
+                user.cupons = user.cupons || [];
+                user.cupons.push(cupom.toUpperCase());
+                await update('usuarios', user);
+                addLog('admin', 'dar_cupom', `${cupom} para ${user.nome}`);
+                loadUsers();
+                alert(`✅ Cupom ${cupom} adicionado!`);
+            }
+        }
+    }
+
+    async function deleteUser(userId) {
+        if (confirm('Excluir este usuário?')) {
+            const user = await getById('usuarios', userId);
+            await remove('usuarios', userId);
+            addLog('admin', 'excluir_usuario', `Excluiu: ${user?.nome}`);
+            loadUsers();
+        }
+    }
+
+    // ============================================================
+    // LOGS
+    // ============================================================
+    async function loadLogs() {
+        const logs = await getAll('logs');
+        const tbody = document.getElementById('logsTable');
+        tbody.innerHTML = logs.reverse().map(log => `
+            <tr>
+                <td>${log.data}</td>
+                <td>${log.usuario}</td>
+                <td>${log.acao}</td>
+                <td>${log.detalhes}</td>
+            </tr>
+        `).join('');
+    }
+
+    // ============================================================
+    // NAVEGAÇÃO
+    // ============================================================
+    function switchTab(tab) {
+        const tabs = ['dashboard', 'products', 'orders', 'users', 'logs'];
+        tabs.forEach(t => {
+            const el = document.getElementById(`${t}Tab`);
+            if (el) el.classList.remove('active');
+        });
+        document.getElementById(`${tab}Tab`).classList.add('active');
+        
+        document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    async function init() {
+        await openDatabase();
+        checkAuth();
+    }
+
+    init();
+</script>
+</body>
+</html>
