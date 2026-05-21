@@ -7,83 +7,350 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #ff6b9d; --primary-dark: #e8436e;
-            --success: #2ecc71; --warning: #f39c12;
-            --danger: #e74c3c; --dark: #2d1020;
-            --light: #fff6f9; --gray: #f0f0f0;
+            --primary: #ff6b9d;
+            --primary-dark: #e8436e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2d1020;
+            --light: #fff6f9;
+            --gray: #f0f0f0;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 5px rgba(0,0,0,0.08);
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); }
-        
-        .header { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 0.5rem; }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: bold; color: var(--primary); }
-        .nav-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .nav-tab { padding: 0.5rem 1rem; border: none; background: var(--gray); cursor: pointer; border-radius: 8px; font-weight: 600; transition: all 0.3s; }
-        .nav-tab:hover, .nav-tab.active { background: var(--primary); color: white; }
-        
-        .container { padding: 2rem; max-width: 1400px; margin: 0 auto; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: white; padding: 1.5rem; border-radius: 16px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .stat-number { font-size: 2rem; font-weight: bold; color: var(--primary); }
-        .stat-label { color: #666; margin-top: 0.5rem; }
-        
-        .table-container { background: white; border-radius: 16px; overflow-x: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: var(--gray); font-weight: 600; }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        .btn { padding: 0.4rem 0.8rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-sm { padding: 0.2rem 0.5rem; font-size: 0.8rem; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .modal.active { display: flex; }
-        .modal-content { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 500px; }
-        .modal-content input, .modal-content select { width: 100%; padding: 0.6rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; }
-        
-        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .login-overlay.hidden { display: none; }
-        .login-box { background: white; padding: 2rem; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; }
-        .login-box input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 8px; }
-        .login-box button { width: 100%; padding: 0.8rem; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        
-        .status-badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
-        .status-pending { background: #ffeaa7; color: #d63031; }
-        .status-completed { background: #badc58; color: #6ab04c; }
-        
-        @media (max-width: 768px) { .container { padding: 1rem; } th, td { padding: 0.5rem; font-size: 0.8rem; } }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .sync-badge {
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+            transition: opacity 0.2s;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: var(--gray);
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .nav-tab:hover, .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Tabelas */
+        .table-container {
+            background: white;
+            border-radius: 16px;
+            overflow-x: auto;
+            box-shadow: var(--shadow-sm);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: var(--gray);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover { background: rgba(255,107,157,0.05); }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Botões */
+        .btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover { background: #27ae60; }
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        .btn-warning:hover { background: #e67e22; }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-sm {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* Modais */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .modal-header h3 { color: var(--dark); }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .status-pending {
+            background: #ffeaa7;
+            color: #d63031;
+        }
+        .status-completed {
+            background: #badc58;
+            color: #6ab04c;
+        }
+        .status-active {
+            background: #c8f7e0;
+            color: #00b894;
+        }
+        .status-inactive {
+            background: #fde8e8;
+            color: #e74c3c;
+        }
+
+        /* Login Overlay */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        .login-overlay.hidden {
+            display: none;
+        }
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .login-box h2 { color: var(--primary); margin-bottom: 1rem; }
+        .login-box input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        .login-box button:hover { background: var(--primary-dark); }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            th, td { padding: 0.5rem; font-size: 0.8rem; }
+            .nav-tabs { justify-content: center; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+            .stat-card { padding: 1rem; }
+            .stat-number { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
-<!-- Login -->
+<!-- Login Overlay -->
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">🍩</div>
-        <h2 style="color: var(--primary);">Donut ALR Admin</h2>
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🍩</div>
+        <h2>Donut ALR Admin</h2>
         <p style="color: #666; margin-bottom: 1.5rem;">Controle total da loja</p>
         <input type="text" id="adminUser" placeholder="Usuário">
         <input type="password" id="adminPass" placeholder="Senha" onkeydown="if(event.key==='Enter') loginAdmin()">
-        <button onclick="loginAdmin()">Acessar Painel</button>
+        <button onclick="loginAdmin()">🔓 Acessar Painel</button>
         <p style="margin-top: 1rem; font-size: 0.7rem; color: #999;">admin / admin123</p>
     </div>
 </div>
 
-<!-- Painel -->
+<!-- Painel Administrativo -->
 <div id="adminPanel" class="hidden">
     <div class="header">
-        <div class="logo">🍩 Donut ALR - Admin <span style="font-size: 0.7rem; background: #2ecc71; padding: 0.2rem 0.5rem; border-radius: 20px; margin-left: 0.5rem;">🔥 Firebase</span></div>
+        <div class="logo">
+            <span>🍩</span>
+            <span>Donut ALR - Admin</span>
+            <span class="sync-badge" id="syncStatus">🔄 Firebase</span>
+        </div>
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
-            <button class="nav-tab" onclick="switchTab('products', this)">🍩 Produtos</button>
-            <button class="nav-tab" onclick="switchTab('orders', this)">📦 Pedidos</button>
-            <button class="nav-tab" onclick="switchTab('users', this)">👥 Usuários</button>
-            <button class="nav-tab" onclick="switchTab('logs', this)">📋 Logs</button>
+            <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="switchTab('products')">🍩 Produtos</button>
+            <button class="nav-tab" onclick="switchTab('orders')">📦 Pedidos</button>
+            <button class="nav-tab" onclick="switchTab('users')">👥 Usuários</button>
+            <button class="nav-tab" onclick="switchTab('logs')">📋 Logs</button>
             <button class="nav-tab" onclick="logout()">🚪 Sair</button>
         </div>
     </div>
@@ -91,56 +358,74 @@
     <div class="container">
         <!-- Dashboard -->
         <div id="dashboardTab" class="tab-content active">
-            <div class="stats-grid" id="statsGrid"></div>
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card"><div class="stat-number">-</div><div class="stat-label">Carregando...</div></div>
+            </div>
             <div class="table-container">
                 <h3 style="padding: 1rem;">📈 Últimos Pedidos</h3>
-                <div id="recentOrders"></div>
+                <div id="recentOrders" class="loading">Carregando pedidos...</div>
             </div>
         </div>
 
         <!-- Produtos -->
         <div id="productsTab" class="tab-content">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                <h2>🍩 Produtos</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h2>🍩 Gestão de Produtos</h2>
                 <button class="btn btn-primary" onclick="openProductModal()">+ Novo Produto</button>
             </div>
             <div class="table-container">
                 <table style="width:100%">
-                    <thead><tr><th>Nome</th><th>Categoria</th><th>Preço</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody id="productsTable"></tbody>
+                    <thead>
+                        <tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Status</th><th>Ações</th>
+                    </thead>
+                    <tbody id="productsTable">
+                        <tr><td colspan="5" class="loading">Carregando produtos...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
 
         <!-- Pedidos -->
         <div id="ordersTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">📦 Pedidos</h2>
+            <h2 style="margin-bottom: 1rem;">📦 Pedidos Recebidos <span style="font-size:0.8rem; color:var(--success);">● Tempo Real</span></h2>
             <div class="table-container">
                 <table style="width:100%">
-                    <thead><tr><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
-                    <tbody id="ordersTable"></tbody>
+                    <thead>
+                        <tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th>
+                    </thead>
+                    <tbody id="ordersTable">
+                        <tr><td colspan="7" class="loading">Carregando pedidos...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
 
         <!-- Usuários -->
         <div id="usersTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">👥 Clientes</h2>
+            <h2 style="margin-bottom: 1rem;">👥 Clientes Cadastrados</h2>
             <div class="table-container">
                 <table style="width:100%">
-                    <thead><tr><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Cadastro</th></tr></thead>
-                    <tbody id="usersTable"></tbody>
+                    <thead>
+                        <tr><th>#</th><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Cadastro</th>
+                    </thead>
+                    <tbody id="usersTable">
+                        <tr><td colspan="5" class="loading">Carregando clientes...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
 
         <!-- Logs -->
         <div id="logsTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">📋 Logs</h2>
+            <h2 style="margin-bottom: 1rem;">📋 Logs do Sistema</h2>
             <div class="table-container">
                 <table style="width:100%">
-                    <thead><tr><th>Data</th><th>Usuário</th><th>Ação</th><th>Detalhes</th></tr></thead>
-                    <tbody id="logsTable"></tbody>
+                    <thead>
+                        <tr><th>Data/Hora</th><th>Usuário</th><th>Ação</th><th>Detalhes</th>
+                    </thead>
+                    <tbody id="logsTable">
+                        <tr><td colspan="4" class="loading">Carregando logs...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -150,24 +435,54 @@
 <!-- Modal Produto -->
 <div id="productModal" class="modal">
     <div class="modal-content">
-        <h3 id="productModalTitle">Novo Produto</h3>
-        <input type="hidden" id="productId">
-        <input type="text" id="productName" placeholder="Nome">
-        <select id="productCategory">
-            <option value="Donuts">Donuts</option>
-            <option value="Bolos">Bolos</option>
-            <option value="Bebidas">Bebidas</option>
-        </select>
-        <input type="number" step="0.01" id="productPrice" placeholder="Preço">
-        <input type="text" id="productEmoji" placeholder="Emoji" maxlength="2">
-        <input type="text" id="productDesc" placeholder="Descrição">
-        <div style="display: flex; gap: 0.5rem;">
-            <button class="btn btn-primary" onclick="saveProduct()">Salvar</button>
-            <button class="btn" onclick="closeProductModal()">Cancelar</button>
+        <div class="modal-header">
+            <h3 id="productModalTitle">Novo Produto</h3>
+            <button class="btn btn-danger btn-sm" onclick="closeProductModal()">✕</button>
         </div>
+        <form id="productForm" onsubmit="event.preventDefault(); saveProduct()">
+            <input type="hidden" id="productId">
+            <div class="form-group">
+                <label>🍩 Nome do Produto</label>
+                <input type="text" id="productName" required placeholder="Ex: Donut Chocolate">
+            </div>
+            <div class="form-group">
+                <label>📂 Categoria</label>
+                <select id="productCategory" required>
+                    <option value="Donuts">Donuts</option>
+                    <option value="Cupcakes">Cupcakes</option>
+                    <option value="Bolos">Bolos</option>
+                    <option value="Bebidas">Bebidas</option>
+                    <option value="Combos">Combos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>💰 Preço (R$)</label>
+                <input type="number" step="0.01" id="productPrice" required placeholder="0,00">
+            </div>
+            <div class="form-group">
+                <label>😊 Emoji</label>
+                <input type="text" id="productEmoji" placeholder="🍩" maxlength="2">
+            </div>
+            <div class="form-group">
+                <label>📝 Descrição</label>
+                <textarea id="productDesc" rows="2" placeholder="Descrição do produto"></textarea>
+            </div>
+            <div class="form-group">
+                <label>📌 Status</label>
+                <select id="productStatus">
+                    <option value="true">✅ Ativo</option>
+                    <option value="false">❌ Inativo</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
+                <button type="button" class="btn" onclick="closeProductModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
     </div>
 </div>
 
+<!-- Firebase SDK -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
@@ -175,6 +490,9 @@
         updateDoc, deleteDoc, onSnapshot, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+    // ============================================================
+    // CONFIGURAÇÃO FIREBASE
+    // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyB-3fkmoelAxZIiJtI4OKCOyi6A9wJjSGg",
         authDomain: "donutalr.firebaseapp.com",
@@ -188,9 +506,10 @@
     const db = getFirestore(app);
 
     let unsubscribeOrders = null;
+    let unsubscribeUsers = null;
 
     // ============================================================
-    // LOGIN
+    // LOGIN ADMIN
     // ============================================================
     window.loginAdmin = function() {
         const user = document.getElementById('adminUser').value;
@@ -207,6 +526,7 @@
 
     window.logout = function() {
         if (unsubscribeOrders) unsubscribeOrders();
+        if (unsubscribeUsers) unsubscribeUsers();
         localStorage.removeItem('admin_logged');
         document.getElementById('loginOverlay').classList.remove('hidden');
         document.getElementById('adminPanel').classList.add('hidden');
@@ -220,77 +540,118 @@
         }
     }
 
+    // ============================================================
+    // LOGS
+    // ============================================================
     async function addLog(usuario, acao, detalhes) {
-        await addDoc(collection(db, 'logs'), {
-            data: new Date().toLocaleString('pt-BR'),
-            usuario, acao, detalhes,
-            criadoEm: serverTimestamp()
-        });
+        try {
+            await addDoc(collection(db, 'logs'), {
+                data: new Date().toLocaleString('pt-BR'),
+                usuario: usuario,
+                acao: acao,
+                detalhes: detalhes,
+                criadoEm: serverTimestamp()
+            });
+        } catch (error) {
+            console.error('Erro ao adicionar log:', error);
+        }
     }
 
     // ============================================================
     // DASHBOARD
     // ============================================================
     async function loadDashboard() {
-        const [produtos, pedidos, users] = await Promise.all([
-            getDocs(collection(db, 'produtos')),
-            getDocs(collection(db, 'pedidos')),
-            getDocs(collection(db, 'users'))
-        ]);
+        try {
+            const [produtosSnap, pedidosSnap, usersSnap] = await Promise.all([
+                getDocs(collection(db, 'produtos')),
+                getDocs(collection(db, 'pedidos')),
+                getDocs(collection(db, 'users'))
+            ]);
 
-        const pedidosData = pedidos.docs.map(d => d.data());
-        const totalVendas = pedidosData.reduce((sum, p) => sum + (p.total || 0), 0);
-        const pendentes = pedidosData.filter(p => p.status !== 'completed').length;
+            const pedidos = pedidosSnap.docs.map(d => d.data());
+            const totalVendas = pedidos.reduce((sum, p) => sum + (p.total || 0), 0);
+            const pendentes = pedidos.filter(p => p.status !== 'completed').length;
 
-        document.getElementById('statsGrid').innerHTML = `
-            <div class="stat-card"><div class="stat-number">${produtos.size}</div><div class="stat-label">Produtos</div></div>
-            <div class="stat-card"><div class="stat-number">${pedidos.size}</div><div class="stat-label">Pedidos</div></div>
-            <div class="stat-card"><div class="stat-number">${users.size}</div><div class="stat-label">Clientes</div></div>
-            <div class="stat-card"><div class="stat-number">R$ ${totalVendas.toFixed(2).replace('.', ',')}</div><div class="stat-label">Faturamento</div></div>
-            <div class="stat-card"><div class="stat-number">${pendentes}</div><div class="stat-label">Pendentes</div></div>
-        `;
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card"><div class="stat-number">${produtosSnap.size}</div><div class="stat-label">📦 Produtos</div></div>
+                <div class="stat-card"><div class="stat-number">${pedidosSnap.size}</div><div class="stat-label">📋 Pedidos</div></div>
+                <div class="stat-card"><div class="stat-number">${usersSnap.size}</div><div class="stat-label">👥 Clientes</div></div>
+                <div class="stat-card"><div class="stat-number">R$ ${totalVendas.toFixed(2).replace('.', ',')}</div><div class="stat-label">💰 Faturamento</div></div>
+                <div class="stat-card"><div class="stat-number">${pendentes}</div><div class="stat-label">⏳ Pendentes</div></div>
+            `;
 
-        const recentes = pedidos.docs.slice(-5).reverse().map(d => ({ id: d.id, ...d.data() }));
-        document.getElementById('recentOrders').innerHTML = `
-            <table style="width:100%">
-                <thead><tr><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></tr></thead>
-                <tbody>${recentes.map(p => `
-                    <tr><td>${p.cliente || '-'}</td><td>R$ ${(p.total || 0).toFixed(2).replace('.', ',')}</td>
-                    <td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td>
-                    <td>${p.data || '-'}</td></tr>
-                `).join('')}</tbody>
-            </table>
-        `;
+            const recentes = pedidosSnap.docs.slice(-5).reverse().map(d => ({ id: d.id, ...d.data() }));
+            document.getElementById('recentOrders').innerHTML = `
+                <table style="width:100%">
+                    <thead><tr><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></tr></thead>
+                    <tbody>
+                        ${recentes.map(p => `
+                            <tr>
+                                <td>${p.cliente || '-'}</td>
+                                <td>R$ ${(p.total || 0).toFixed(2).replace('.', ',')}</td>
+                                <td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td>
+                                <td>${p.data || '-'}</td>
+                            </tr>
+                        `).join('')}
+                        ${recentes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum pedido ainda</td></tr>' : ''}
+                    </tbody>
+                </table>
+            `;
+        } catch (error) {
+            console.error('Erro ao carregar dashboard:', error);
+            document.getElementById('statsGrid').innerHTML = '<div class="stat-card"><div class="stat-number">Erro</div><div class="stat-label">Tente recarregar</div></div>';
+        }
     }
 
     // ============================================================
     // PRODUTOS
     // ============================================================
     async function loadProducts() {
-        const snap = await getDocs(collection(db, 'produtos'));
-        const produtos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        document.getElementById('productsTable').innerHTML = produtos.map(p => `
-            <tr><td>${p.emoji || '🍩'} ${p.nome}</td><td>${p.categoria || '-'}</td>
-            <td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td>
-            <td>${p.ativo !== false ? '✅ Ativo' : '❌ Inativo'}</td>
-            <td><button class="btn btn-warning btn-sm" onclick="editProduct('${p.id}')">✏️</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">🗑️</button></td></tr>
-        `).join('') || '<tr><td colspan="5" style="text-align:center">Nenhum produto</td></tr>';
+        try {
+            const snap = await getDocs(collection(db, 'produtos'));
+            const produtos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const tbody = document.getElementById('productsTable');
+            
+            if (produtos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;">Nenhum produto cadastrado</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = produtos.map(p => `
+                <tr>
+                    <td><strong>${p.emoji || '🍩'}</strong> ${p.nome}</td>
+                    <td>${p.categoria || '-'}</td>
+                    <td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td>
+                    <td><span class="status-badge ${p.ativo !== false ? 'status-active' : 'status-inactive'}">${p.ativo !== false ? 'Ativo' : 'Inativo'}</span></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editProduct('${p.id}')" title="Editar">✏️</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}', '${p.nome}')" title="Excluir">🗑️</button>
+                        <button class="btn btn-sm" onclick="toggleProductStatus('${p.id}', ${p.ativo !== false})" title="${p.ativo !== false ? 'Desativar' : 'Ativar'}">${p.ativo !== false ? '🔴' : '🟢'}</button>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Erro ao carregar produtos:', error);
+            document.getElementById('productsTable').innerHTML = '<tr><td colspan="5" class="loading">Erro ao carregar produtos</td></tr>';
+        }
     }
 
     window.openProductModal = function(product = null) {
-        document.getElementById('productModalTitle').innerHTML = product ? 'Editar Produto' : 'Novo Produto';
+        document.getElementById('productModalTitle').innerHTML = product ? '✏️ Editar Produto' : '➕ Novo Produto';
         document.getElementById('productId').value = product?.id || '';
         document.getElementById('productName').value = product?.nome || '';
         document.getElementById('productCategory').value = product?.categoria || 'Donuts';
         document.getElementById('productPrice').value = product?.preco || '';
         document.getElementById('productEmoji').value = product?.emoji || '🍩';
         document.getElementById('productDesc').value = product?.descricao || '';
+        document.getElementById('productStatus').value = product?.ativo !== false ? 'true' : 'false';
         document.getElementById('productModal').classList.add('active');
     };
 
     window.closeProductModal = function() {
         document.getElementById('productModal').classList.remove('active');
+        document.getElementById('productForm').reset();
+        document.getElementById('productId').value = '';
     };
 
     window.saveProduct = async function() {
@@ -301,108 +662,258 @@
             preco: parseFloat(document.getElementById('productPrice').value),
             emoji: document.getElementById('productEmoji').value || '🍩',
             descricao: document.getElementById('productDesc').value,
-            ativo: true
+            ativo: document.getElementById('productStatus').value === 'true'
         };
 
-        if (id) {
-            await updateDoc(doc(db, 'produtos', id), product);
-            addLog('admin', 'editar_produto', product.nome);
-        } else {
-            await addDoc(collection(db, 'produtos'), product);
-            addLog('admin', 'criar_produto', product.nome);
+        try {
+            if (id) {
+                await updateDoc(doc(db, 'produtos', id), product);
+                addLog('admin', 'editar_produto', `Editou: ${product.nome}`);
+                showToast(`✅ Produto "${product.nome}" atualizado!`);
+            } else {
+                await addDoc(collection(db, 'produtos'), product);
+                addLog('admin', 'criar_produto', `Criou: ${product.nome}`);
+                showToast(`✅ Produto "${product.nome}" criado!`);
+            }
+            closeProductModal();
+            loadProducts();
+            loadDashboard();
+        } catch (error) {
+            console.error('Erro ao salvar produto:', error);
+            showToast('❌ Erro ao salvar produto');
         }
-        closeProductModal();
-        loadProducts();
-        loadDashboard();
     };
 
     window.editProduct = async function(id) {
         const snap = await getDocs(collection(db, 'produtos'));
         const produto = snap.docs.find(d => d.id === id);
-        if (produto) openProductModal({ id: produto.id, ...produto.data() });
+        if (produto) {
+            openProductModal({ id: produto.id, ...produto.data() });
+        }
     };
 
-    window.deleteProduct = async function(id) {
-        if (confirm('Tem certeza?')) {
-            await deleteDoc(doc(db, 'produtos', id));
-            addLog('admin', 'excluir_produto', `ID: ${id}`);
+    window.deleteProduct = async function(id, nome) {
+        if (confirm(`Tem certeza que deseja excluir "${nome}"?`)) {
+            try {
+                await deleteDoc(doc(db, 'produtos', id));
+                addLog('admin', 'excluir_produto', `Excluiu: ${nome}`);
+                loadProducts();
+                loadDashboard();
+                showToast(`🗑️ Produto "${nome}" excluído!`);
+            } catch (error) {
+                console.error('Erro ao excluir produto:', error);
+                showToast('❌ Erro ao excluir produto');
+            }
+        }
+    };
+
+    window.toggleProductStatus = async function(id, currentStatus) {
+        try {
+            await updateDoc(doc(db, 'produtos', id), { ativo: !currentStatus });
+            addLog('admin', 'toggle_produto', `${!currentStatus ? 'Ativou' : 'Desativou'} produto ID: ${id}`);
             loadProducts();
             loadDashboard();
+            showToast(`✅ Status do produto alterado!`);
+        } catch (error) {
+            console.error('Erro ao alterar status:', error);
+            showToast('❌ Erro ao alterar status');
         }
     };
 
     // ============================================================
-    // PEDIDOS
+    // PEDIDOS - COM LISTENER EM TEMPO REAL
     // ============================================================
+    function iniciarListenerPedidos() {
+        if (unsubscribeOrders) unsubscribeOrders();
+        unsubscribeOrders = onSnapshot(collection(db, 'pedidos'), () => {
+            loadOrders();
+            // Atualiza badge de sincronização
+            const badge = document.getElementById('syncStatus');
+            if (badge) {
+                badge.style.opacity = '0.5';
+                badge.textContent = '🔄 Atualizando...';
+                setTimeout(() => {
+                    badge.style.opacity = '1';
+                    badge.textContent = '✅ Firebase';
+                }, 500);
+            }
+        });
+    }
+
     async function loadOrders() {
-        const snap = await getDocs(collection(db, 'pedidos'));
-        const pedidos = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => b.data > a.data ? 1 : -1);
-        document.getElementById('ordersTable').innerHTML = pedidos.map(p => `
-            <tr><td>${p.cliente || '-'}</td><td>${p.whatsapp || '-'}</td>
-            <td>R$ ${(p.total || 0).toFixed(2).replace('.', ',')}</td>
-            <td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td>
-            <td>${p.data || '-'}</td>
-            <td><button class="btn btn-primary btn-sm" onclick="viewOrder('${p.id}')">👁️</button>
-            ${p.status !== 'completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder('${p.id}')">✅</button>` : ''}</td></tr>
-        `).join('') || '<tr><td colspan="6" style="text-align:center">Nenhum pedido</td></tr>';
+        try {
+            const snap = await getDocs(collection(db, 'pedidos'));
+            const pedidos = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+            const tbody = document.getElementById('ordersTable');
+            
+            if (pedidos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;">Nenhum pedido recebido ainda</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = pedidos.map(p => `
+                <tr>
+                    <td><small>${p.id.slice(0, 8)}...</small></td>
+                    <td><strong>${p.cliente || '-'}</strong></td>
+                    <td>${p.whatsapp || '-'}</td>
+                    <td>R$ ${(p.total || 0).toFixed(2).replace('.', ',')}</td>
+                    <td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? '✅ Concluído' : '⏳ Pendente'}</span></td>
+                    <td>${p.data || '-'}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${p.id}')" title="Ver detalhes">👁️</button>
+                        ${p.status !== 'completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder('${p.id}')" title="Concluir">✅</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Erro ao carregar pedidos:', error);
+            document.getElementById('ordersTable').innerHTML = '<tr><td colspan="7" class="loading">Erro ao carregar pedidos</td></tr>';
+        }
     }
 
     window.completeOrder = async function(id) {
-        await updateDoc(doc(db, 'pedidos', id), { status: 'completed' });
-        addLog('admin', 'concluir_pedido', `Pedido ${id}`);
-        loadOrders();
-        loadDashboard();
-        alert('✅ Pedido concluído!');
+        try {
+            await updateDoc(doc(db, 'pedidos', id), { status: 'completed' });
+            addLog('admin', 'concluir_pedido', `Pedido ${id} concluído`);
+            loadOrders();
+            loadDashboard();
+            showToast(`✅ Pedido ${id} marcado como concluído!`);
+        } catch (error) {
+            console.error('Erro ao concluir pedido:', error);
+            showToast('❌ Erro ao concluir pedido');
+        }
     };
 
-    window.viewOrder = async function(id) {
-        const snap = await getDocs(collection(db, 'pedidos'));
-        const p = snap.docs.find(d => d.id === id)?.data();
-        if (p) {
-            let msg = `📦 PEDIDO\nCliente: ${p.cliente}\nWhatsApp: ${p.whatsapp}\nEndereço: ${p.endereco}\nPagamento: ${p.pagamento}\n\nITENS:\n`;
-            p.itens?.forEach(i => msg += `${i.nome} x${i.qtd} = R$ ${(i.preco * i.qtd).toFixed(2)}\n`);
-            msg += `\nTOTAL: R$ ${p.total.toFixed(2)}`;
-            alert(msg);
+    window.viewOrderDetails = async function(id) {
+        try {
+            const snap = await getDocs(collection(db, 'pedidos'));
+            const pedido = snap.docs.find(d => d.id === id)?.data();
+            if (pedido) {
+                let detalhes = `📦 PEDIDO\n`;
+                detalhes += `🆔 ID: ${id}\n`;
+                detalhes += `👤 Cliente: ${pedido.cliente}\n`;
+                detalhes += `📱 WhatsApp: ${pedido.whatsapp || '-'}\n`;
+                detalhes += `📍 Endereço: ${pedido.endereco || '-'}\n`;
+                detalhes += `💳 Pagamento: ${pedido.pagamento || '-'}\n`;
+                detalhes += `📅 Data: ${pedido.data}\n\n`;
+                detalhes += `🛒 ITENS:\n`;
+                if (pedido.itens && Array.isArray(pedido.itens)) {
+                    pedido.itens.forEach(i => {
+                        detalhes += `  • ${i.nome} x${i.qtd} = R$ ${(i.preco * i.qtd).toFixed(2).replace('.', ',')}\n`;
+                    });
+                }
+                detalhes += `\n💰 TOTAL: R$ ${(pedido.total || 0).toFixed(2).replace('.', ',')}`;
+                alert(detalhes);
+            }
+        } catch (error) {
+            console.error('Erro ao ver detalhes do pedido:', error);
+            showToast('❌ Erro ao carregar detalhes');
         }
     };
 
     // ============================================================
-    // USUÁRIOS
+    // USUÁRIOS - COM LISTENER EM TEMPO REAL
     // ============================================================
+    function iniciarListenerUsers() {
+        if (unsubscribeUsers) unsubscribeUsers();
+        unsubscribeUsers = onSnapshot(collection(db, 'users'), () => {
+            loadUsers();
+        });
+    }
+
     async function loadUsers() {
-        const snap = await getDocs(collection(db, 'users'));
-        const users = snap.docs.map(d => d.data());
-        document.getElementById('usersTable').innerHTML = users.map(u => `
-            <tr><td>${u.nome || '-'}</td><td>${u.telefone || '-'}</td><td>${u.email || '-'}</td><td>${u.dataCadastro || '-'}</td></tr>
-        `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum cliente</td></tr>';
+        try {
+            const snap = await getDocs(collection(db, 'users'));
+            const users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const tbody = document.getElementById('usersTable');
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;">Nenhum cliente cadastrado ainda</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = users.map((user, idx) => `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${user.nome || '-'}</strong></td>
+                    <td>${user.telefone || '-'}</td>
+                    <td>${user.email || '-'}</td>
+                    <td>${user.dataCadastro || '-'}</td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Erro ao carregar usuários:', error);
+            document.getElementById('usersTable').innerHTML = '<tr><td colspan="5" class="loading">Erro ao carregar clientes</td></tr>';
+        }
     }
 
     // ============================================================
     // LOGS
     // ============================================================
     async function loadLogs() {
-        const snap = await getDocs(collection(db, 'logs'));
-        const logs = snap.docs.map(d => d.data()).sort((a,b) => b.data > a.data ? 1 : -1);
-        document.getElementById('logsTable').innerHTML = logs.map(l => `
-            <tr><td>${l.data}</td><td>${l.usuario}</td><td>${l.acao}</td><td>${l.detalhes}</td></tr>
-        `).join('') || '<tr><td colspan="4" style="text-align:center">Nenhum log</td></tr>';
+        try {
+            const snap = await getDocs(collection(db, 'logs'));
+            const logs = snap.docs.map(d => d.data()).sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+            const tbody = document.getElementById('logsTable');
+            
+            if (logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum log registrado</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = logs.map(log => `
+                <tr>
+                    <td>${log.data || '-'}</td>
+                    <td>${log.usuario || '-'}</td>
+                    <td>${log.acao || '-'}</td>
+                    <td>${log.detalhes || '-'}</td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Erro ao carregar logs:', error);
+            document.getElementById('logsTable').innerHTML = '<td><td colspan="4" class="loading">Erro ao carregar logs</td></tr>';
+        }
     }
 
     // ============================================================
     // NAVEGAÇÃO
     // ============================================================
-    window.switchTab = function(tab, btn) {
+    window.switchTab = function(tab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
         document.getElementById(`${tab}Tab`).classList.add('active');
-        if (btn) btn.classList.add('active');
-        
+        event.target.classList.add('active');
+
         if (tab === 'dashboard') loadDashboard();
         else if (tab === 'products') loadProducts();
         else if (tab === 'orders') loadOrders();
         else if (tab === 'users') loadUsers();
         else if (tab === 'logs') loadLogs();
     };
+
+    // ============================================================
+    // TOAST
+    // ============================================================
+    function showToast(msg) {
+        // Criar toast temporário
+        const toast = document.createElement('div');
+        toast.textContent = msg;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            z-index: 9999;
+            font-size: 14px;
+            animation: fadeInOut 2.5s ease;
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
 
     // ============================================================
     // INICIALIZAÇÃO
@@ -413,7 +924,21 @@
         loadOrders();
         loadUsers();
         loadLogs();
+        iniciarListenerPedidos();
+        iniciarListenerUsers();
     }
+
+    // Adicionar animação CSS para toast
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+    `;
+    document.head.appendChild(style);
 
     checkAuth();
 </script>
