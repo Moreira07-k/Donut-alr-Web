@@ -188,12 +188,119 @@
         .roda-wrap { position:relative; width:260px; height:260px; margin:0 auto; }
         #rodaCanvas { border-radius:50%; }
         .roda-ponteiro { position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:1.8rem; }
-        footer { background:var(--brown); color:rgba(255,255,255,0.8); padding:3rem 1.5rem; }
+        footer { background:var(--brown); color:rgba(255,255,255,0.8); padding:3rem 1.5rem 5rem; }
+        @media (min-width:769px) { footer { padding-bottom:3rem; } }
+        .footer-col-title { font-weight:700; color:#fff; margin-bottom:0.75rem; }
+        .footer-inner ul { list-style:none; display:flex; flex-direction:column; gap:0.4rem; }
+        .footer-inner ul a { color:rgba(255,255,255,0.7); cursor:pointer; font-size:0.88rem; }
+        .footer-inner ul a:hover { color:#fff; }
+        .footer-bottom { max-width:1300px; margin:2rem auto 0; border-top:1px solid rgba(255,255,255,0.15); padding-top:1rem; font-size:0.8rem; }
         .footer-inner { max-width:1300px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:2rem; }
         .mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--gray-2); padding:0.5rem; z-index:800; }
-        @media (max-width:768px) { .mobile-nav { display:block; } .nav-links { display:none; } .hero { grid-template-columns:1fr; } }
         .wa-fab { position:fixed; bottom:80px; right:16px; width:52px; height:52px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.2); z-index:900; }
         @media (min-width:769px) { .wa-fab { bottom:20px; } }
+
+        /* ========== IMAGENS E MÍDIAS RESPONSIVAS ========== */
+        img, video { max-width:100%; height:auto; }
+
+        /* ========== MOBILE (≤ 768px) ========== */
+        @media (max-width:768px) {
+            .mobile-nav { display:block; }
+            .nav-links { display:none; }
+
+            /* Hero: coluna única, sem card lateral */
+            .hero { grid-template-columns:1fr; padding:1.5rem 1rem; gap:1.5rem; }
+            .hero-text h1 { font-size:2rem; }
+            .hero-right { display:none; }
+            .hero-cta { display:flex; flex-direction:column; gap:0.75rem; }
+            .btn-primary, .btn-outline { width:100%; text-align:center; padding:0.9rem 1rem; font-size:1rem; min-height:44px; }
+
+            /* Stats bar */
+            .stats-inner { gap:1.5rem; flex-wrap:wrap; justify-content:center; }
+            .stat-num { font-size:1.4rem; }
+
+            /* Seções */
+            .section { padding:2rem 1rem; }
+            .section-title { font-size:1.5rem; }
+
+            /* Grids de produtos */
+            .products-grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:1rem; }
+            .combos-grid { grid-template-columns:1fr; }
+            .drinks-grid { grid-template-columns:1fr 1fr; }
+
+            /* Botões de toque mínimo 44px */
+            .btn-add { width:44px; height:44px; font-size:1.4rem; }
+            .qty-btn { width:36px; height:36px; }
+            .tab-btn { padding:0.5rem 0.9rem; font-size:0.82rem; min-height:44px; }
+
+            /* Barra de busca */
+            .search-wrap { max-width:100%; }
+
+            /* Offer banner */
+            .offers-banner { margin-left:1rem; margin-right:1rem; }
+            .offers-container { flex-direction:column; align-items:flex-start; gap:0.75rem; }
+            .offer-timer { font-size:1rem; }
+
+            /* Game banner */
+            .game-banner-inner { grid-template-columns:repeat(2,1fr); }
+
+            /* Footer */
+            .footer-inner { grid-template-columns:1fr; gap:1.5rem; }
+
+            /* Cart sidebar */
+            .cart-sidebar { width:100%; max-width:100vw; }
+
+            /* Modal */
+            .modal-box { padding:1.5rem; max-height:92vh; width:95%; }
+
+            /* Delivery section */
+            .calc-box { padding:1.2rem; }
+            .cep-row { flex-direction:row; }
+            .endereco-fields { grid-template-columns:1fr; }
+            .endereco-fields input { grid-column:span 1 !important; }
+
+            /* Auth screen */
+            .auth-screen { grid-template-columns:1fr; min-height:auto; }
+            .auth-screen-left { display:none; }
+            .auth-screen-right { padding:2rem 1.5rem; }
+
+            /* Navbar */
+            .navbar { padding:0 1rem; height:60px; }
+            .cart-btn { padding:0.5rem 0.8rem; font-size:0.82rem; }
+            .login-btn { padding:0 0.7rem; font-size:0.8rem; }
+            .logo-text { font-size:1.1rem; }
+
+            /* Encomenda section */
+            .footer-bottom { text-align:center; font-size:0.78rem; }
+
+            /* Payment options */
+            .payment-options { flex-direction:column; gap:0.5rem; }
+            .payment-option { justify-content:center; min-height:44px; }
+        }
+
+        /* ========== TABLET (769px – 1024px) ========== */
+        @media (min-width:769px) and (max-width:1024px) {
+            .hero { grid-template-columns:1fr 320px; gap:2rem; }
+            .hero-text h1 { font-size:2.4rem; }
+            .products-grid { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+            .footer-inner { grid-template-columns:1.5fr 1fr 1fr; }
+            .stats-inner { gap:2.5rem; }
+            .game-banner-inner { grid-template-columns:repeat(4,1fr); }
+            .section { padding:2.5rem 1.5rem; }
+        }
+
+        /* ========== ULTRA-WIDE (≥ 1600px) ========== */
+        @media (min-width:1600px) {
+            .navbar, .hero, .section, .stats-inner, .footer-inner, .game-banner-inner { max-width:1500px; }
+            .hero-text h1 { font-size:3.5rem; }
+            .products-grid { grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
+        }
+
+        /* ========== MOBILE NAV BOTÕES ========== */
+        .mnav-item { background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:2px; font-size:0.7rem; font-weight:600; color:var(--brown-mid); cursor:pointer; padding:0.4rem 0.5rem; min-width:44px; min-height:44px; position:relative; }
+        .mnav-item span:first-child { font-size:1.3rem; }
+        .mnav-badge { position:absolute; top:2px; right:6px; background:var(--rose); color:#fff; border-radius:50%; width:16px; height:16px; font-size:0.6rem; display:flex; align-items:center; justify-content:center; font-weight:800; }
+        .mobile-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--gray-2); padding:0.25rem; z-index:800; }
         .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:1000; opacity:0; pointer-events:none; transition:0.3s; }
         .overlay.show { opacity:1; pointer-events:all; }
         .confetti-canvas { position:fixed; inset:0; pointer-events:none; z-index:9999; display:none; }
@@ -365,15 +472,24 @@
         <input type="text" id="cadNome" class="auth-field" placeholder="👤 Nome completo">
         <input type="email" id="cadEmail" class="auth-field" placeholder="📧 E-mail">
         <input type="tel" id="cadTelefone" class="auth-field" placeholder="📱 WhatsApp (89) 99999-9999" oninput="mascararTelefone(this)">
-        <input type="password" id="cadSenha" class="auth-field" placeholder="🔒 Senha (mín. 6 caracteres)" oninput="avaliarSenha(this.value)">
+        <div style="position:relative;">
+          <input type="password" id="cadSenha" class="auth-field" placeholder="🔒 Senha (mín. 6 caracteres)" oninput="avaliarSenha(this.value)" style="width:100%;padding-right:2.8rem;">
+          <button type="button" onclick="toggleSenha('cadSenha','eyeCad1')" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-60%);background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;color:var(--brown-light);" id="eyeCad1">👁</button>
+        </div>
         <div class="senha-strength" id="senhaStrength"></div>
-        <input type="password" id="cadSenhaConf" class="auth-field" placeholder="🔒 Confirmar senha">
-        <button class="auth-btn-submit" onclick="fazerCadastro()">🎉 Criar minha conta</button>
+        <div style="position:relative;">
+          <input type="password" id="cadSenhaConf" class="auth-field" placeholder="🔒 Confirmar senha" style="width:100%;padding-right:2.8rem;">
+          <button type="button" onclick="toggleSenha('cadSenhaConf','eyeCad2')" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;color:var(--brown-light);" id="eyeCad2">👁</button>
+        </div>
+        <button class="auth-btn-submit" id="btnCadastrar" onclick="fazerCadastro()">🎉 Criar minha conta</button>
       </div>
       <div id="authScreenLogin" style="display:none">
         <input type="email" id="loginEmail" class="auth-field" placeholder="📧 Seu e-mail">
-        <input type="password" id="loginSenha" class="auth-field" placeholder="🔒 Sua senha">
-        <button class="auth-btn-submit" onclick="fazerLogin()">🍩 Entrar na minha conta</button>
+        <div style="position:relative;">
+          <input type="password" id="loginSenha" class="auth-field" placeholder="🔒 Sua senha" style="width:100%;padding-right:2.8rem;">
+          <button type="button" onclick="toggleSenha('loginSenha','eyeLogin')" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;color:var(--brown-light);" id="eyeLogin">👁</button>
+        </div>
+        <button class="auth-btn-submit" id="btnLogin" onclick="fazerLogin()">🍩 Entrar na minha conta</button>
       </div>
       <div class="auth-screen-msg" id="authScreenMsg"></div>
     </div>
@@ -750,6 +866,20 @@
     }
     window.avaliarSenha = avaliarSenha;
 
+    function toggleSenha(inputId, btnId) {
+        const input = document.getElementById(inputId);
+        const btn = document.getElementById(btnId);
+        if (!input) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            if (btn) btn.textContent = '🙈';
+        } else {
+            input.type = 'password';
+            if (btn) btn.textContent = '👁';
+        }
+    }
+    window.toggleSenha = toggleSenha;
+
     function validarSenhaForte(senha) { return senha.length >= 6 && /[0-9]/.test(senha) && /[A-Z]/.test(senha); }
     function formatBRL(value) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value); }
     function showToast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2500); }
@@ -779,7 +909,7 @@
         const senha = document.getElementById('loginSenha').value;
         if (!email || !senha) { setAuthMsg('Preencha todos os campos.', false); return; }
         const btn = document.getElementById('btnLogin');
-        btn.disabled = true; btn.textContent = 'Entrando...';
+        if (btn) { btn.disabled = true; btn.textContent = 'Entrando...'; }
         try {
             const q = query(collection(db, 'users'), where('email', '==', email));
             const snap = await getDocs(q);
@@ -797,7 +927,7 @@
             carregarCarrinho();
             carregarProdutosFirebase();
         } catch (error) { console.error('Erro no login:', error); setAuthMsg('❌ Erro ao fazer login', false); }
-        finally { btn.disabled = false; btn.textContent = '🍩 Entrar na minha conta'; }
+        finally { if (btn) { btn.disabled = false; btn.textContent = '🍩 Entrar na minha conta'; } }
     };
 
     // ========== CADASTRO COM HASH ==========
@@ -809,10 +939,10 @@
         const conf = document.getElementById('cadSenhaConf').value;
         if (!nome || nome.length < 3) { setAuthMsg('❌ Nome deve ter pelo menos 3 caracteres.', false); return; }
         if (!email.includes('@')) { setAuthMsg('❌ E-mail inválido.', false); return; }
-        if (senha !== conf) { setAuthMsg('❌ As senhas não coincidem.', false); return; }
-        if (!validarSenhaForte(senha)) { setAuthMsg('❌ Senha deve ter mínimo 6 caracteres, 1 número e 1 letra maiúscula.', false); return; }
+        if (senha.length < 6) { setAuthMsg('❌ Senha deve ter pelo menos 6 caracteres.', false); return; }
+        if (senha !== conf) { setAuthMsg('❌ As senhas não coincidem. Verifique e tente novamente.', false); return; }
         const btn = document.getElementById('btnCadastrar');
-        btn.disabled = true; btn.textContent = 'Criando conta...';
+        if (btn) { btn.disabled = true; btn.textContent = 'Criando conta...'; }
         try {
             const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
             if (!existing.empty) { setAuthMsg('❌ E-mail já cadastrado!', false); return; }
@@ -828,8 +958,8 @@
             setTimeout(() => esconderLoginOverlay(), 1100);
             carregarCarrinho();
             carregarProdutosFirebase();
-        } catch (error) { console.error('Erro no cadastro:', error); setAuthMsg('❌ Erro ao cadastrar', false); }
-        finally { btn.disabled = false; btn.textContent = '🎉 Criar minha conta'; }
+        } catch (error) { console.error('Erro no cadastro:', error); setAuthMsg('❌ Erro ao cadastrar. Tente novamente.', false); }
+        finally { if (btn) { btn.disabled = false; btn.textContent = '🎉 Criar minha conta'; } }
     };
 
     window.fazerLogout = function() { usuarioAtual = null; localStorage.removeItem('donut_session'); atualizarHeaderLogin(); closeModal('perfilModal'); showToast('👋 Até logo!'); mostrarLoginOverlay(); switchAuthScreen('login'); };
