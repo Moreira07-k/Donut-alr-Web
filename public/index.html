@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1241,6 +1242,7 @@
     const cepInput = document.getElementById("cepInput"); if(cepInput) { cepInput.addEventListener('input', function(e) { const isDeleting = e.inputType && e.inputType.startsWith('delete'); let v = this.value.replace(/\D/g,''); if(v.length>8) v=v.slice(0,8); if(!isDeleting && v.length>5) v=v.slice(0,5)+'-'+v.slice(5); this.value=v; }); }
         window.navTo = navTo;
     });
+
 </script>
 </body>
 </html>
