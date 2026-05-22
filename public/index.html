@@ -737,7 +737,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyB-3fkmoelAxZIiJtI4OKCOyi6A9wJjSGg",
@@ -810,13 +810,27 @@
     let combosFirebase = [...COMBOS_LOCAL];
     let bebidasFirebase = [...BEBIDAS_LOCAL];
 
-    // ========== SHA-256 HASH FUNCTION ==========
+    // ========== SHA-256 HASH — funciona em HTTP, HTTPS e file:// ==========
     async function hashPassword(password) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(password);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        // Tenta crypto.subtle (HTTPS/localhost)
+        if (typeof crypto !== 'undefined' && crypto.subtle) {
+            try {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(password);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch(e) { /* cai no fallback abaixo */ }
+        }
+        // Fallback: hash simples mas consistente (para HTTP sem crypto.subtle)
+        let hash = 0;
+        const str = 'donut_alr_salt_' + password;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return 'fb_' + Math.abs(hash).toString(16).padStart(8, '0') + '_' + btoa(encodeURIComponent(password)).replace(/[^a-z0-9]/gi, '').slice(0, 20);
     }
 
     // ========== CARREGAR PRODUTOS DO FIREBASE ==========
@@ -907,18 +921,18 @@
     window.fazerLogin = async function() {
         const email = document.getElementById('loginEmail').value.trim().toLowerCase();
         const senha = document.getElementById('loginSenha').value;
-        if (!email || !senha) { setAuthMsg('Preencha todos os campos.', false); return; }
+        if (!email || !senha) { setAuthMsg('⚠️ Preencha e-mail e senha.', false); return; }
         const btn = document.getElementById('btnLogin');
         if (btn) { btn.disabled = true; btn.textContent = 'Entrando...'; }
         try {
             const q = query(collection(db, 'users'), where('email', '==', email));
             const snap = await getDocs(q);
-            if (snap.empty) { setAuthMsg('❌ E-mail ou senha incorretos.', false); return; }
+            if (snap.empty) { setAuthMsg('❌ E-mail não encontrado. Verifique ou cadastre-se.', false); return; }
             const userData = snap.docs[0].data();
             const senhaHash = await hashPassword(senha);
-            if (userData.senha !== senhaHash) { setAuthMsg('❌ E-mail ou senha incorretos.', false); return; }
-            usuarioAtual = { email, nome: userData.nome, telefone: userData.telefone || '' };
-            localStorage.setItem('donut_session', JSON.stringify({ email, nome: userData.nome, telefone: userData.telefone || '' }));
+            if (userData.senha !== senhaHash) { setAuthMsg('❌ Senha incorreta. Verifique e tente novamente.', false); return; }
+            usuarioAtual = { email, nome: userData.nome, telefone: userData.telefone || '', docId: snap.docs[0].id };
+            localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
             if (userData.endereco) enderecoCadastrado = userData.endereco;
             setAuthMsg(`✅ Bem-vindo(a), ${usuarioAtual.nome}!`, true);
             atualizarHeaderLogin();
@@ -926,7 +940,11 @@
             showToast(`🍩 Olá, ${usuarioAtual.nome}!`);
             carregarCarrinho();
             carregarProdutosFirebase();
-        } catch (error) { console.error('Erro no login:', error); setAuthMsg('❌ Erro ao fazer login', false); }
+        } catch (error) {
+            console.error('Erro no login:', error);
+            if (error.code === 'permission-denied') { setAuthMsg('❌ Erro de permissão no banco de dados. Contate o administrador.', false); }
+            else { setAuthMsg(`❌ Erro ao fazer login: ${error.message || 'Tente novamente'}`, false); }
+        }
         finally { if (btn) { btn.disabled = false; btn.textContent = '🍩 Entrar na minha conta'; } }
     };
 
@@ -938,19 +956,27 @@
         const senha = document.getElementById('cadSenha').value;
         const conf = document.getElementById('cadSenhaConf').value;
         if (!nome || nome.length < 3) { setAuthMsg('❌ Nome deve ter pelo menos 3 caracteres.', false); return; }
-        if (!email.includes('@')) { setAuthMsg('❌ E-mail inválido.', false); return; }
+        if (!email.includes('@') || !email.includes('.')) { setAuthMsg('❌ E-mail inválido. Exemplo: seuemail@gmail.com', false); return; }
         if (senha.length < 6) { setAuthMsg('❌ Senha deve ter pelo menos 6 caracteres.', false); return; }
-        if (senha !== conf) { setAuthMsg('❌ As senhas não coincidem. Verifique e tente novamente.', false); return; }
+        if (senha !== conf) { setAuthMsg('❌ As senhas não coincidem. Use o 👁 para conferir.', false); return; }
         const btn = document.getElementById('btnCadastrar');
         if (btn) { btn.disabled = true; btn.textContent = 'Criando conta...'; }
         try {
             const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
-            if (!existing.empty) { setAuthMsg('❌ E-mail já cadastrado!', false); return; }
+            if (!existing.empty) { setAuthMsg('❌ Este e-mail já está cadastrado! Faça login.', false); return; }
             const senhaHash = await hashPassword(senha);
-            await addDoc(collection(db, 'users'), { nome, email, telefone, senha: senhaHash, dataCadastro: new Date().toLocaleDateString('pt-BR'), criadoEm: serverTimestamp(), cupons: [] });
-            await addDoc(collection(db, 'logs'), { data: new Date().toLocaleString('pt-BR'), usuario: nome, acao: 'CADASTRO', detalhes: `Novo cliente: ${email}`, criadoEm: serverTimestamp() });
-            usuarioAtual = { email, nome, telefone };
-            localStorage.setItem('donut_session', JSON.stringify({ email, nome, telefone }));
+            const novoDoc = await addDoc(collection(db, 'users'), {
+                nome, email, telefone, senha: senhaHash,
+                dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                criadoEm: serverTimestamp(), cupons: []
+            });
+            await addDoc(collection(db, 'logs'), {
+                data: new Date().toLocaleString('pt-BR'), usuario: nome,
+                acao: 'CADASTRO', detalhes: `Novo cliente: ${email}`,
+                criadoEm: serverTimestamp()
+            });
+            usuarioAtual = { email, nome, telefone, docId: novoDoc.id };
+            localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
             atualizarHeaderLogin();
             setAuthMsg('✅ Cadastro realizado! Seja bem-vindo(a)! 🎉', true);
             showToast('🎉 Cadastro realizado com sucesso!');
@@ -958,7 +984,11 @@
             setTimeout(() => esconderLoginOverlay(), 1100);
             carregarCarrinho();
             carregarProdutosFirebase();
-        } catch (error) { console.error('Erro no cadastro:', error); setAuthMsg('❌ Erro ao cadastrar. Tente novamente.', false); }
+        } catch (error) {
+            console.error('Erro no cadastro:', error);
+            if (error.code === 'permission-denied') { setAuthMsg('❌ Erro de permissão. Contate o administrador.', false); }
+            else { setAuthMsg(`❌ Erro ao cadastrar: ${error.message || 'Tente novamente'}`, false); }
+        }
         finally { if (btn) { btn.disabled = false; btn.textContent = '🎉 Criar minha conta'; } }
     };
 

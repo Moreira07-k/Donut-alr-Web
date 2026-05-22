@@ -215,8 +215,8 @@
         <div id="usersTab" class="tab-content">
             <h2 style="margin-bottom: 1rem;">👥 Clientes Cadastrados</h2>
             <div class="table-container">
-                <table><thead><tr><th>#</th><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Cadastro</th></tr></thead>
-                <tbody id="usersTable"><tr><td colspan="5" class="loading">Carregando clientes...</td></tr></tbody></table>
+                <table><thead><tr><th>#</th><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Cadastro</th><th>Ações</th></tr></thead>
+                <tbody id="usersTable"><tr><td colspan="6" class="loading">Carregando clientes...</td></tr></tbody></table>
             </div>
         </div>
 
@@ -306,12 +306,25 @@
     let lastOrderCount = 0;
     let monthlyChart = null;
 
+    // ========== SHA-256 HASH — idêntico ao index.html ==========
     async function hashPassword(password) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(password);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        if (typeof crypto !== 'undefined' && crypto.subtle) {
+            try {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(password);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch(e) { /* cai no fallback */ }
+        }
+        let hash = 0;
+        const str = 'donut_alr_salt_' + password;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return 'fb_' + Math.abs(hash).toString(16).padStart(8, '0') + '_' + btoa(encodeURIComponent(password)).replace(/[^a-z0-9]/gi, '').slice(0, 20);
     }
 
     window.loginAdmin = async function() {
@@ -432,8 +445,37 @@
     window.toggleSoundNotification = function() { soundEnabled = !soundEnabled; document.getElementById('toggleSoundBtn').textContent = soundEnabled ? '🔊 Som: ON' : '🔇 Som: OFF'; showToast(soundEnabled ? 'Som ativado' : 'Som desativado'); };
 
     function iniciarListenerUsers() { if(unsubscribeUsers) unsubscribeUsers(); unsubscribeUsers = onSnapshot(collection(db, 'users'), () => loadUsers()); }
-    async function loadUsers() { try { const snap = await getDocs(collection(db, 'users')); const users = snap.docs.map((d, idx) => ({ idx: idx+1, ...d.data() })); document.getElementById('usersTable').innerHTML = users.length === 0 ? '<td><td colspan="5" style="text-align:center;padding:2rem;">Nenhum cliente cadastrado</td></tr>' : users.map(u => `<tr><td>${u.idx}</td><td><strong>${u.nome || '-'}</strong></td><td>${u.telefone || '-'}</td><td>${u.email || '-'}</td><td>${u.dataCadastro || '-'}</td></tr>`).join(''); } catch(e) { console.error(e); } }
-    async function loadAvaliacoes() { try { const snap = await getDocs(collection(db, 'avaliacoes')); const avaliacoes = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); document.getElementById('avaliacoesTable').innerHTML = avaliacoes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhuma avaliação ainda</td></td>' : avaliacoes.map(a => `<tr><td>${a.data || '-'}</td><td>${a.usuario || '-'}</td><td>${'⭐'.repeat(a.estrelas || 0)}</td><td>${a.pedidoId || '-'}</td></tr>`).join(''); } catch(e) { console.error(e); } }
+    async function loadUsers() {
+        try {
+            const snap = await getDocs(collection(db, 'users'));
+            const users = snap.docs.map((d, idx) => ({ docId: d.id, idx: idx+1, ...d.data() }));
+            document.getElementById('usersTable').innerHTML = users.length === 0
+                ? '<tr><td colspan="6" style="text-align:center;padding:2rem;">Nenhum cliente cadastrado</td></tr>'
+                : users.map(u => `<tr>
+                    <td>${u.idx}</td>
+                    <td><strong>${u.nome || '-'}</strong></td>
+                    <td>${u.telefone || '-'}</td>
+                    <td>${u.email || '-'}</td>
+                    <td>${u.dataCadastro || '-'}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.docId}','${(u.nome||'').replace(/'/g,"\\'")}','${(u.email||'').replace(/'/g,"\\'")}')">🗑️ Apagar</button></td>
+                  </tr>`).join('');
+        } catch(e) { console.error(e); }
+    }
+    async function loadAvaliacoes() { try { const snap = await getDocs(collection(db, 'avaliacoes')); const avaliacoes = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); document.getElementById('avaliacoesTable').innerHTML = avaliacoes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhuma avaliação ainda</td></tr>' : avaliacoes.map(a => `<tr><td>${a.data || '-'}</td><td>${a.usuario || '-'}</td><td>${'⭐'.repeat(a.estrelas || 0)}</td><td>${a.pedidoId || '-'}</td></tr>`).join(''); } catch(e) { console.error(e); } }
+
+    window.deleteUser = async function(docId, nome, email) {
+        if (!confirm(`⚠️ Apagar o usuário "${nome}" (${email})?\n\nEsta ação não pode ser desfeita!`)) return;
+        try {
+            await deleteDoc(doc(db, 'users', docId));
+            await addLog('admin', 'apagar_usuario', `Usuário apagado: ${nome} (${email})`);
+            loadUsers();
+            loadDashboard();
+            showToast(`🗑️ Usuário "${nome}" apagado com sucesso!`);
+        } catch(e) {
+            console.error(e);
+            showToast('❌ Erro ao apagar usuário. Verifique as permissões do Firebase.');
+        }
+    };
     async function loadLogs() { try { const snap = await getDocs(collection(db, 'logs')); const logs = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); document.getElementById('logsTable').innerHTML = logs.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum log registrado</td></tr>' : logs.map(l => `<tr><td>${l.data || '-'}</td><td>${l.usuario || '-'}</td><td>${l.acao || '-'}</td><td>${l.detalhes || '-'}</td></tr>`).join(''); } catch(e) { console.error(e); } }
 
     window.switchTab = function(tab) {
