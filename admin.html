@@ -108,6 +108,7 @@
             <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
             <button class="nav-tab" onclick="switchTab('products')">🍩 Produtos</button>
             <button class="nav-tab" onclick="switchTab('orders')">📦 Pedidos</button>
+            <button class="nav-tab" onclick="switchTab('encomendas')">📅 Encomendas</button>
             <button class="nav-tab" onclick="switchTab('users')">👥 Usuários</button>
             <button class="nav-tab" onclick="switchTab('avaliacoes')">⭐ Avaliações</button>
             <button class="nav-tab" onclick="switchTab('logs')">📋 Logs</button>
@@ -172,8 +173,28 @@
                 <tbody id="logsTable"><tr><td colspan="4" class="loading">Carregando logs...</td></tr></tbody></table>
             </div>
         </div>
+
+        <div id="encomendasTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem;">📅 Encomendas <span style="font-size:0.8rem; color:var(--success);">● Tempo Real</span></h2>
+            <div class="filters-bar">
+                <select id="encomendaStatusFilter" class="filter-select" onchange="filterEncomendas()">
+                    <option value="all">📋 Todas</option>
+                    <option value="encomenda">⏳ Pendentes</option>
+                    <option value="encomenda_confirmada">✅ Confirmadas</option>
+                    <option value="encomenda_cancelada">❌ Canceladas</option>
+                </select>
+                <button class="btn-export" onclick="exportEncomendasToCSV()">📎 Exportar CSV</button>
+            </div>
+            <div class="table-container">
+                <table><thead><tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Data Entrega</th><th>Horário</th><th>Obs</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody id="encomendasTable"><tr><td colspan="9" class="loading">Carregando encomendas...</td></tr></tbody></table>
+                <div id="encomendas_pagination" class="pagination"></div>
+            </div>
+        </div>
     </div>
 </div>
+
+<div id="toast-container" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:9999;pointer-events:none;"></div>
 
 <div id="productModal" class="modal">
     <div class="modal-content">
@@ -267,13 +288,15 @@
             const [produtosSnap, pedidosSnap, usersSnap] = await Promise.all([getDocs(collection(db, 'produtos')), getDocs(collection(db, 'pedidos')), getDocs(collection(db, 'users'))]);
             const pedidos = pedidosSnap.docs.map(d => d.data());
             const totalVendas = pedidos.reduce((sum, p) => sum + (Number(p.total) || 0), 0);
-            const pendentes = pedidos.filter(p => p.status !== 'completed').length;
+            const pendentes = pedidos.filter(p => p.status !== 'completed' && p.status !== 'encomenda' && p.status !== 'encomenda_confirmada' && p.status !== 'encomenda_cancelada').length;
+            const encomendas = pedidos.filter(p => p.tipoEncomenda === true || p.status === 'encomenda').length;
             document.getElementById('statsGrid').innerHTML = `
                 <div class="stat-card"><div class="stat-number">${produtosSnap.size}</div><div class="stat-label">📦 Produtos</div></div>
                 <div class="stat-card"><div class="stat-number">${pedidosSnap.size}</div><div class="stat-label">📋 Pedidos</div></div>
                 <div class="stat-card"><div class="stat-number">${usersSnap.size}</div><div class="stat-label">👥 Clientes</div></div>
                 <div class="stat-card"><div class="stat-number">R$ ${totalVendas.toFixed(2).replace('.', ',')}</div><div class="stat-label">💰 Faturamento</div></div>
-                <div class="stat-card"><div class="stat-number">${pendentes}</div><div class="stat-label">⏳ Pendentes</div></div>`;
+                <div class="stat-card"><div class="stat-number">${pendentes}</div><div class="stat-label">⏳ Pendentes</div></div>
+                <div class="stat-card" style="border: 2px solid #c8a4f7;"><div class="stat-number" style="color:#8b5cf6;">${encomendas}</div><div class="stat-label">📅 Encomendas</div></div>`;
             
             const monthlyData = {};
             pedidos.forEach(p => { if(p.data) { const mes = p.data.split('/')[1] + '/' + p.data.split('/')[2]; monthlyData[mes] = (monthlyData[mes] || 0) + (Number(p.total) || 0); } });
@@ -362,10 +385,74 @@
         else if(tab === 'users') loadUsers();
         else if(tab === 'avaliacoes') loadAvaliacoes();
         else if(tab === 'logs') loadLogs();
+        else if(tab === 'encomendas') loadEncomendas();
     };
 
-    function showToast(msg) { const toast = document.createElement('div'); toast.textContent = msg; toast.style.cssText = `position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:10px 20px;border-radius:50px;z-index:9999;font-size:14px;animation:fadeInOut 2.5s ease;`; document.body.appendChild(toast); setTimeout(() => toast.remove(), 2500); }
-    function iniciarPainel() { loadDashboard(); loadProducts(); loadOrders(); loadUsers(); loadAvaliacoes(); loadLogs(); iniciarListenerPedidos(); iniciarListenerUsers(); }
+    function showToast(msg) { const container = document.getElementById('toast-container'); if(!container) return; const toast = document.createElement('div'); toast.textContent = msg; toast.style.cssText = `background:#333;color:white;padding:10px 20px;border-radius:50px;font-size:14px;animation:fadeInOut 2.5s ease;pointer-events:none;white-space:nowrap;`; container.appendChild(toast); setTimeout(() => { if(container.contains(toast)) container.removeChild(toast); }, 2500); }
+
+    let allEncomendas = [];
+    let currentEncomendaFilter = 'all';
+
+    async function loadEncomendas() {
+        try {
+            const snap = await getDocs(collection(db, 'pedidos'));
+            allEncomendas = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+                .filter(p => p.tipoEncomenda === true || p.status === 'encomenda' || p.status === 'encomenda_confirmada' || p.status === 'encomenda_cancelada')
+                .sort((a, b) => (b.dataEntrega || '').localeCompare(a.dataEntrega || ''));
+            filterEncomendas();
+        } catch(e) { console.error(e); }
+    }
+
+    window.filterEncomendas = function() {
+        currentEncomendaFilter = document.getElementById('encomendaStatusFilter').value;
+        renderEncomendasTable();
+    };
+
+    function renderEncomendasTable() {
+        let filtered = [...allEncomendas];
+        if(currentEncomendaFilter !== 'all') filtered = filtered.filter(e => e.status === currentEncomendaFilter);
+        const tbody = document.getElementById('encomendasTable');
+        if(!tbody) return;
+        if(!filtered.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;">Nenhuma encomenda encontrada</td></tr>'; return; }
+        tbody.innerHTML = filtered.map(e => {
+            const statusClass = e.status === 'encomenda_confirmada' ? 'status-completed' : e.status === 'encomenda_cancelada' ? 'status-inactive' : 'status-pending';
+            const statusLabel = e.status === 'encomenda_confirmada' ? '✅ Confirmada' : e.status === 'encomenda_cancelada' ? '❌ Cancelada' : '⏳ Pendente';
+            const dataEntrega = e.dataEntrega ? new Date(e.dataEntrega + 'T12:00:00').toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',weekday:'short'}) : '-';
+            const acoes = e.status === 'encomenda' ? `<button class="btn btn-success btn-sm" onclick="confirmarEncomendaAdmin('${e.id}')">✅</button> <button class="btn btn-danger btn-sm" onclick="cancelarEncomendaAdmin('${e.id}')">❌</button>` : `<button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${e.id}')">👁️</button>`;
+            return `<tr><td><small>${e.id.slice(0,8)}...</small></td><td><strong>${e.cliente || '-'}</strong></td><td>${e.whatsapp || '-'}</td><td>R$ ${(Number(e.total)||0).toFixed(2).replace('.',',')}</td><td><strong>${dataEntrega}</strong></td><td>${e.horarioEntrega || '-'}</td><td style="max-width:120px;font-size:0.8rem;">${e.observacoes || '-'}</td><td><span class="status-badge ${statusClass}">${statusLabel}</span></td><td>${acoes}</td></tr>`;
+        }).join('');
+    }
+
+    window.confirmarEncomendaAdmin = async function(id) {
+        try {
+            await updateDoc(doc(db, 'pedidos', id), { status: 'encomenda_confirmada' });
+            addLog('admin', 'confirmar_encomenda', `Encomenda ${id} confirmada`);
+            loadEncomendas();
+            loadDashboard();
+            showToast('✅ Encomenda confirmada!');
+        } catch(e) { console.error(e); showToast('❌ Erro ao confirmar encomenda'); }
+    };
+
+    window.cancelarEncomendaAdmin = async function(id) {
+        if(!confirm('Cancelar esta encomenda?')) return;
+        try {
+            await updateDoc(doc(db, 'pedidos', id), { status: 'encomenda_cancelada' });
+            addLog('admin', 'cancelar_encomenda', `Encomenda ${id} cancelada`);
+            loadEncomendas();
+            showToast('❌ Encomenda cancelada.');
+        } catch(e) { console.error(e); showToast('❌ Erro ao cancelar encomenda'); }
+    };
+
+    window.exportEncomendasToCSV = function() {
+        const headers = ['ID','Cliente','WhatsApp','Total','Data Entrega','Horário','Observações','Status'];
+        const rows = allEncomendas.map(e => [e.id, e.cliente, e.whatsapp, e.total, e.dataEntrega, e.horarioEntrega, e.observacoes, e.status]);
+        const csv = [headers,...rows].map(row => row.map(cell => `"${String(cell||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `encomendas_${new Date().toISOString().slice(0,10)}.csv`; link.click(); URL.revokeObjectURL(link.href);
+        showToast('📎 Encomendas exportadas!');
+    };
+
+    function iniciarPainel() { loadDashboard(); loadProducts(); loadOrders(); loadUsers(); loadAvaliacoes(); loadLogs(); loadEncomendas(); iniciarListenerPedidos(); iniciarListenerUsers(); }
     const style = document.createElement('style'); style.textContent = `@keyframes fadeInOut {0%{opacity:0;transform:translateX(-50%) translateY(20px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}85%{opacity:1;transform:translateX(-50%) translateY(0);}100%{opacity:0;transform:translateX(-50%) translateY(-20px);}}`; document.head.appendChild(style);
     checkAuth();
 </script>

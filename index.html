@@ -258,6 +258,7 @@
       <li><a onclick="navTo('#bebidas')">Bebidas</a></li>
       <li><a onclick="navTo('#delivery')">Delivery</a></li>
       <li><a onclick="navTo('#contato')">Contato</a></li>
+      <li><a onclick="abrirEncomenda()" style="color:var(--pink);font-weight:800;">📅 Encomendas</a></li>
     </ul>
     <div class="header-actions">
       <button class="dark-toggle" id="darkToggle">🌙</button>
@@ -377,6 +378,21 @@
     </div>
   </section>
 
+  <section class="section" id="encomendas" style="padding-top:0;">
+    <div style="background:linear-gradient(135deg,var(--lavender),var(--peach));border-radius:24px;padding:2.5rem;text-align:center;">
+      <div style="font-size:3rem;margin-bottom:0.75rem;">📅</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--brown);margin-bottom:0.5rem;">Faça sua <span style="color:var(--pink);">Encomenda</span></h2>
+      <p style="color:var(--brown-mid);max-width:480px;margin:0 auto 1.5rem;line-height:1.6;">Quer garantir seu pedido especial? Encomende com pelo menos <strong>1 dia de antecedência</strong> e receba com toda a atenção que você merece! 🍩</p>
+      <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+        <div style="text-align:center;"><div style="font-size:1.5rem;">🎂</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Bolos especiais</div></div>
+        <div style="text-align:center;"><div style="font-size:1.5rem;">🎁</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Kits presenteáveis</div></div>
+        <div style="text-align:center;"><div style="font-size:1.5rem;">🍩</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Donuts personalizados</div></div>
+        <div style="text-align:center;"><div style="font-size:1.5rem;">🧁</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Cupcakes para evento</div></div>
+      </div>
+      <button class="btn-primary" onclick="abrirEncomenda()" style="font-size:1rem;padding:0.9rem 2.5rem;">📅 Fazer Encomenda Agora</button>
+    </div>
+  </section>
+
   <footer>
     <div class="footer-inner">
       <div><div style="display:flex; gap:10px; margin-bottom:0.75rem;"><div class="logo-blob" style="width:38px;height:38px;">🍩</div><span style="font-weight:800;">Donut ALR</span></div><p>Doces artesanais feitos com amor em Floriano-PI.</p></div>
@@ -417,6 +433,7 @@
     </div>
     <div class="cart-summary" id="cartSummary"></div>
     <button class="btn-checkout" id="checkoutBtn">✅ Finalizar Pedido</button>
+    <button class="btn-encomenda" id="encomendaBtn" onclick="abrirEncomenda()" style="width:100%; margin-top:0.5rem; background:var(--lavender); border:none; padding:0.75rem; border-radius:12px; font-weight:700; cursor:pointer; color:var(--brown); font-family:inherit; font-size:0.9rem;">📅 Fazer Encomenda</button>
     <button class="btn-secondary" onclick="limparCarrinho()" style="width:100%; margin-top:0.5rem; background:var(--gray); border:none; padding:0.7rem; border-radius:12px;">🗑️ Limpar Carrinho</button>
   </div>
 </div>
@@ -428,6 +445,36 @@
 <div id="rodaModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('rodaModal')">✕</button><div class="modal-title">🎡 Roda da Sorte</div><div class="roda-container"><div class="roda-wrap"><div class="roda-ponteiro">▼</div><canvas id="rodaCanvas" width="260" height="260"></canvas></div><button class="btn-girar" id="btnGirar" onclick="girarRoda()">🎡 Girar</button><div class="roda-result" id="rodaResult"></div></div></div></div>
 <div id="enderecoModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('enderecoModal')">✕</button><div class="modal-title">🏠 Endereço de Entrega</div><input type="text" id="modalEndRua" placeholder="Rua" class="auth-input"><div style="display:flex; gap:0.5rem;"><input type="text" id="modalEndNumero" placeholder="Número *" class="auth-input" style="flex:1"><input type="text" id="modalEndComplemento" placeholder="Complemento" class="auth-input" style="flex:2"></div><input type="text" id="modalEndBairro" placeholder="Bairro" class="auth-input"><input type="text" id="modalEndCidade" placeholder="Cidade" class="auth-input"><div id="enderecoMsg" class="auth-msg"></div><button class="auth-submit" onclick="confirmarEndereco()">Confirmar e Enviar</button></div></div>
 <div id="avaliacaoModal" class="modal-overlay"><div class="modal-box" style="text-align:center"><div class="surprise-donut">🍩</div><div class="modal-title">Obrigado pelo pedido!</div><div class="stars-row" id="starsRow"><button class="star-btn" data-v="1" onclick="selecionarEstrela(1)">★</button><button class="star-btn" data-v="2" onclick="selecionarEstrela(2)">★</button><button class="star-btn" data-v="3" onclick="selecionarEstrela(3)">★</button><button class="star-btn" data-v="4" onclick="selecionarEstrela(4)">★</button><button class="star-btn" data-v="5" onclick="selecionarEstrela(5)">★</button></div><div id="avaliacaoMsg"></div><button class="auth-submit" id="btnEnviarAvaliacao" onclick="enviarAvaliacao()" disabled>Enviar Avaliação</button><button class="btn-secondary" onclick="closeModal('avaliacaoModal')" style="width:100%; margin-top:0.5rem;">Agora não</button></div></div>
+
+<div id="encomendaModal" class="modal-overlay">
+  <div class="modal-box" style="max-width:500px;">
+    <button class="modal-close" onclick="closeModal('encomendaModal')">✕</button>
+    <div class="modal-title">📅 Fazer Encomenda</div>
+    <p style="color:var(--brown-light);font-size:0.85rem;margin-bottom:1.2rem;">Encomendas devem ser feitas com <strong>no mínimo 1 dia de antecedência</strong>. Selecione a data desejada para entrega:</p>
+    <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
+      <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">📅 Data de Entrega</label>
+      <input type="date" id="encomendaData" class="auth-field" style="width:100%;">
+      <div id="encomendaDataMsg" style="font-size:0.8rem;color:var(--danger);margin-top:0.4rem;min-height:1.2em;"></div>
+    </div>
+    <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
+      <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">⏰ Horário Preferido</label>
+      <select id="encomendaHorario" class="auth-field" style="width:100%;">
+        <option value="08:00-10:00">08h00 – 10h00</option>
+        <option value="10:00-12:00">10h00 – 12h00</option>
+        <option value="12:00-14:00">12h00 – 14h00</option>
+        <option value="14:00-16:00">14h00 – 16h00</option>
+        <option value="16:00-18:00">16h00 – 18h00</option>
+      </select>
+    </div>
+    <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
+      <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">📝 Observações (opcional)</label>
+      <textarea id="encomendaObs" class="auth-field" rows="2" placeholder="Ex: mensagem no bolo, cobertura especial..." style="width:100%;resize:vertical;"></textarea>
+    </div>
+    <div id="encomendaResumo" style="background:var(--gray);border-radius:14px;padding:1rem;margin-bottom:1rem;font-size:0.87rem;"></div>
+    <button class="auth-submit" id="btnConfirmarEncomenda" onclick="confirmarEncomenda()">📅 Confirmar Encomenda</button>
+    <p style="text-align:center;font-size:0.75rem;color:var(--brown-light);margin-top:0.8rem;">Você será redirecionado ao WhatsApp para confirmar com a loja.</p>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 <a href="https://wa.me/5589994112913" target="_blank" class="wa-fab">💬</a>
@@ -565,6 +612,7 @@
     window.avaliarSenha = avaliarSenha;
 
     function validarSenhaForte(senha) { return senha.length >= 6 && /[0-9]/.test(senha) && /[A-Z]/.test(senha); }
+    function formatBRL(value) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value); }
     function showToast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2500); }
     function navTo(id) { const el = document.querySelector(id); if (el) el.scrollIntoView({ behavior:"smooth" }); }
     function mostrarLoginOverlay() { document.getElementById('loginRequiredOverlay').classList.remove('hidden'); document.getElementById('mainContent').classList.remove('visible'); }
@@ -885,6 +933,121 @@
     function startOfferTimer() { let time = 2*3600; const interval = setInterval(() => { if(time<=0){ const el=document.getElementById('offerTimer'); if(el) el.textContent='ENCERRADA'; clearInterval(interval); return; } const h=String(Math.floor(time/3600)).padStart(2,'0'); const m=String(Math.floor((time%3600)/60)).padStart(2,'0'); const s=String(time%60).padStart(2,'0'); const el=document.getElementById('offerTimer'); if(el) el.textContent=`${h}:${m}:${s}`; time--; },1000); }
     function initPaymentSelection() { document.querySelectorAll('.payment-option').forEach(opt => { opt.addEventListener('click', function() { const radio = this.querySelector('input[type="radio"]'); if(radio) { radio.checked=true; document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected')); this.classList.add('selected'); } }); }); }
 
+    // ========== ENCOMENDAS ==========
+    function getMinEncomendaDate() {
+        // Mínimo: amanhã (1 dia de antecedência), apenas dias úteis (seg-sex)
+        const agora = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
+        const amanha = new Date(agora);
+        amanha.setDate(amanha.getDate() + 1);
+        // Se amanhã for sábado, pula para segunda
+        if(amanha.getDay() === 6) amanha.setDate(amanha.getDate() + 2);
+        // Se amanhã for domingo, pula para segunda
+        if(amanha.getDay() === 0) amanha.setDate(amanha.getDate() + 1);
+        return amanha;
+    }
+
+    function getMaxEncomendaDate() {
+        const agora = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
+        const max = new Date(agora);
+        max.setDate(max.getDate() + 60);
+        return max;
+    }
+
+    function formatDateBR(date) {
+        return date.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+    }
+
+    window.abrirEncomenda = function() {
+        if (!usuarioAtual) { mostrarLoginOverlay(); showToast('⚠️ Faça login para realizar uma encomenda.'); return; }
+        const minDate = getMinEncomendaDate();
+        const maxDate = getMaxEncomendaDate();
+        const toISO = d => d.toISOString().split('T')[0];
+        const dataInput = document.getElementById('encomendaData');
+        if(dataInput) {
+            dataInput.min = toISO(minDate);
+            dataInput.max = toISO(maxDate);
+            dataInput.value = toISO(minDate);
+        }
+        atualizarResumoEncomenda();
+        closeCart();
+        openModal('encomendaModal');
+        ['encomendaModal'].forEach(id => { const m = document.getElementById(id); if(m) m.addEventListener('click', function(e) { if(e.target === m) m.classList.remove('open'); }); });
+    };
+
+    function atualizarResumoEncomenda() {
+        const resumoEl = document.getElementById('encomendaResumo'); if(!resumoEl) return;
+        const dataVal = document.getElementById('encomendaData')?.value;
+        const horario = document.getElementById('encomendaHorario')?.value;
+        const { subtotal, frete, desconto, total } = calcTotais();
+        const itensTexto = carrinho.length ? carrinho.map(i => `${i.emoji} ${i.name} x${i.qtd}`).join(', ') : 'Nenhum item no carrinho';
+        const dataFormatada = dataVal ? new Date(dataVal + 'T12:00:00').toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' }) : '—';
+        resumoEl.innerHTML = `<div style="font-weight:700;color:var(--brown);margin-bottom:0.5rem;">📋 Resumo da Encomenda</div>
+            <div style="color:var(--brown-mid);line-height:1.7;font-size:0.83rem;">
+                <div>🛒 Itens: <span style="color:var(--text);">${itensTexto || 'Adicione itens ao carrinho'}</span></div>
+                <div>📅 Entrega: <span style="color:var(--text);font-weight:700;">${dataFormatada}</span></div>
+                <div>⏰ Horário: <span style="color:var(--text);">${horario || '—'}</span></div>
+                <div>💰 Total estimado: <span style="color:var(--pink);font-weight:800;">${formatBRL(total)}</span></div>
+            </div>`;
+    }
+
+    window.confirmarEncomenda = async function() {
+        if (!usuarioAtual) { mostrarLoginOverlay(); return; }
+        const dataVal = document.getElementById('encomendaData')?.value;
+        const horario = document.getElementById('encomendaHorario')?.value;
+        const obs = document.getElementById('encomendaObs')?.value.trim();
+        const msgEl = document.getElementById('encomendaDataMsg');
+        if(!dataVal) { if(msgEl) msgEl.textContent = '⚠️ Selecione uma data de entrega.'; return; }
+        const dataEscolhida = new Date(dataVal + 'T12:00:00');
+        const minDate = getMinEncomendaDate();
+        minDate.setHours(0,0,0,0);
+        dataEscolhida.setHours(0,0,0,0);
+        if(dataEscolhida < minDate) { if(msgEl) msgEl.textContent = '⚠️ Encomendas precisam de pelo menos 1 dia de antecedência.'; return; }
+        const diaSemana = dataEscolhida.getDay();
+        if(diaSemana === 0 || diaSemana === 6) { if(msgEl) msgEl.textContent = '⚠️ Não entregamos aos finais de semana. Escolha um dia útil.'; return; }
+        if(msgEl) msgEl.textContent = '';
+        if(!carrinho.length) { showToast('⚠️ Adicione itens ao carrinho antes de encomendear!'); return; }
+        const btn = document.getElementById('btnConfirmarEncomenda');
+        btn.disabled = true; btn.textContent = 'Enviando...';
+        try {
+            const { frete, desconto, total } = calcTotais();
+            const dataFormatada = dataEscolhida.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+            const pedidoId = 'ENC' + Date.now();
+            let msg = `📅 *ENCOMENDA - Donut ALR*\n🆔 Encomenda #${pedidoId}\n👤 Cliente: ${usuarioAtual.nome}\n📱 WhatsApp: ${usuarioAtual.telefone || 'Não informado'}\n\n*ITENS:*\n`;
+            carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price * i.qtd)}\n`; });
+            msg += `\n📅 Data de Entrega: ${dataFormatada}\n⏰ Horário: ${horario}\n💰 Total estimado: ${formatBRL(total)}`;
+            if(obs) msg += `\n📝 Obs: ${obs}`;
+            msg += `\n\n_Encomenda via site Donut ALR · Aguardando confirmação da loja._`;
+            const agora = new Date();
+            const dataRegistro = agora.toLocaleDateString('pt-BR') + " " + agora.toLocaleTimeString('pt-BR',{hour:"2-digit",minute:"2-digit"});
+            try {
+                await addDoc(collection(db, 'pedidos'), {
+                    cliente: usuarioAtual.nome, email: usuarioAtual.email,
+                    whatsapp: usuarioAtual.telefone || 'Não informado',
+                    itens: carrinho.map(i => ({ nome: i.name, qtd: i.qtd, preco: i.price })),
+                    total, endereco: 'A confirmar', pagamento: 'A confirmar',
+                    status: 'encomenda', tipoEncomenda: true,
+                    dataEntrega: dataVal, horarioEntrega: horario,
+                    observacoes: obs || '', data: dataRegistro,
+                    criadoEm: serverTimestamp()
+                });
+            } catch(e) { console.warn(e); }
+            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+            lancarConfete();
+            showToast('📅 Encomenda enviada! Aguarde confirmação da loja.');
+            closeModal('encomendaModal');
+        } catch(e) { console.error(e); if(msgEl) msgEl.textContent = '❌ Erro ao enviar encomenda. Tente novamente.'; }
+        finally { btn.disabled = false; btn.textContent = '📅 Confirmar Encomenda'; }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const encomendaDataInput = document.getElementById('encomendaData');
+        const encomendaHorarioInput = document.getElementById('encomendaHorario');
+        if(encomendaDataInput) encomendaDataInput.addEventListener('change', atualizarResumoEncomenda);
+        if(encomendaHorarioInput) encomendaHorarioInput.addEventListener('change', atualizarResumoEncomenda);
+    });
+
+    window.abrirEncomenda = window.abrirEncomenda;
+
     document.addEventListener("DOMContentLoaded", function() {
         initDarkMode(); carregarSessao(); carregarCarrinho(); atualizarStatusHorario(); setInterval(atualizarStatusHorario, 60000); startOfferTimer(); initPaymentSelection(); renderProdutos(true); carregarProdutosFirebase();
         document.getElementById("cartBtn")?.addEventListener('click', openCart);
@@ -895,14 +1058,14 @@
         document.getElementById("calcFreteBtn")?.addEventListener('click', calcularFrete);
         document.getElementById("darkToggle")?.addEventListener('click', toggleDark);
         document.getElementById("cepInput")?.addEventListener('keydown', e => { if(e.key==='Enter') buscarCepEndereco(); });
-        ['productModal','perfilModal','surpriseModal','quizModal','rodaModal','enderecoModal','avaliacaoModal'].forEach(id => { const m = document.getElementById(id); if(m) m.addEventListener('click', function(e) { if(e.target === m) m.classList.remove('open'); }); });
+        ['productModal','perfilModal','surpriseModal','quizModal','rodaModal','enderecoModal','avaliacaoModal','encomendaModal'].forEach(id => { const m = document.getElementById(id); if(m) m.addEventListener('click', function(e) { if(e.target === m) m.classList.remove('open'); }); });
         document.getElementById("endNumero")?.addEventListener('input', e => { enderecoCadastrado.numero = e.target.value; });
         document.getElementById("endComplemento")?.addEventListener('input', e => { enderecoCadastrado.complemento = e.target.value; });
         const searchInput = document.getElementById("searchInput"); if(searchInput) { searchInput.addEventListener("input", function(e) { searchTerm = e.target.value.toLowerCase().trim(); renderProdutos(); }); }
         document.querySelectorAll(".tab-btn").forEach(btn => { btn.addEventListener("click", function() { document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active")); this.classList.add("active"); currentCat = this.dataset.cat; renderProdutos(); }); });
         document.getElementById("couponInput")?.addEventListener("keydown", e => { if(e.key==="Enter") aplicarCupom(); });
         document.getElementById('surpriseBtn')?.addEventListener('click', abrirCaixaSurpresa);
-        const cepInput = document.getElementById("cepInput"); if(cepInput) { cepInput.addEventListener('input', function() { let v = this.value.replace(/\D/g,''); if(v.length>8) v=v.slice(0,8); if(v.length>5) v=v.slice(0,5)+'-'+v.slice(5); this.value=v; }); }
+        const cepInput = document.getElementById("cepInput"); if(cepInput) { cepInput.addEventListener('input', function(e) { const isDeleting = e.inputType && e.inputType.startsWith('delete'); let v = this.value.replace(/\D/g,''); if(v.length>8) v=v.slice(0,8); if(!isDeleting && v.length>5) v=v.slice(0,5)+'-'+v.slice(5); this.value=v; }); }
         window.navTo = navTo;
     });
 </script>
