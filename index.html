@@ -1234,11 +1234,11 @@
         ['productModal','perfilModal','surpriseModal','quizModal','rodaModal','enderecoModal','avaliacaoModal','encomendaModal'].forEach(id => { const m = document.getElementById(id); if(m) m.addEventListener('click', function(e) { if(e.target === m) m.classList.remove('open'); }); });
         document.getElementById("endNumero")?.addEventListener('input', e => { enderecoCadastrado.numero = e.target.value; });
         document.getElementById("endComplemento")?.addEventListener('input', e => { enderecoCadastrado.complemento = e.target.value; });
-        const searchInput = document.getElementById("searchInput"); if(searchInput) { searchInput.addEventListener("input", function(e) { searchTerm = e.target.value.toLowerCase().trim(); renderProdutos(); }); }
+    const searchInput = document.getElementById("searchInput"); if(searchInput) { searchInput.addEventListener("input", function(e) { searchTerm = e.target.value.toLowerCase().trim(); renderProdutos(); }); }
         document.querySelectorAll(".tab-btn").forEach(btn => { btn.addEventListener("click", function() { document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active")); this.classList.add("active"); currentCat = this.dataset.cat; renderProdutos(); }); });
         document.getElementById("couponInput")?.addEventListener("keydown", e => { if(e.key==="Enter") aplicarCupom(); });
         document.getElementById('surpriseBtn')?.addEventListener('click', abrirCaixaSurpresa);
-        const cepInput = document.getElementById("cepInput"); if(cepInput) { cepInput.addEventListener('input', function(e) { const isDeleting = e.inputType && e.inputType.startsWith('delete'); let v = this.value.replace(/\D/g,''); if(v.length>8) v=v.slice(0,8); if(!isDeleting && v.length>5) v=v.slice(0,5)+'-'+v.slice(5); this.value=v; }); }
+    const cepInput = document.getElementById("cepInput"); if(cepInput) { cepInput.addEventListener('input', function(e) { const isDeleting = e.inputType && e.inputType.startsWith('delete'); let v = this.value.replace(/\D/g,''); if(v.length>8) v=v.slice(0,8); if(!isDeleting && v.length>5) v=v.slice(0,5)+'-'+v.slice(5); this.value=v; }); }
         window.navTo = navTo;
     });
 </script>
