@@ -198,10 +198,147 @@
         .confetti-canvas { position:fixed; inset:0; pointer-events:none; z-index:9999; display:none; }
         .skeleton-item { background:linear-gradient(90deg,var(--gray) 25%,var(--gray-2) 50%,var(--gray) 75%); background-size:200% 100%; animation:skeleton-shine 1.5s infinite; border-radius:var(--radius); height:280px; }
         @keyframes skeleton-shine { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+        /* ========== ANIMAÇÕES GLOBAIS ========== */
+
+        /* Entrada suave no carregamento */
+        @keyframes fadeInUp   { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeInLeft { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes fadeInRight{ from{opacity:0;transform:translateX(28px)}  to{opacity:1;transform:translateX(0)} }
+        @keyframes zoomIn     { from{opacity:0;transform:scale(0.88)}       to{opacity:1;transform:scale(1)} }
+        @keyframes popIn      { 0%{opacity:0;transform:scale(0.7)} 70%{transform:scale(1.06)} 100%{opacity:1;transform:scale(1)} }
+        @keyframes shimmer    { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+        @keyframes wiggle     { 0%,100%{transform:rotate(0deg)} 25%{transform:rotate(-6deg)} 75%{transform:rotate(6deg)} }
+        @keyframes bounceDot  { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+        @keyframes gradientShift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        @keyframes floatSlow  { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-14px) rotate(2deg)} }
+        @keyframes ripple     { 0%{transform:scale(0);opacity:0.6} 100%{transform:scale(4);opacity:0} }
+        @keyframes slideInCart{ from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes countUp    { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes borderGlow { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,157,0)} 50%{box-shadow:0 0 0 6px rgba(255,107,157,0.25)} }
+        @keyframes heartBeat  { 0%,100%{transform:scale(1)} 14%{transform:scale(1.2)} 28%{transform:scale(1)} 42%{transform:scale(1.15)} 70%{transform:scale(1)} }
+
+        /* Scroll reveal — elementos começam invisíveis até .visible via JS */
+        .reveal { opacity:0; transform:translateY(32px); transition:opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+        .reveal-left  { opacity:0; transform:translateX(-32px); transition:opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
+        .reveal-left.visible  { opacity:1; transform:translateX(0); }
+        .reveal-right { opacity:0; transform:translateX(32px); transition:opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
+        .reveal-right.visible { opacity:1; transform:translateX(0); }
+        .reveal-zoom  { opacity:0; transform:scale(0.9); transition:opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.5s cubic-bezier(.22,1,.36,1); }
+        .reveal-zoom.visible  { opacity:1; transform:scale(1); }
+        .reveal-delay-1 { transition-delay:0.08s; }
+        .reveal-delay-2 { transition-delay:0.18s; }
+        .reveal-delay-3 { transition-delay:0.28s; }
+        .reveal-delay-4 { transition-delay:0.38s; }
+
+        /* Hero animação de entrada */
+        .hero-text     { animation:fadeInLeft  0.75s cubic-bezier(.22,1,.36,1) both; }
+        .hero-card     { animation:fadeInRight 0.75s cubic-bezier(.22,1,.36,1) 0.15s both; }
+        .stats-bar     { animation:fadeInUp 0.6s cubic-bezier(.22,1,.36,1) 0.3s both; }
+
+        /* Navbar logo micro-animação */
+        .logo-blob { transition:transform 0.3s; }
+        .logo-blob:hover { transform:rotate(15deg) scale(1.1); animation:wiggle 0.5s ease; }
+
+        /* Cards de produto — hover elaborado */
+        .product-card { transition:transform 0.28s cubic-bezier(.22,1,.36,1), box-shadow 0.28s; will-change:transform; }
+        .product-card:hover { transform:translateY(-8px) scale(1.015); box-shadow:0 24px 48px rgba(200,80,120,0.22); }
+        .product-card:hover .product-img-wrap { background:linear-gradient(135deg,#ffb3d0,#eed6f8); }
+        .product-img-wrap { transition:background 0.35s; }
+        .product-img-wrap .product-emoji-inner { display:inline-block; transition:transform 0.3s; }
+        .product-card:hover .product-emoji-inner { transform:scale(1.12) rotate(-5deg); }
+
+        /* Botão add ao carrinho */
+        .btn-add { transition:transform 0.15s, box-shadow 0.15s; position:relative; overflow:hidden; }
+        .btn-add:hover { transform:scale(1.15); box-shadow:0 6px 18px rgba(255,64,129,0.4); }
+        .btn-add:active { transform:scale(0.92); }
+        .btn-add::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.35); border-radius:50%; transform:scale(0); opacity:0; transition:transform 0.4s, opacity 0.4s; }
+        .btn-add:active::after { transform:scale(4); opacity:0; transition:0s; }
+
+        /* Botões primários */
+        .btn-primary, .auth-submit, .btn-checkout { transition:transform 0.18s, box-shadow 0.18s; }
+        .btn-primary:hover, .auth-submit:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,64,129,0.38); }
+        .btn-primary:active, .auth-submit:active { transform:translateY(0) scale(0.97); }
+
+        /* Checkout button pulse enquanto carrinho tem itens */
+        .btn-checkout.has-items { animation:borderGlow 2s infinite; }
+
+        /* Carrinho lateral — itens entram com slide */
+        .cart-item { animation:slideInCart 0.3s cubic-bezier(.22,1,.36,1) both; }
+
+        /* Badge do carrinho — pop ao adicionar */
+        .cart-badge.pop { animation:popIn 0.35s cubic-bezier(.22,1,.36,1); }
+
+        /* Game cards */
+        .game-card { transition:transform 0.22s, background 0.22s; }
+        .game-card:hover { transform:translateY(-5px) scale(1.04); background:rgba(255,255,255,0.28); }
+        .game-card:active { transform:scale(0.96); }
+
+        /* Stats bar números */
+        .stat-num { animation:countUp 0.5s ease both; }
+
+        /* Logo donut hero flutuando */
+        .hero-donut-float { display:inline-block; animation:floatSlow 4s ease-in-out infinite; }
+
+        /* Status banner gradiente animado */
+        .status-banner { background-size:200% 200%; animation:gradientShift 4s ease infinite; }
+
+        /* Seções de título */
+        .section-title { display:inline-block; }
+        .section-title .accent { position:relative; }
+        .section-title .accent::after { content:''; position:absolute; left:0; bottom:-4px; width:0; height:3px; background:var(--gradient); border-radius:2px; transition:width 0.6s cubic-bezier(.22,1,.36,1); }
+        .section-title.visible .accent::after { width:100%; }
+
+        /* Footer */
+        footer { animation:fadeInUp 0.6s ease both; }
+
+        /* Modal abertura */
+        .modal-overlay.open .modal-box { animation:popIn 0.35s cubic-bezier(.22,1,.36,1); }
+
+        /* Toast animação melhorada */
+        .toast { transition:opacity 0.25s, transform 0.25s; transform:translateX(-50%) translateY(12px); }
+        .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+        /* WhatsApp FAB pulse */
+        .wa-fab { animation:heartBeat 2.4s ease-in-out infinite; }
+        .wa-fab:hover { animation:none; transform:scale(1.15); }
+
+        /* Combo cards */
+        .combo-card { transition:transform 0.25s, box-shadow 0.25s; }
+        .combo-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-md); }
+
+        /* Drink cards */
+        .drink-card { transition:transform 0.22s, box-shadow 0.22s; }
+        .drink-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-sm); }
+
+        /* Fundo hero partículas decorativas (CSS-only) */
+        .hero-bg-decor { position:absolute; pointer-events:none; opacity:0.07; font-size:3rem; user-select:none; }
+
+        /* Indicador de scroll */
+        .scroll-indicator { display:flex; gap:5px; justify-content:center; margin-top:1.5rem; }
+        .scroll-dot { width:8px; height:8px; border-radius:50%; background:var(--pink-light); animation:bounceDot 1.4s infinite ease-in-out both; }
+        .scroll-dot:nth-child(1){animation-delay:0s}
+        .scroll-dot:nth-child(2){animation-delay:0.16s}
+        .scroll-dot:nth-child(3){animation-delay:0.32s}
+
+        /* Page loader */
+        #pageLoader { position:fixed; inset:0; background:linear-gradient(135deg,#ff6b9d,#ff4081); z-index:99999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1rem; transition:opacity 0.5s, visibility 0.5s; }
+        #pageLoader.done { opacity:0; visibility:hidden; }
+        #pageLoader .loader-donut { font-size:4rem; animation:wiggle 0.6s infinite; }
+        #pageLoader .loader-bar { width:180px; height:5px; background:rgba(255,255,255,0.3); border-radius:99px; overflow:hidden; }
+        #pageLoader .loader-fill { height:100%; background:#fff; border-radius:99px; animation:loaderFill 1s ease forwards; }
+        @keyframes loaderFill { from{width:0} to{width:100%} }
+
+        /* Scroll progress bar no topo */
+        #scrollProgress { position:fixed; top:0; left:0; height:3px; background:var(--gradient); z-index:9999; width:0%; transition:width 0.1s linear; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<div id="pageLoader"><div class="loader-donut">🍩</div><div class="loader-bar"><div class="loader-fill"></div></div><div style="color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;opacity:0.85;">Donut ALR · Carregando...</div></div>
+<div id="scrollProgress"></div>
 
 <div class="login-required-overlay" id="loginRequiredOverlay">
   <div class="auth-screen">
@@ -270,7 +407,7 @@
 
 <div class="main-content" id="mainContent">
 
-  <div class="offers-banner">
+  <div class="offers-banner reveal">
     <div class="offers-container">
       <div class="offer-text"><h3>🔥 OFERTA RELÂMPAGO</h3><p>20% OFF em Donuts com cupom <strong>DONUT20</strong></p></div>
       <div class="offer-timer" id="offerTimer">02:00:00</div>
@@ -279,16 +416,17 @@
 
   <section class="hero">
     <div class="hero-text">
-      <div class="hero-badge">⭐ 4.9 · 500+ pedidos</div>
-      <h1>Os melhores doces<br />de <span class="accent">Floriano</span> 🍩</h1>
+      <div class="hero-badge reveal reveal-delay-1">⭐ 4.9 · 500+ pedidos</div>
+      <h1>Os melhores doces<br />de <span class="accent">Floriano</span> <span class="hero-donut-float">🍩</span></h1>
       <p>Donuts artesanais, cupcakes decorados e bebidas especiais. Entrega em toda Floriano-PI e Barão de Grajaú.</p>
       <div class="hero-cta">
         <button class="btn-primary" onclick="navTo('#cardapio')">🍩 Pedir agora</button>
         <button class="btn-outline" onclick="navTo('#delivery')">🚚 Ver entrega</button>
       </div>
+      <div class="scroll-indicator"><div class="scroll-dot"></div><div class="scroll-dot"></div><div class="scroll-dot"></div></div>
     </div>
     <div class="hero-right">
-      <div class="hero-card">
+      <div class="hero-card reveal-zoom">
         <div class="hero-card-header"><strong>Pedido em andamento</strong> <span style="color:#2ecc71;">✓ A caminho</span></div>
         <div style="margin:0.5rem 0;">🍩 Donut Nutella Love <span style="float:right;">R$ 16,90</span></div>
         <div>🧁 Cupcake Red Velvet <span style="float:right;">R$ 17,90</span></div>
@@ -308,7 +446,7 @@
     </div>
   </div>
 
-  <div class="game-banner">
+  <div class="game-banner reveal">
     <div class="game-banner-inner">
       <div class="game-card" onclick="openModal('surpriseModal')"><div class="game-card-icon">🎁</div><div>Caixa Surpresa</div></div>
       <div class="game-card" onclick="openModal('quizModal')"><div class="game-card-icon">🧠</div><div>Quiz do Donut</div></div>
@@ -317,7 +455,7 @@
     </div>
   </div>
 
-  <section class="section" id="cardapio">
+  <section class="section reveal" id="cardapio">
     <h2 class="section-title">Nosso <span class="accent">Cardápio</span></h2>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
@@ -333,7 +471,7 @@
     <div class="products-grid" id="productsGrid"></div>
   </section>
 
-  <section class="section" id="combosSection">
+  <section class="section reveal" id="combosSection">
     <h2 class="section-title">🎁 <span class="accent">Combos</span> Especiais</h2>
     <div class="combos-grid" id="combosGrid"></div>
   </section>
@@ -370,7 +508,7 @@
     </div>
   </div>
 
-  <section class="section" id="contato">
+  <section class="section reveal" id="contato">
     <h2 class="section-title">📬 <span class="accent">Contato</span></h2>
     <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
       <a href="https://wa.me/5589994112913" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">💬 WhatsApp (89) 9 9411-2913</a>
@@ -378,11 +516,11 @@
     </div>
   </section>
 
-  <section class="section" id="encomendas" style="padding-top:0;">
+  <section class="section reveal" id="encomendas" style="padding-top:0;">
     <div style="background:linear-gradient(135deg,var(--lavender),var(--peach));border-radius:24px;padding:2.5rem;text-align:center;">
       <div style="font-size:3rem;margin-bottom:0.75rem;">📅</div>
       <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--brown);margin-bottom:0.5rem;">Faça sua <span style="color:var(--pink);">Encomenda</span></h2>
-      <p style="color:var(--brown-mid);max-width:480px;margin:0 auto 1.5rem;line-height:1.6;">Quer garantir seu pedido especial? Encomende com pelo menos <strong>1 dia de antecedência</strong> e receba com toda a atenção que você merece! 🍩</p>
+      <p style="color:var(--brown-mid);max-width:480px;margin:0 auto 1.5rem;line-height:1.6;">Quer garantir seu pedido especial? Encomende com pelo menos <strong>2 dias úteis de antecedência</strong> e receba com toda a atenção que você merece! 🍩</p>
       <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;">
         <div style="text-align:center;"><div style="font-size:1.5rem;">🎂</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Bolos especiais</div></div>
         <div style="text-align:center;"><div style="font-size:1.5rem;">🎁</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Kits presenteáveis</div></div>
@@ -450,7 +588,7 @@
   <div class="modal-box" style="max-width:500px;">
     <button class="modal-close" onclick="closeModal('encomendaModal')">✕</button>
     <div class="modal-title">📅 Fazer Encomenda</div>
-    <p style="color:var(--brown-light);font-size:0.85rem;margin-bottom:1.2rem;">Encomendas devem ser feitas com <strong>no mínimo 1 dia de antecedência</strong>. Selecione a data desejada para entrega:</p>
+    <p style="color:var(--brown-light);font-size:0.85rem;margin-bottom:1.2rem;">Encomendas devem ser feitas com <strong>no mínimo 2 dias úteis de antecedência</strong>. Selecione a data desejada para entrega:</p>
     <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
       <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">📅 Data de Entrega</label>
       <input type="date" id="encomendaData" class="auth-field" style="width:100%;">
@@ -858,27 +996,34 @@
         btn.disabled = true; btn.textContent = 'Enviando pedido...';
         try {
             enderecoCadastrado = { rua, bairro, cidade, numero, complemento };
+            // Recalcula frete baseado no bairro do modal (pode ter sido preenchido manualmente)
+            freteAtual = calcularFretePorBairro(bairro);
+            freteCalculado = freteAtual;
             if(usuarioAtual) { try { const q = query(collection(db, 'users'), where('email', '==', usuarioAtual.email)); const snap = await getDocs(q); if(!snap.empty) await updateDoc(doc(db, 'users', snap.docs[0].id), { endereco: enderecoCadastrado }); } catch(e) { console.warn(e); } }
             let endCompleto = `${rua}, ${numero}`; if(complemento) endCompleto += `, ${complemento}`; endCompleto += ` — ${bairro}, ${cidade || 'Floriano - PI'}`;
-            const { frete, desconto, total } = calcTotais();
+            const { frete, desconto, total, subtotal } = calcTotais();
             const pedidoId = Date.now();
             const agora = new Date();
             const pagamento = getSelectedPayment();
             const pagTexto = pagamento === "pix" ? "PIX" : pagamento === "cartao" ? "Cartão" : "Dinheiro";
             let msg = `🍩 *NOVO PEDIDO - Donut ALR*\n🆔 Pedido #${pedidoId}\n👤 Cliente: ${usuarioAtual.nome}\n📱 WhatsApp: ${usuarioAtual.telefone || 'Não informado'}\n\n*ITENS:*\n`;
-            carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} x${i.qtd} = R$ ${(i.price*i.qtd).toFixed(2).replace('.',',')}\n`; });
-            msg += `\n📍 Endereço: ${endCompleto}\n🚚 Frete: ${frete===0?"Grátis":"R$ "+frete.toFixed(2).replace('.',',')}`;
-            if(desconto>0) msg += `\n🎟 Desconto (${cupomAtivo}): -R$ ${desconto.toFixed(2).replace('.',',')}`;
-            msg += `\n💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n💳 Pagamento: ${pagTexto}\n\n_Pedido via site Donut ALR_`;
+            carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price*i.qtd)}\n`; });
+            msg += `\n📦 Subtotal: ${formatBRL(subtotal)}`;
+            msg += `\n📍 Endereço: ${endCompleto}\n🚚 Frete: ${frete===0?"Grátis ✅":formatBRL(frete)}`;
+            if(desconto>0) msg += `\n🎟 Desconto (${cupomAtivo}): -${formatBRL(desconto)}`;
+            msg += `\n💰 *TOTAL: ${formatBRL(total)}*\n💳 Pagamento: ${pagTexto}\n\n_Pedido via site Donut ALR_`;
             const data = agora.toLocaleDateString('pt-BR') + " " + agora.toLocaleTimeString('pt-BR',{hour:"2-digit",minute:"2-digit"});
             salvarHistorico({ id:pedidoId, data, itens:[...carrinho], total, endereco:endCompleto, pagamento:pagTexto });
             ultimoPedidoId = pedidoId;
-            try { await addDoc(collection(db, 'pedidos'), { cliente: usuarioAtual.nome, email: usuarioAtual.email, whatsapp: usuarioAtual.telefone || 'Não informado', itens: carrinho.map(i => ({ nome: i.name, qtd: i.qtd, preco: i.price })), total, endereco: endCompleto, pagamento: pagTexto, status: 'pending', data, criadoEm: serverTimestamp() }); } catch(e) { console.warn(e); }
-            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-            lancarConfete(); showToast("🎉 Pedido enviado com sucesso!");
+            try { await addDoc(collection(db, 'pedidos'), { cliente: usuarioAtual.nome, email: usuarioAtual.email, whatsapp: usuarioAtual.telefone || 'Não informado', itens: carrinho.map(i => ({ nome: i.name, qtd: i.qtd, preco: i.price })), total, frete, endereco: endCompleto, pagamento: pagTexto, status: 'pending', data, criadoEm: serverTimestamp() }); } catch(e) { console.warn(e); }
+            // Fecha modal ANTES de abrir WA para garantir que o popup não seja bloqueado
+            closeModal('enderecoModal');
+            const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+            window.open(waUrl, '_blank');
+            lancarConfete(); showToast("🎉 Pedido enviado! Verifique o WhatsApp.");
             carrinho = []; cupomAtivo = null;
             const couponInput = document.getElementById("couponInput"); if(couponInput) couponInput.value = "";
-            salvarCarrinho(); renderCart(); closeModal('enderecoModal');
+            salvarCarrinho(); renderCart();
             setTimeout(() => { avaliacaoEstrela = 0; document.querySelectorAll('.star-btn').forEach(s => s.classList.remove('active')); const btn2 = document.getElementById('btnEnviarAvaliacao'); if(btn2) { btn2.disabled = true; btn2.style.opacity = '0.5'; } openModal('avaliacaoModal'); }, 2000);
         } catch(e) { console.error(e); msgEl.textContent = '❌ Erro ao enviar pedido. Tente novamente.'; }
         finally { btn.disabled = false; btn.textContent = '✅ Confirmar e Enviar Pedido'; }
@@ -935,15 +1080,16 @@
 
     // ========== ENCOMENDAS ==========
     function getMinEncomendaDate() {
-        // Mínimo: amanhã (1 dia de antecedência), apenas dias úteis (seg-sex)
+        // Mínimo: 2 dias úteis de antecedência
         const agora = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
-        const amanha = new Date(agora);
-        amanha.setDate(amanha.getDate() + 1);
-        // Se amanhã for sábado, pula para segunda
-        if(amanha.getDay() === 6) amanha.setDate(amanha.getDate() + 2);
-        // Se amanhã for domingo, pula para segunda
-        if(amanha.getDay() === 0) amanha.setDate(amanha.getDate() + 1);
-        return amanha;
+        let diasUteis = 0;
+        const candidato = new Date(agora);
+        while(diasUteis < 2) {
+            candidato.setDate(candidato.getDate() + 1);
+            const d = candidato.getDay();
+            if(d !== 0 && d !== 6) diasUteis++; // conta apenas seg-sex
+        }
+        return candidato;
     }
 
     function getMaxEncomendaDate() {
@@ -1001,7 +1147,7 @@
         const minDate = getMinEncomendaDate();
         minDate.setHours(0,0,0,0);
         dataEscolhida.setHours(0,0,0,0);
-        if(dataEscolhida < minDate) { if(msgEl) msgEl.textContent = '⚠️ Encomendas precisam de pelo menos 1 dia de antecedência.'; return; }
+        if(dataEscolhida < minDate) { if(msgEl) msgEl.textContent = '⚠️ Encomendas precisam de pelo menos 2 dias úteis de antecedência.'; return; }
         const diaSemana = dataEscolhida.getDay();
         if(diaSemana === 0 || diaSemana === 6) { if(msgEl) msgEl.textContent = '⚠️ Não entregamos aos finais de semana. Escolha um dia útil.'; return; }
         if(msgEl) msgEl.textContent = '';
@@ -1049,6 +1195,33 @@
     window.abrirEncomenda = window.abrirEncomenda;
 
     document.addEventListener("DOMContentLoaded", function() {
+        // ===== PAGE LOADER =====
+        const loader = document.getElementById('pageLoader');
+        setTimeout(() => { if(loader) loader.classList.add('done'); }, 1100);
+
+        // ===== SCROLL PROGRESS BAR =====
+        const prog = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            if(!prog) return;
+            const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            prog.style.width = Math.min(scrolled, 100) + '%';
+        }, { passive:true });
+
+        // ===== SCROLL REVEAL =====
+        const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-zoom, .section-title');
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+        }, { threshold: 0.12, rootMargin:'0px 0px -40px 0px' });
+        revealEls.forEach(el => revealObs.observe(el));
+
+        // ===== CART BADGE POP =====
+        const origAddToCart = window.addToCartById;
+        window.addToCartById = function(id) {
+            if(origAddToCart) origAddToCart(id);
+            const badge = document.getElementById('cartCount');
+            if(badge) { badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop'); setTimeout(()=>badge.classList.remove('pop'),400); }
+        };
+
         initDarkMode(); carregarSessao(); carregarCarrinho(); atualizarStatusHorario(); setInterval(atualizarStatusHorario, 60000); startOfferTimer(); initPaymentSelection(); renderProdutos(true); carregarProdutosFirebase();
         document.getElementById("cartBtn")?.addEventListener('click', openCart);
         document.getElementById("closeCartBtn")?.addEventListener('click', closeCart);
