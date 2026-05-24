@@ -127,10 +127,7 @@
         .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.5rem; }
         .product-card { background:var(--card); border-radius:var(--radius); overflow:hidden; border:1px solid rgba(255,180,210,0.2); cursor:pointer; transition:0.2s; }
         .product-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-md); }
-        .product-img-wrap { aspect-ratio:1; background:linear-gradient(135deg,#ffd4e8,#eed6f8); display:flex; align-items:center; justify-content:center; font-size:4rem; position:relative; overflow:hidden; }
-        .product-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 0.3s ease; }
-        .product-card:hover .product-img-wrap img { transform:scale(1.08); }
-        .product-desc { font-size:0.82rem; color:var(--brown-light); margin-top:0.3rem; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .product-img-wrap { aspect-ratio:1; background:linear-gradient(135deg,#ffd4e8,#eed6f8); display:flex; align-items:center; justify-content:center; font-size:4rem; position:relative; }
         .product-badge { position:absolute; top:8px; right:8px; background:var(--gradient); color:#fff; border-radius:99px; padding:0.15rem 0.55rem; font-size:0.7rem; }
         .product-tag { position:absolute; top:8px; left:8px; background:var(--yellow); color:var(--brown); border-radius:99px; padding:0.15rem 0.55rem; font-size:0.7rem; }
         .product-info { padding:1rem; }
@@ -464,35 +461,35 @@
       </div>
     </div>
     <div class="auth-screen-right">
-      <div class="auth-screen-title" id="authScreenTitle">Criar conta</div>
-      <div class="auth-screen-sub" id="authScreenSub">Preencha os dados abaixo para começar</div>
-      <div class="auth-toggle">
-        <button class="auth-toggle-btn active" id="toggleCadastro" onclick="switchAuthScreen('cadastro')">✨ Cadastrar</button>
-        <button class="auth-toggle-btn" id="toggleLogin" onclick="switchAuthScreen('login')">🔑 Já tenho conta</button>
-      </div>
-      <div id="authScreenCadastro">
-        <input type="text" id="cadNome" class="auth-field" placeholder="👤 Nome completo">
-        <input type="email" id="cadEmail" class="auth-field" placeholder="📧 E-mail">
-        <input type="tel" id="cadTelefone" class="auth-field" placeholder="📱 WhatsApp (89) 99999-9999" oninput="mascararTelefone(this)">
-        <div style="position:relative;">
-          <input type="password" id="cadSenha" class="auth-field" placeholder="🔒 Senha (mín. 6 caracteres)" oninput="avaliarSenha(this.value)" style="width:100%;padding-right:2.8rem;">
-          <button type="button" onclick="toggleSenha('cadSenha','eyeCad1')" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-60%);background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;color:var(--brown-light);" id="eyeCad1">👁</button>
+      <div class="auth-screen-title" id="authScreenTitle">Entrar ou cadastrar</div>
+      <div class="auth-screen-sub" id="authScreenSub">Digite seu e-mail e enviaremos um link mágico para acessar</div>
+
+      <!-- PASSO 1: formulário de e-mail (novo usuário preenche nome+telefone também) -->
+      <div id="authStep1">
+        <div class="auth-toggle">
+          <button class="auth-toggle-btn active" id="toggleCadastro" onclick="switchAuthScreen('cadastro')">✨ Sou novo</button>
+          <button class="auth-toggle-btn" id="toggleLogin" onclick="switchAuthScreen('login')">🔑 Já tenho conta</button>
         </div>
-        <div class="senha-strength" id="senhaStrength"></div>
-        <div style="position:relative;">
-          <input type="password" id="cadSenhaConf" class="auth-field" placeholder="🔒 Confirmar senha" style="width:100%;padding-right:2.8rem;">
-          <button type="button" onclick="toggleSenha('cadSenhaConf','eyeCad2')" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;color:var(--brown-light);" id="eyeCad2">👁</button>
+        <div id="authScreenCadastro">
+          <input type="text" id="cadNome" class="auth-field" placeholder="👤 Nome completo">
+          <input type="tel" id="cadTelefone" class="auth-field" placeholder="📱 WhatsApp (89) 99999-9999" oninput="mascararTelefone(this)">
+          <input type="email" id="cadEmail" class="auth-field" placeholder="📧 Seu e-mail">
+          <button class="auth-btn-submit" id="btnCadastrar" onclick="fazerCadastro()">✉️ Enviar link de acesso</button>
         </div>
-        <button class="auth-btn-submit" id="btnCadastrar" onclick="fazerCadastro()">🎉 Criar minha conta</button>
-      </div>
-      <div id="authScreenLogin" style="display:none">
-        <input type="email" id="loginEmail" class="auth-field" placeholder="📧 Seu e-mail">
-        <div style="position:relative;">
-          <input type="password" id="loginSenha" class="auth-field" placeholder="🔒 Sua senha" style="width:100%;padding-right:2.8rem;">
-          <button type="button" onclick="toggleSenha('loginSenha','eyeLogin')" style="position:absolute;right:0.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;color:var(--brown-light);" id="eyeLogin">👁</button>
+        <div id="authScreenLogin" style="display:none">
+          <input type="email" id="loginEmail" class="auth-field" placeholder="📧 Seu e-mail">
+          <button class="auth-btn-submit" id="btnLogin" onclick="fazerLogin()">✉️ Enviar link de acesso</button>
         </div>
-        <button class="auth-btn-submit" id="btnLogin" onclick="fazerLogin()">🍩 Entrar na minha conta</button>
       </div>
+
+      <!-- PASSO 2: confirmação de envio do link -->
+      <div id="authStep2" style="display:none; text-align:center; padding: 1rem 0;">
+        <div style="font-size:3rem; margin-bottom:1rem;">📬</div>
+        <div style="font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:800; color:var(--brown); margin-bottom:0.5rem;">Link enviado!</div>
+        <div style="color:var(--brown-light); font-size:0.88rem; line-height:1.6; margin-bottom:1.2rem;" id="authStep2Msg">Abra o e-mail que enviamos e clique no link para entrar automaticamente.</div>
+        <button onclick="voltarStep1()" style="background:none;border:none;color:var(--pink);font-weight:700;cursor:pointer;font-size:0.85rem;">← Usar outro e-mail</button>
+      </div>
+
       <div class="auth-screen-msg" id="authScreenMsg"></div>
     </div>
   </div>
@@ -740,6 +737,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyB-3fkmoelAxZIiJtI4OKCOyi6A9wJjSGg",
@@ -752,6 +750,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
 
     // ========== FALLBACK LOCAIS (caso Firebase falhe) ==========
     const PRODUTOS_LOCAL = [
@@ -842,8 +841,7 @@
             const todos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             produtosFirebase = todos.filter(p => p.categoria !== 'Combos' && p.categoria !== 'Bebidas').map(p => ({
                 id: p.id, name: p.nome, emoji: p.emoji, desc: p.descricao, price: p.preco,
-                category: p.categoria?.toLowerCase(), badge: p.badge, tag: p.tag, estoque: p.estoque ?? 99,
-                imagem: p.imagem || ''
+                category: p.categoria?.toLowerCase(), badge: p.badge, tag: p.tag, estoque: p.estoque ?? 99
             }));
             combosFirebase = todos.filter(p => p.categoria === 'Combos').map(p => ({
                 id: p.id, name: p.nome, emoji: p.emoji, desc: p.descricao, price: p.preco,
@@ -908,11 +906,27 @@
         const tCad = document.getElementById('toggleCadastro'), tLog = document.getElementById('toggleLogin');
         const fCad = document.getElementById('authScreenCadastro'), fLog = document.getElementById('authScreenLogin');
         const title = document.getElementById('authScreenTitle'), sub = document.getElementById('authScreenSub');
-        if (t === 'cadastro') { tCad.classList.add('active'); tLog.classList.remove('active'); fCad.style.display = 'block'; fLog.style.display = 'none'; if(title) title.textContent = 'Criar conta'; if(sub) sub.textContent = 'Preencha os dados abaixo para começar'; }
-        else { tLog.classList.add('active'); tCad.classList.remove('active'); fLog.style.display = 'block'; fCad.style.display = 'none'; if(title) title.textContent = 'Bem-vindo de volta!'; if(sub) sub.textContent = 'Entre com seu e-mail e senha'; }
+        if (t === 'cadastro') {
+            tCad.classList.add('active'); tLog.classList.remove('active');
+            fCad.style.display = 'block'; fLog.style.display = 'none';
+            if(title) title.textContent = 'Criar conta';
+            if(sub) sub.textContent = 'Preencha seus dados e enviaremos um link mágico';
+        } else {
+            tLog.classList.add('active'); tCad.classList.remove('active');
+            fLog.style.display = 'block'; fCad.style.display = 'none';
+            if(title) title.textContent = 'Bem-vindo de volta!';
+            if(sub) sub.textContent = 'Digite seu e-mail e enviaremos um link para entrar';
+        }
         setAuthMsg('');
     }
     window.switchAuthScreen = switchAuthScreen;
+
+    function voltarStep1() {
+        document.getElementById('authStep1').style.display = 'block';
+        document.getElementById('authStep2').style.display = 'none';
+        setAuthMsg('');
+    }
+    window.voltarStep1 = voltarStep1;
 
     function atualizarHeaderLogin() {
         const btn = document.getElementById('headerLoginBtn');
@@ -920,89 +934,176 @@
         else { btn.textContent = '👤 Entrar'; btn.onclick = () => mostrarLoginOverlay(); }
     }
 
-    // ========== LOGIN COM HASH ==========
-    window.fazerLogin = async function() {
-        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-        const senha = document.getElementById('loginSenha').value;
-        if (!email || !senha) { setAuthMsg('⚠️ Preencha e-mail e senha.', false); return; }
-        const btn = document.getElementById('btnLogin');
-        if (btn) { btn.disabled = true; btn.textContent = 'Entrando...'; }
-        try {
-            const q = query(collection(db, 'users'), where('email', '==', email));
-            const snap = await getDocs(q);
-            if (snap.empty) { setAuthMsg('❌ E-mail não encontrado. Verifique ou cadastre-se.', false); return; }
-            const userData = snap.docs[0].data();
-            const senhaHash = await hashPassword(senha);
-            if (userData.senha !== senhaHash) { setAuthMsg('❌ Senha incorreta. Verifique e tente novamente.', false); return; }
-            usuarioAtual = { email, nome: userData.nome, telefone: userData.telefone || '', docId: snap.docs[0].id };
-            localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
-            if (userData.endereco) enderecoCadastrado = userData.endereco;
-            setAuthMsg(`✅ Bem-vindo(a), ${usuarioAtual.nome}!`, true);
-            atualizarHeaderLogin();
-            setTimeout(() => esconderLoginOverlay(), 900);
-            showToast(`🍩 Olá, ${usuarioAtual.nome}!`);
-            carregarCarrinho();
-            carregarProdutosFirebase();
-        } catch (error) {
-            console.error('Erro no login:', error);
-            if (error.code === 'permission-denied') { setAuthMsg('❌ Erro de permissão no banco de dados. Contate o administrador.', false); }
-            else { setAuthMsg(`❌ Erro ao fazer login: ${error.message || 'Tente novamente'}`, false); }
-        }
-        finally { if (btn) { btn.disabled = false; btn.textContent = '🍩 Entrar na minha conta'; } }
+    // ========== CONFIGURAÇÃO DO LINK MÁGICO ==========
+    // ⚠️ IMPORTANTE: troque pela URL real onde seu site está hospedado
+    const ACTION_CODE_URL = window.location.origin + window.location.pathname;
+
+    const actionCodeSettings = {
+        url: ACTION_CODE_URL,
+        handleCodeInApp: true
     };
 
-    // ========== CADASTRO COM HASH ==========
+    // ========== ENVIAR LINK — LOGIN (usuário já cadastrado) ==========
+    window.fazerLogin = async function() {
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        if (!email || !email.includes('@')) { setAuthMsg('⚠️ Digite um e-mail válido.', false); return; }
+        const btn = document.getElementById('btnLogin');
+        if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+        try {
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            // Guarda o e-mail localmente para completar o login quando o link for clicado
+            localStorage.setItem('emailParaLink', email);
+            document.getElementById('authStep1').style.display = 'none';
+            document.getElementById('authStep2').style.display = 'block';
+            document.getElementById('authStep2Msg').textContent = `Enviamos um link para ${email}. Abra e clique para entrar automaticamente.`;
+        } catch(error) {
+            console.error(error);
+            const msgs = {
+                'auth/invalid-email': '❌ E-mail inválido.',
+                'auth/user-not-found': '❌ E-mail não encontrado. Cadastre-se primeiro.',
+                'auth/too-many-requests': '⚠️ Muitas tentativas. Aguarde alguns minutos.'
+            };
+            setAuthMsg(msgs[error.code] || `❌ Erro: ${error.message}`, false);
+        }
+        finally { if (btn) { btn.disabled = false; btn.textContent = '✉️ Enviar link de acesso'; } }
+    };
+
+    // ========== ENVIAR LINK — CADASTRO (novo usuário) ==========
     window.fazerCadastro = async function() {
         const nome = document.getElementById('cadNome').value.trim();
         const email = document.getElementById('cadEmail').value.trim().toLowerCase();
         const telefone = document.getElementById('cadTelefone').value.trim();
-        const senha = document.getElementById('cadSenha').value;
-        const conf = document.getElementById('cadSenhaConf').value;
         if (!nome || nome.length < 3) { setAuthMsg('❌ Nome deve ter pelo menos 3 caracteres.', false); return; }
-        if (!email.includes('@') || !email.includes('.')) { setAuthMsg('❌ E-mail inválido. Exemplo: seuemail@gmail.com', false); return; }
-        if (senha.length < 6) { setAuthMsg('❌ Senha deve ter pelo menos 6 caracteres.', false); return; }
-        if (senha !== conf) { setAuthMsg('❌ As senhas não coincidem. Use o 👁 para conferir.', false); return; }
+        if (!email.includes('@') || !email.includes('.')) { setAuthMsg('❌ E-mail inválido.', false); return; }
         const btn = document.getElementById('btnCadastrar');
-        if (btn) { btn.disabled = true; btn.textContent = 'Criando conta...'; }
+        if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
         try {
-            const existing = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
-            if (!existing.empty) { setAuthMsg('❌ Este e-mail já está cadastrado! Faça login.', false); return; }
-            const senhaHash = await hashPassword(senha);
-            const novoDoc = await addDoc(collection(db, 'users'), {
-                nome, email, telefone, senha: senhaHash,
-                dataCadastro: new Date().toLocaleDateString('pt-BR'),
-                criadoEm: serverTimestamp(), cupons: []
-            });
-            await addDoc(collection(db, 'logs'), {
-                data: new Date().toLocaleString('pt-BR'), usuario: nome,
-                acao: 'CADASTRO', detalhes: `Novo cliente: ${email}`,
-                criadoEm: serverTimestamp()
-            });
-            usuarioAtual = { email, nome, telefone, docId: novoDoc.id };
-            localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
-            atualizarHeaderLogin();
-            setAuthMsg('✅ Cadastro realizado! Seja bem-vindo(a)! 🎉', true);
-            showToast('🎉 Cadastro realizado com sucesso!');
-            lancarConfete();
-            setTimeout(() => esconderLoginOverlay(), 1100);
-            carregarCarrinho();
-            carregarProdutosFirebase();
-        } catch (error) {
-            console.error('Erro no cadastro:', error);
-            if (error.code === 'permission-denied') { setAuthMsg('❌ Erro de permissão. Contate o administrador.', false); }
-            else { setAuthMsg(`❌ Erro ao cadastrar: ${error.message || 'Tente novamente'}`, false); }
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            // Guarda dados temporariamente para criar o perfil após o clique no link
+            localStorage.setItem('emailParaLink', email);
+            localStorage.setItem('nomeParaLink', nome);
+            localStorage.setItem('telefoneParaLink', telefone);
+            document.getElementById('authStep1').style.display = 'none';
+            document.getElementById('authStep2').style.display = 'block';
+            document.getElementById('authStep2Msg').textContent = `Enviamos um link para ${email}. Clique nele para ativar sua conta e entrar automaticamente.`;
+        } catch(error) {
+            console.error(error);
+            setAuthMsg(`❌ Erro ao enviar: ${error.message}`, false);
         }
-        finally { if (btn) { btn.disabled = false; btn.textContent = '🎉 Criar minha conta'; } }
+        finally { if (btn) { btn.disabled = false; btn.textContent = '✉️ Enviar link de acesso'; } }
     };
 
-    window.fazerLogout = function() { usuarioAtual = null; localStorage.removeItem('donut_session'); atualizarHeaderLogin(); closeModal('perfilModal'); showToast('👋 Até logo!'); mostrarLoginOverlay(); switchAuthScreen('login'); };
+    // ========== INTERCEPTAR O LINK MÁGICO AO VOLTAR AO SITE ==========
+    async function verificarLinkMagico() {
+        if (!isSignInWithEmailLink(auth, window.location.href)) return;
+        let email = localStorage.getItem('emailParaLink');
+        if (!email) {
+            // Caso o usuário abra o link em outro dispositivo
+            email = window.prompt('Por segurança, confirme seu e-mail para entrar:');
+        }
+        if (!email) return;
+        try {
+            const result = await signInWithEmailLink(auth, email, window.location.href);
+            localStorage.removeItem('emailParaLink');
+            // Limpa o link da URL sem recarregar a página
+            window.history.replaceState({}, document.title, window.location.pathname);
+            const user = result.user;
+            // Verifica se já tem perfil no Firestore
+            const q = query(collection(db, 'users'), where('email', '==', email));
+            const snap = await getDocs(q);
+            let docId = '';
+            if (snap.empty) {
+                // Primeiro acesso: cria o perfil com os dados salvos (cadastro) ou sem (login direto)
+                const nome = localStorage.getItem('nomeParaLink') || email.split('@')[0];
+                const telefone = localStorage.getItem('telefoneParaLink') || '';
+                localStorage.removeItem('nomeParaLink');
+                localStorage.removeItem('telefoneParaLink');
+                const novoDoc = await addDoc(collection(db, 'users'), {
+                    uid: user.uid, nome, email, telefone,
+                    dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                    criadoEm: serverTimestamp(), cupons: []
+                });
+                await addDoc(collection(db, 'logs'), {
+                    data: new Date().toLocaleString('pt-BR'), usuario: nome,
+                    acao: 'CADASTRO_LINK', detalhes: `Novo cliente via link: ${email}`,
+                    criadoEm: serverTimestamp()
+                });
+                docId = novoDoc.id;
+                usuarioAtual = { email, nome, telefone, docId, uid: user.uid };
+                showToast('🎉 Conta criada! Seja bem-vindo(a)!');
+                lancarConfete();
+            } else {
+                const d = snap.docs[0].data();
+                docId = snap.docs[0].id;
+                if (d.endereco) enderecoCadastrado = d.endereco;
+                usuarioAtual = { email, nome: d.nome, telefone: d.telefone || '', docId, uid: user.uid };
+                showToast(`🍩 Olá, ${d.nome}!`);
+            }
+            localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
+            atualizarHeaderLogin();
+            esconderLoginOverlay();
+            carregarCarrinho();
+            carregarProdutosFirebase();
+        } catch(error) {
+            console.error('Erro ao processar link:', error);
+            const msgs = {
+                'auth/invalid-action-code': '❌ Link expirado ou já usado. Solicite um novo.',
+                'auth/expired-action-code': '❌ Link expirado. Solicite um novo.',
+                'auth/invalid-email': '❌ E-mail não corresponde ao link.'
+            };
+            setAuthMsg(msgs[error.code] || `❌ Erro: ${error.message}`, false);
+            mostrarLoginOverlay();
+        }
+    }
+
+    window.fazerLogout = async function() {
+        try { await signOut(auth); } catch(e) {}
+        usuarioAtual = null;
+        localStorage.removeItem('donut_session');
+        atualizarHeaderLogin();
+        closeModal('perfilModal');
+        showToast('👋 Até logo!');
+        mostrarLoginOverlay();
+        switchAuthScreen('login');
+    };
 
     function carregarSessao() {
-        try {
-            const s = localStorage.getItem('donut_session');
-            if (s) { const data = JSON.parse(s); if (data && data.email && data.nome) { usuarioAtual = data; atualizarHeaderLogin(); esconderLoginOverlay(); } else throw new Error(); }
-            else { mostrarLoginOverlay(); atualizarHeaderLogin(); }
-        } catch(e) { localStorage.removeItem('donut_session'); mostrarLoginOverlay(); atualizarHeaderLogin(); }
+        // Primeiro tenta processar um link mágico de retorno
+        verificarLinkMagico();
+        // Depois escuta mudanças de sessão do Firebase Auth
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const q = query(collection(db, 'users'), where('email', '==', user.email));
+                    const snap = await getDocs(q);
+                    if (!snap.empty) {
+                        const d = snap.docs[0].data();
+                        usuarioAtual = { email: user.email, nome: d.nome || user.email.split('@')[0], telefone: d.telefone || '', docId: snap.docs[0].id, uid: user.uid };
+                        if (d.endereco) enderecoCadastrado = d.endereco;
+                    } else {
+                        const cached = localStorage.getItem('donut_session');
+                        if (cached) { try { usuarioAtual = JSON.parse(cached); } catch(e) {} }
+                        if (!usuarioAtual) usuarioAtual = { email: user.email, nome: user.email.split('@')[0], telefone: '', docId: '', uid: user.uid };
+                    }
+                } catch(e) {
+                    const cached = localStorage.getItem('donut_session');
+                    if (cached) { try { usuarioAtual = JSON.parse(cached); } catch(e2) {} }
+                }
+                localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
+                atualizarHeaderLogin();
+                esconderLoginOverlay();
+                carregarCarrinho();
+                carregarProdutosFirebase();
+            } else {
+                // Sem sessão ativa — só mostra overlay se não estiver processando um link
+                if (!isSignInWithEmailLink(auth, window.location.href)) {
+                    usuarioAtual = null;
+                    localStorage.removeItem('donut_session');
+                    atualizarHeaderLogin();
+                    mostrarLoginOverlay();
+                }
+            }
+        });
     }
 
     // ========== CARRINHO ==========
@@ -1067,24 +1168,13 @@
         else list = produtosFirebase.filter(p => p.category === currentCat);
         if (searchTerm) list = list.filter(p => p.name.toLowerCase().includes(searchTerm) || (p.desc||'').toLowerCase().includes(searchTerm));
         if (!list.length) { grid.innerHTML = `<div style="text-align:center;padding:2rem;">😔 Nenhum produto encontrado</div>`; return; }
-        grid.innerHTML = list.map(p => {
-            const temImagem = p.imagem && p.imagem.startsWith('http');
-            const imgConteudo = temImagem
-                ? `<img src="${p.imagem}" alt="${p.name}" loading="lazy">`
-                : `<span style="font-size:4rem;">${p.emoji}</span>`;
-            return `<div class="product-card" onclick="abrirModalProduto('${p.id}')"><div class="product-img-wrap">${imgConteudo}${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}${p.tag ? `<div class="product-tag">${p.tag}</div>` : ''}</div><div class="product-info"><div class="product-title">${p.name}</div><div class="product-desc">${p.desc || ''}</div><div class="product-footer"><div class="product-price">R$ ${p.price.toFixed(2).replace('.',',')}</div>${(p.estoque ?? 99) <= 0 ? '<button class="btn-add" disabled style="opacity:0.5;cursor:not-allowed;">🚫</button>' : `<button class="btn-add" onclick="event.stopPropagation(); addToCartById('${p.id}')">+</button>`}</div></div></div>`;
-        }).join('');
+        grid.innerHTML = list.map(p => `<div class="product-card" onclick="abrirModalProduto('${p.id}')"><div class="product-img-wrap"><span style="font-size:4rem;">${p.emoji}</span>${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}${p.tag ? `<div class="product-tag">${p.tag}</div>` : ''}</div><div class="product-info"><div class="product-title">${p.name}</div><div class="product-desc">${p.desc || ''}</div><div class="product-footer"><div class="product-price">R$ ${p.price.toFixed(2).replace('.',',')}</div>${(p.estoque ?? 99) <= 0 ? '<button class="btn-add" disabled style="opacity:0.5;cursor:not-allowed;">🚫</button>' : `<button class="btn-add" onclick="event.stopPropagation(); addToCartById('${p.id}')">+</button>`}</div></div></div>`).join('');
     }
 
     function abrirModalProduto(id) {
         const produto = [...produtosFirebase, ...combosFirebase].find(p => p.id == id);
         if (!produto) return;
-        const imgWrap = document.getElementById('modalProductImgWrap');
-        if (produto.imagem && produto.imagem.startsWith('http')) {
-            imgWrap.innerHTML = `<img src="${produto.imagem}" alt="${produto.name}" style="width:100%;height:100%;object-fit:cover;border-radius:16px;">`;
-        } else {
-            imgWrap.innerHTML = produto.emoji;
-        }
+        document.getElementById('modalProductImgWrap').innerHTML = produto.emoji;
         document.getElementById('modalProductTitle').textContent = produto.name;
         document.getElementById('modalProductDesc').textContent = produto.desc || '';
         const action = document.getElementById('modalProductAction');
