@@ -123,14 +123,47 @@
         }
         .login-box h2 { color: #2d1020; margin-bottom: 0.25rem; font-family: 'Syne', sans-serif; font-size: 1.6rem; }
         .login-box p.sub { color: #b07090; font-size: 0.82rem; margin-bottom: 1.5rem; }
-        .login-box input {
-            width: 100%; padding: 0.85rem 1rem; margin-bottom: 0.85rem;
+        
+        /* Password wrapper para visualizar senha */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 0.85rem;
+        }
+        .password-wrapper input {
+            width: 100%; padding: 0.85rem 1rem;
             border: 1.5px solid #eee0e8; border-radius: 12px;
             font-size: 0.95rem; font-family: inherit;
             background: #fff6f9; color: #2d1020;
             transition: border-color 0.2s;
+            padding-right: 45px;
         }
-        .login-box input:focus { outline: none; border-color: #ff6b9d; }
+        .password-wrapper input:focus {
+            outline: none; border-color: #ff6b9d;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            color: #b07090;
+        }
+        .toggle-password:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
         .login-box button {
             width: 100%; padding: 0.9rem; margin-top: 0.2rem;
             background: linear-gradient(135deg, #ff6b9d, #ff4081);
@@ -180,6 +213,25 @@
             th, td { padding: 0.6rem 0.5rem; font-size: 0.78rem; }
             .filters-bar { flex-direction: column; align-items: stretch; }
             .login-box { padding: 1.5rem; width: 92%; }
+            .password-wrapper input { padding: 0.75rem 1rem; padding-right: 45px; }
+        }
+        
+        /* Checkbox estilo */
+        .remember-checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0.8rem 0;
+            font-size: 0.75rem;
+            color: #999;
+            cursor: pointer;
+        }
+        .remember-checkbox input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            margin: 0;
         }
     </style>
 </head>
@@ -192,8 +244,19 @@
         <div class="master-badge">👑 Master Admin</div>
         <h2>Donut ALR Admin</h2>
         <p class="sub">Acesso restrito · Área administrativa</p>
-        <input type="email" id="adminEmail" placeholder="E-mail de administrador" autocomplete="email">
-        <input type="password" id="adminPass" placeholder="Senha" autocomplete="current-password">
+        
+        <div class="password-wrapper">
+            <input type="email" id="adminEmail" placeholder="E-mail de administrador" autocomplete="email">
+        </div>
+        <div class="password-wrapper">
+            <input type="password" id="adminPass" placeholder="Senha" autocomplete="current-password">
+            <button type="button" class="toggle-password" onclick="toggleAdminPassword()">👁️</button>
+        </div>
+        
+        <label class="remember-checkbox">
+            <input type="checkbox" id="rememberAdmin" checked> Manter conectado por 7 dias
+        </label>
+        
         <button onclick="loginAdmin()" id="btnLoginAdmin">🔓 Entrar no Painel</button>
         <p id="loginAdminMsg" style="margin-top:0.8rem; font-size:0.78rem; color:#e74c3c; min-height:1.2em; text-align:center;"></p>
         <p style="margin-top:1rem; font-size:0.7rem; color:#999;">🔒 Login seguro via Firebase Authentication</p>
@@ -434,10 +497,57 @@
     let monthlyChart = null;
     let currentUser = null;
 
+    // ========== VISUALIZAR SENHA ==========
+    window.toggleAdminPassword = function() {
+        const passInput = document.getElementById('adminPass');
+        const btn = event.target;
+        if (passInput.type === 'password') {
+            passInput.type = 'text';
+            btn.textContent = '🙈';
+        } else {
+            passInput.type = 'password';
+            btn.textContent = '👁️';
+        }
+    };
+
+    // ========== SESSÃO PERSISTENTE (LOGIN AUTOMÁTICO) ==========
+    function salvarSessaoAdmin(email, senha, remember = true) {
+        if (remember) {
+            const sessao = {
+                email: email,
+                senhaHash: btoa(senha),
+                expiraEm: Date.now() + (7 * 24 * 60 * 60 * 1000)
+            };
+            localStorage.setItem('admin_sessao', JSON.stringify(sessao));
+        } else {
+            localStorage.removeItem('admin_sessao');
+        }
+    }
+
+    function verificarSessaoAdmin() {
+        const sessaoStr = localStorage.getItem('admin_sessao');
+        if (!sessaoStr) return false;
+        
+        try {
+            const sessao = JSON.parse(sessaoStr);
+            if (Date.now() < sessao.expiraEm) {
+                document.getElementById('adminEmail').value = sessao.email;
+                document.getElementById('adminPass').value = atob(sessao.senhaHash);
+                return true;
+            } else {
+                localStorage.removeItem('admin_sessao');
+                return false;
+            }
+        } catch(e) {
+            return false;
+        }
+    }
+
     // ========== FUNÇÃO DE LOGIN (E-MAIL + SENHA) ==========
     window.loginAdmin = async function() {
         const email = document.getElementById('adminEmail').value.trim().toLowerCase();
         const pass = document.getElementById('adminPass').value;
+        const remember = document.getElementById('rememberAdmin')?.checked || false;
         const btn = document.getElementById('btnLoginAdmin');
         const msg = document.getElementById('loginAdminMsg');
         
@@ -451,11 +561,9 @@
         msg.textContent = '';
         
         try {
-            // Login com Firebase Auth
             const userCredential = await signInWithEmailAndPassword(auth, email, pass);
             const user = userCredential.user;
             
-            // Verifica se é master admin ou está na coleção de admins
             let isAuthorized = ADMIN_EMAILS.includes(user.email);
             
             if (!isAuthorized) {
@@ -472,12 +580,14 @@
                 return;
             }
             
-            // Login bem-sucedido
+            if (remember) {
+                salvarSessaoAdmin(email, pass, true);
+            }
+            
             currentUser = user;
             document.getElementById('loginOverlay').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden');
             
-            // Atualiza badge de master
             if (ADMIN_EMAILS.includes(user.email)) {
                 document.getElementById('masterBadge').innerHTML = '👑 Master';
             } else {
@@ -509,6 +619,7 @@
         try { 
             await signOut(auth); 
             currentUser = null;
+            localStorage.removeItem('admin_sessao');
         } catch(e) { console.warn(e); }
         
         document.getElementById('loginOverlay').classList.remove('hidden');
@@ -523,7 +634,6 @@
     function checkAuth() {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Verifica se é admin
                 let isAuthorized = ADMIN_EMAILS.includes(user.email);
                 if (!isAuthorized) {
                     try {
@@ -619,7 +729,7 @@
             });
             
             const recentes = pedidosSnap.docs.slice(-5).reverse().map(d => ({ id: d.id, ...d.data() }));
-            document.getElementById('recentOrders').innerHTML = `<table style="width:100%"><thead><tr><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></tr></thead><tbody>${recentes.map(p => `<tr><td>${p.cliente || '-'}</td><td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td><td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td><td>${p.data || '-'}</td></tr>`).join('')}${recentes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum pedido ainda</td></tr>' : ''}</tbody></table>`;
+            document.getElementById('recentOrders').innerHTML = `<table style="width:100%"><thead><tr><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></td></thead><tbody>${recentes.map(p => `<tr><td>${p.cliente || '-'}</td><td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td><td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td><td>${p.data || '-'}</td></tr>`).join('')}${recentes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum pedido ainda</td></tr>' : ''}</tbody></tr>`;
         } catch(e) { console.error(e); }
     }
 
@@ -633,7 +743,14 @@
                     const thumb = p.imagem && p.imagem.startsWith('http')
                         ? `<img src="${p.imagem}" alt="${p.nome}" style="width:36px;height:36px;object-fit:cover;border-radius:8px;vertical-align:middle;margin-right:6px;">`
                         : `<strong style="margin-right:4px;">${p.emoji || '🍩'}</strong>`;
-                    return `<tr><td>${thumb}${p.nome}</td><td>${p.categoria || '-'}</td><td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td><td>${p.estoque ?? '-'}</td><td><span class="status-badge ${p.ativo !== false ? 'status-active' : 'status-inactive'}">${p.ativo !== false ? 'Ativo' : 'Inativo'}</span></td><td><button class="btn btn-warning btn-sm" onclick="editProduct('${p.id}')">✏️</button> <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}', '${p.nome}')">🗑️</button> <button class="btn btn-sm" onclick="toggleProductStatus('${p.id}', ${p.ativo !== false})">${p.ativo !== false ? '🔴' : '🟢'}</button></td></tr>`;
+                    return `<tr>
+                        <td>${thumb}${p.nome}</td>
+                        <td>${p.categoria || '-'}</td>
+                        <td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td>
+                        <td>${p.estoque ?? '-'}</td>
+                        <td><span class="status-badge ${p.ativo !== false ? 'status-active' : 'status-inactive'}">${p.ativo !== false ? 'Ativo' : 'Inativo'}</span></td>
+                        <td><button class="btn btn-warning btn-sm" onclick="editProduct('${p.id}')">✏️</button> <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}', '${p.nome}')">🗑️</button> <button class="btn btn-sm" onclick="toggleProductStatus('${p.id}', ${p.ativo !== false})">${p.ativo !== false ? '🔴' : '🟢'}</button></td>
+                    </tr>`;
                 }).join('');
         } catch(e) { console.error(e); }
     }
@@ -741,7 +858,15 @@
         const start = (currentOrderPage - 1) * ordersPerPage; 
         const paginated = filtered.slice(start, start + ordersPerPage); 
         document.getElementById('ordersTable').innerHTML = paginated.length === 0 ? '<tr><td colspan="7" style="text-align:center;padding:2rem;">Nenhum pedido encontrado</td></tr>' : 
-            paginated.map(p => `<tr><td><small>${p.id.slice(0,8)}...</small></td><td><strong>${p.cliente || '-'}</strong></td><td>${p.whatsapp || '-'}</td><td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td><td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? '✅ Concluído' : '⏳ Pendente'}</span></td><td>${p.data || '-'}</td><td><button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${p.id}')">👁️</button> ${p.status !== 'completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder('${p.id}')">✅</button>` : ''}</td></tr>`).join(''); 
+            paginated.map(p => `<tr>
+                <td><small>${p.id.slice(0,8)}...</small></td>
+                <td><strong>${p.cliente || '-'}</strong></td>
+                <td>${p.whatsapp || '-'}</td>
+                <td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td>
+                <td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? '✅ Concluído' : '⏳ Pendente'}</span></td>
+                <td>${p.data || '-'}</td>
+                <td><button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${p.id}')">👁️</button> ${p.status !== 'completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder('${p.id}')">✅</button>` : ''}</td>
+            </tr>`).join(''); 
         document.getElementById('ordersPagination').innerHTML = Array.from({ length: totalPages }, (_, i) => `<button class="page-btn ${i+1 === currentOrderPage ? 'active' : ''}" onclick="goToOrderPage(${i+1})">${i+1}</button>`).join(''); 
     }
     
@@ -784,7 +909,14 @@
             const users = snap.docs.map((d, idx) => ({ docId: d.id, idx: idx+1, ...d.data() }));
             document.getElementById('usersTable').innerHTML = users.length === 0
                 ? '<tr><td colspan="6" style="text-align:center;padding:2rem;">Nenhum cliente cadastrado</td></tr>'
-                : users.map(u => `<tr><td>${u.idx}</td><td><strong>${u.nome || '-'}</strong></td><td>${u.telefone || '-'}</td><td>${u.email || '-'}</td><td>${u.dataCadastro || '-'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.docId}','${(u.nome||'').replace(/'/g,"\\'")}','${(u.email||'').replace(/'/g,"\\'")}')">🗑️ Apagar</button></td></tr>`).join('');
+                : users.map(u => `<tr>
+                    <td>${u.idx}</td>
+                    <td><strong>${u.nome || '-'}</strong></td>
+                    <td>${u.telefone || '-'}</td>
+                    <td>${u.email || '-'}</td>
+                    <td>${u.dataCadastro || '-'}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.docId}','${(u.nome||'').replace(/'/g,"\\'")}','${(u.email||'').replace(/'/g,"\\'")}')">🗑️ Apagar</button></td>
+                </tr>`).join('');
         } catch(e) { console.error(e); }
     }
     
@@ -804,7 +936,12 @@
             const snap = await getDocs(collection(db, 'avaliacoes')); 
             const avaliacoes = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); 
             document.getElementById('avaliacoesTable').innerHTML = avaliacoes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhuma avaliação ainda</td></tr>' : 
-                avaliacoes.map(a => `<tr><td>${a.data || '-'}</td><td>${a.usuario || '-'}</td><td>${'⭐'.repeat(a.estrelas || 0)}</td><td>${a.pedidoId || '-'}</td></tr>`).join(''); 
+                avaliacoes.map(a => `<tr>
+                    <td>${a.data || '-'}</td>
+                    <td>${a.usuario || '-'}</td>
+                    <td>${'⭐'.repeat(a.estrelas || 0)}</td>
+                    <td>${a.pedidoId || '-'}</td>
+                </tr>`).join(''); 
         } catch(e) { console.error(e); } 
     }
     
@@ -813,7 +950,12 @@
             const snap = await getDocs(collection(db, 'logs')); 
             const logs = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); 
             document.getElementById('logsTable').innerHTML = logs.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum log registrado</td></tr>' : 
-                logs.map(l => `<tr><td>${l.data || '-'}</td><td>${l.usuario || '-'}</td><td>${l.acao || '-'}</td><td>${l.detalhes || '-'}</td></tr>`).join(''); 
+                logs.map(l => `<tr>
+                    <td>${l.data || '-'}</td>
+                    <td>${l.usuario || '-'}</td>
+                    <td>${l.acao || '-'}</td>
+                    <td>${l.detalhes || '-'}</td>
+                </tr>`).join(''); 
         } catch(e) { console.error(e); } 
     }
 
@@ -847,7 +989,17 @@
             const statusLabel = e.status === 'encomenda_confirmada' ? '✅ Confirmada' : e.status === 'encomenda_cancelada' ? '❌ Cancelada' : '⏳ Pendente';
             const dataEntrega = e.dataEntrega ? new Date(e.dataEntrega + 'T12:00:00').toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',weekday:'short'}) : '-';
             const acoes = e.status === 'encomenda' ? `<button class="btn btn-success btn-sm" onclick="confirmarEncomendaAdmin('${e.id}')">✅</button> <button class="btn btn-danger btn-sm" onclick="cancelarEncomendaAdmin('${e.id}')">❌</button>` : `<button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${e.id}')">👁️</button>`;
-            return `<tr><td><small>${e.id.slice(0,8)}...</small></td><td><strong>${e.cliente || '-'}</strong></td><td>${e.whatsapp || '-'}</td><td>R$ ${(Number(e.total)||0).toFixed(2).replace('.',',')}</td><td><strong>${dataEntrega}</strong></td><td>${e.horarioEntrega || '-'}</td><td style="max-width:120px;font-size:0.8rem;">${e.observacoes || '-'}</td><td><span class="status-badge ${statusClass}">${statusLabel}</span></td><td>${acoes}</td></tr>`;
+            return `<tr>
+                <td><small>${e.id.slice(0,8)}...</small></td>
+                <td><strong>${e.cliente || '-'}</strong></td>
+                <td>${e.whatsapp || '-'}</td>
+                <td>R$ ${(Number(e.total)||0).toFixed(2).replace('.',',')}</td>
+                <td><strong>${dataEntrega}</strong></td>
+                <td>${e.horarioEntrega || '-'}</td>
+                <td style="max-width:120px;font-size:0.8rem;">${e.observacoes || '-'}</td>
+                <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                <td>${acoes}</td>
+            </tr>`;
         }).join('');
     }
 
@@ -903,7 +1055,14 @@
                 const acoes = a.nivel === 'master'
                     ? '<span style="color:#ccc;font-size:0.78rem;">Protegido</span>'
                     : `<button class="btn btn-danger btn-sm" onclick="removerAdmin('${a.id}','${a.email}','${a.nome}')">🗑️ Remover</button>`;
-                return `<tr><td><strong>${a.nome || '-'}</strong></td><td>${a.email || '-'}</td><td>${nivelBadge}</td><td style="font-size:0.8rem;">${a.adicionadoEm || '-'}</td><td style="font-size:0.8rem;">${a.adicionadoPor || '-'}</td><td>${acoes}</td></tr>`;
+                return `<tr>
+                    <td><strong>${a.nome || '-'}</strong></td>
+                    <td>${a.email || '-'}</td>
+                    <td>${nivelBadge}</td>
+                    <td style="font-size:0.8rem;">${a.adicionadoEm || '-'}</td>
+                    <td style="font-size:0.8rem;">${a.adicionadoPor || '-'}</td>
+                    <td>${acoes}</td>
+                </tr>`;
             }).join('');
         } catch(e) {
             console.error(e);
@@ -1009,6 +1168,11 @@
         loadAdmins(); 
         iniciarListenerPedidos(); 
         iniciarListenerUsers(); 
+    }
+
+    // ========== TENTAR LOGIN AUTOMÁTICO ==========
+    if (verificarSessaoAdmin()) {
+        setTimeout(() => loginAdmin(), 100);
     }
 
     // ========== INICIALIZAR ==========
