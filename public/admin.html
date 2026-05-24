@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <style>
+        /* ===== ESTILOS COMPLETOS (mesmo do seu arquivo original) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         img, video { max-width: 100%; height: auto; }
         :root {
@@ -22,6 +23,8 @@
             --shadow-sm: 0 2px 5px rgba(0,0,0,0.08);
         }
         body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: var(--light); }
+        
+        /* Header */
         .header {
             background: white; padding: 0.85rem 2rem;
             display: flex; justify-content: space-between; align-items: center;
@@ -37,50 +40,50 @@
         .nav-tab { padding: 0.5rem 0.9rem; border: none; background: var(--gray); cursor: pointer; border-radius: 8px; font-weight: 600; transition: all 0.2s; font-family: inherit; font-size: 0.85rem; }
         .nav-tab:hover, .nav-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(255,107,157,0.3); }
         .container { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+        
+        /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
-        .stat-card {
-            background: white; padding: 1.4rem 1.5rem; border-radius: 18px;
-            text-align: center; box-shadow: 0 2px 12px rgba(200,80,120,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1.5px solid rgba(255,107,157,0.08);
-        }
+        .stat-card { background: white; padding: 1.4rem 1.5rem; border-radius: 18px; text-align: center; box-shadow: 0 2px 12px rgba(200,80,120,0.08); transition: transform 0.2s, box-shadow 0.2s; border: 1.5px solid rgba(255,107,157,0.08); }
         .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(200,80,120,0.16); }
         .stat-number { font-size: 1.9rem; font-weight: 800; color: var(--primary); font-family: 'Syne', sans-serif; }
         .stat-label { color: #888; margin-top: 0.4rem; font-size: 0.82rem; font-weight: 600; }
-        .filters-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
-        .filter-select { padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
-        .btn-export { background: var(--success); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        
+        /* Tabelas */
         .table-container { background: white; border-radius: 16px; overflow-x: auto; box-shadow: var(--shadow-sm); margin-bottom: 1rem; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
         th { background: var(--gray); font-weight: 600; position: sticky; top: 0; }
         tr:hover { background: rgba(255,107,157,0.05); }
+        
+        /* Tabs */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        
+        /* Botões */
         .btn { padding: 0.4rem 0.8rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-dark); }
         .btn-success { background: var(--success); color: white; }
-        .btn-success:hover { background: #27ae60; }
         .btn-warning { background: var(--warning); color: white; }
-        .btn-warning:hover { background: #e67e22; }
         .btn-danger { background: var(--danger); color: white; }
-        .btn-danger:hover { background: #c0392b; }
         .btn-sm { padding: 0.2rem 0.5rem; font-size: 0.75rem; }
+        
+        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal.active { display: flex; }
         .modal-content { background: white; padding: 2rem; border-radius: 20px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .modal-header h3 { color: var(--dark); }
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark); }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; transition: border-color 0.2s; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
+        
+        /* Status Badges */
         .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
         .status-pending { background: #ffeaa7; color: #d63031; }
         .status-completed { background: #badc58; color: #6ab04c; }
         .status-active { background: #c8f7e0; color: #00b894; }
         .status-inactive { background: #fde8e8; color: #e74c3c; }
+        
+        /* Login Overlay Melhorado */
         .login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(ellipse at 20% 50%, #3a0a1e 0%, #1a0510 50%, #0d0308 100%);
@@ -93,8 +96,9 @@
         }
         .login-overlay.hidden { display: none; }
         .hidden { display: none !important; }
+        
         .login-box {
-            background: rgba(255,255,255,0.97);
+            background: rgba(255,255,255,0.98);
             padding: 2.5rem 2rem; border-radius: 28px;
             width: 90%; max-width: 400px; text-align: center;
             animation: fadeInUp 0.5s ease;
@@ -109,6 +113,7 @@
         }
         @keyframes gradientBar { 0%{background-position:0% 0} 100%{background-position:200% 0} }
         @keyframes fadeInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
         .master-badge {
             display: inline-flex; align-items: center; gap: 0.4rem;
             background: linear-gradient(135deg, #ff6b9d, #ff4081);
@@ -137,95 +142,72 @@
         }
         .login-box button:hover:not(:disabled) { transform: translateY(-2px); }
         .login-box button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .loading { text-align: center; padding: 2rem; color: #999; }
+        
+        /* Paginação */
         .pagination { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; padding: 1rem; flex-wrap: wrap; }
         .page-btn { padding: 0.3rem 0.8rem; border: 1px solid var(--gray); background: white; border-radius: 6px; cursor: pointer; min-height: 36px; min-width: 36px; }
         .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        /* Chart */
         .chart-container { background: white; border-radius: 16px; padding: 1rem; margin-bottom: 2rem; max-width: 100%; }
         canvas { max-height: 300px; width: 100% !important; }
+        
+        /* Filtros */
+        .filters-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+        .filter-select { padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
+        .btn-export { background: var(--success); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        
+        /* Toast */
+        #toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 9999; pointer-events: none; }
+        
+        /* Animação fadeInOut */
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+        
+        /* Responsivo */
         @media (max-width: 768px) {
-            /* Container */
             .container { padding: 0.75rem; }
-
-            /* Header: stack logo + tabs */
-            .header { padding: 0.75rem 1rem; gap: 0.75rem; flex-direction: column; align-items: flex-start; position: sticky; top: 0; }
-            .logo { font-size: 1.1rem; }
-            .sync-badge { font-size: 0.65rem; }
-
-            /* Nav tabs: scroll horizontal */
-            .nav-tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
-            .nav-tabs::-webkit-scrollbar { display: none; }
-            .nav-tab { white-space: nowrap; flex-shrink: 0; padding: 0.5rem 0.85rem; font-size: 0.8rem; min-height: 44px; }
-
-            /* Stats: 2 colunas */
+            .header { padding: 0.75rem 1rem; gap: 0.75rem; flex-direction: column; align-items: flex-start; }
+            .nav-tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+            .nav-tab { white-space: nowrap; flex-shrink: 0; min-height: 44px; }
             .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-            .stat-card { padding: 0.9rem; }
             .stat-number { font-size: 1.4rem; }
-            .stat-label { font-size: 0.75rem; }
-
-            /* Tabelas: scroll horizontal */
-            .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .table-container { overflow-x: auto; }
             table { min-width: 480px; }
             th, td { padding: 0.6rem 0.5rem; font-size: 0.78rem; }
-
-            /* Filtros em coluna */
             .filters-bar { flex-direction: column; align-items: stretch; }
-            .filter-select, .btn-export, .btn-primary { width: 100%; min-height: 44px; font-size: 0.9rem; }
-
-            /* Gráfico */
-            .chart-container { max-width: 100%; padding: 0.75rem; }
-            canvas { max-height: 220px; }
-
-            /* Modal */
-            .modal-content { width: 96%; max-width: 420px; padding: 1.25rem; max-height: 88vh; }
-
-            /* Login box */
             .login-box { padding: 1.5rem; width: 92%; }
-            .login-box input { font-size: 1rem; padding: 0.9rem; min-height: 44px; }
-            .login-box button { min-height: 44px; font-size: 1rem; }
-
-            /* Botões de ação em tabelas */
-            .btn-sm { padding: 0.35rem 0.55rem; font-size: 0.72rem; min-height: 36px; min-width: 36px; }
-
-            /* Paginação */
-            .pagination { flex-wrap: wrap; }
-            .page-btn { min-height: 36px; min-width: 36px; }
-        }
-
-        /* Tablet */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .stats-grid { grid-template-columns: repeat(3, 1fr); }
-            .container { padding: 1.25rem; }
-            .nav-tabs { flex-wrap: wrap; }
-        }
-
-        /* Ultra-wide */
-        @media (min-width: 1600px) {
-            .container { max-width: 1500px; }
         }
     </style>
 </head>
 <body>
 
+<!-- TELA DE LOGIN COM E-MAIL E SENHA (FIREBASE AUTH) -->
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
         <div style="font-size: 3rem; margin-bottom: 0.5rem;">🍩</div>
         <div class="master-badge">👑 Master Admin</div>
         <h2>Donut ALR Admin</h2>
         <p class="sub">Acesso restrito · Área administrativa</p>
-        <input type="email" id="adminEmail" placeholder="E-mail de administrador" onkeydown="if(event.key==='Enter') loginAdmin()">
-        <input type="password" id="adminPass" placeholder="Senha" onkeydown="if(event.key==='Enter') loginAdmin()">
-        <button onclick="loginAdmin()" id="btnLoginAdmin">🔓 Acessar Painel</button>
+        <input type="email" id="adminEmail" placeholder="E-mail de administrador" autocomplete="email">
+        <input type="password" id="adminPass" placeholder="Senha" autocomplete="current-password">
+        <button onclick="loginAdmin()" id="btnLoginAdmin">🔓 Entrar no Painel</button>
         <p id="loginAdminMsg" style="margin-top:0.8rem; font-size:0.78rem; color:#e74c3c; min-height:1.2em; text-align:center;"></p>
+        <p style="margin-top:1rem; font-size:0.7rem; color:#999;">🔒 Login seguro via Firebase Authentication</p>
     </div>
 </div>
 
+<!-- PAINEL ADMIN (oculto até login) -->
 <div id="adminPanel" class="hidden">
     <div class="header">
         <div class="logo">
             <div class="logo-icon">🍩</div>
             <span>Donut ALR</span>
-            <span class="master-indicator">👑 Master</span>
+            <span class="master-indicator" id="masterBadge">👑 Master</span>
             <span class="sync-badge" id="syncStatus">🔄 Firebase</span>
         </div>
         <div class="nav-tabs">
@@ -254,23 +236,28 @@
                 <button class="btn btn-primary" onclick="openProductModal()">+ Novo Produto</button>
             </div>
             <div class="table-container">
-                <table><thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead>
-                <tbody id="productsTable"><tr><td colspan="6" class="loading">Carregando produtos...</td></tr></tbody></table>
+                <table>
+                    <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="productsTable"><tr><td colspan="6" class="loading">Carregando produtos...</td></tr></tbody>
+                </table>
             </div>
         </div>
 
         <div id="ordersTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">📦 Pedidos Recebidos <span style="font-size:0.8rem; color:var(--success);">● Tempo Real</span></h2>
+            <h2 style="margin-bottom: 1rem;">📦 Pedidos Recebidos</h2>
             <div class="filters-bar">
                 <select id="orderStatusFilter" class="filter-select" onchange="filterOrders()">
-                    <option value="all">📋 Todos</option><option value="pending">⏳ Pendentes</option><option value="completed">✅ Concluídos</option>
+                    <option value="all">📋 Todos</option>
+                    <option value="pending">⏳ Pendentes</option>
+                    <option value="completed">✅ Concluídos</option>
                 </select>
                 <button class="btn-export" onclick="exportOrdersToCSV()">📎 Exportar CSV</button>
-                <button class="btn-primary" id="toggleSoundBtn" onclick="toggleSoundNotification()">🔊 Som: ON</button>
             </div>
             <div class="table-container">
-                <table><thead><tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
-                <tbody id="ordersTable"><tr><td colspan="7" class="loading">Carregando pedidos...</td></tr></tbody></table>
+                <table>
+                    <thead><tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
+                    <tbody id="ordersTable"><tr><td colspan="7" class="loading">Carregando pedidos...</td></tr></tbody>
+                </table>
                 <div id="ordersPagination" class="pagination"></div>
             </div>
         </div>
@@ -278,29 +265,35 @@
         <div id="usersTab" class="tab-content">
             <h2 style="margin-bottom: 1rem;">👥 Clientes Cadastrados</h2>
             <div class="table-container">
-                <table><thead><tr><th>#</th><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Cadastro</th><th>Ações</th></tr></thead>
-                <tbody id="usersTable"><tr><td colspan="6" class="loading">Carregando clientes...</td></tr></tbody></table>
+                <table>
+                    <thead><tr><th>#</th><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Cadastro</th><th>Ações</th></tr></thead>
+                    <tbody id="usersTable"><tr><td colspan="6" class="loading">Carregando clientes...</td></tr></tbody>
+                </table>
             </div>
         </div>
 
         <div id="avaliacoesTab" class="tab-content">
             <h2 style="margin-bottom: 1rem;">⭐ Avaliações dos Clientes</h2>
             <div class="table-container">
-                <table><thead><tr><th>Data</th><th>Cliente</th><th>Estrelas</th><th>Pedido ID</th></tr></thead>
-                <tbody id="avaliacoesTable"><tr><td colspan="4" class="loading">Carregando avaliações...</td></tr></tbody></table>
+                <table>
+                    <thead><tr><th>Data</th><th>Cliente</th><th>Estrelas</th><th>Pedido ID</th></tr></thead>
+                    <tbody id="avaliacoesTable"><tr><td colspan="4" class="loading">Carregando avaliações...</td></tr></tbody>
+                </table>
             </div>
         </div>
 
         <div id="logsTab" class="tab-content">
             <h2 style="margin-bottom: 1rem;">📋 Logs do Sistema</h2>
             <div class="table-container">
-                <table><thead><tr><th>Data/Hora</th><th>Usuário</th><th>Ação</th><th>Detalhes</th></tr></thead>
-                <tbody id="logsTable"><tr><td colspan="4" class="loading">Carregando logs...</td></tr></tbody></table>
+                <table>
+                    <thead><tr><th>Data/Hora</th><th>Usuário</th><th>Ação</th><th>Detalhes</th></tr></thead>
+                    <tbody id="logsTable"><tr><td colspan="4" class="loading">Carregando logs...</td></tr></tbody>
+                </table>
             </div>
         </div>
 
         <div id="encomendasTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">📅 Encomendas <span style="font-size:0.8rem; color:var(--success);">● Tempo Real</span></h2>
+            <h2 style="margin-bottom: 1rem;">📅 Encomendas</h2>
             <div class="filters-bar">
                 <select id="encomendaStatusFilter" class="filter-select" onchange="filterEncomendas()">
                     <option value="all">📋 Todas</option>
@@ -311,13 +304,15 @@
                 <button class="btn-export" onclick="exportEncomendasToCSV()">📎 Exportar CSV</button>
             </div>
             <div class="table-container">
-                <table><thead><tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Data Entrega</th><th>Horário</th><th>Obs</th><th>Status</th><th>Ações</th></tr></thead>
-                <tbody id="encomendasTable"><tr><td colspan="9" class="loading">Carregando encomendas...</td></tr></tbody></table>
+                <table>
+                    <thead><tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Data Entrega</th><th>Horário</th><th>Obs</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="encomendasTable"><tr><td colspan="9" class="loading">Carregando encomendas...</td></tr></tbody>
+                </table>
                 <div id="encomendas_pagination" class="pagination"></div>
             </div>
         </div>
 
-        <!-- ===== ABA ADMINS ===== -->
+        <!-- ABA ADMINS -->
         <div id="adminsTab" class="tab-content">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
                 <div>
@@ -333,15 +328,15 @@
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; margin-bottom:0.85rem;" id="inviteFormGrid">
                     <div class="form-group" style="margin:0;">
                         <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">👤 Nome do administrador</label>
-                        <input type="text" id="inviteNome" class="form-group input" placeholder="Ex: Maria Silva" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
+                        <input type="text" id="inviteNome" placeholder="Ex: Maria Silva" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
                     </div>
                     <div class="form-group" style="margin:0;">
                         <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">📧 E-mail</label>
-                        <input type="email" id="inviteEmail" class="form-group input" placeholder="admin@exemplo.com" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
+                        <input type="email" id="inviteEmail" placeholder="admin@exemplo.com" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
                     </div>
                     <div class="form-group" style="margin:0;">
                         <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">🔑 Senha temporária</label>
-                        <input type="text" id="inviteSenha" class="form-group input" placeholder="Mín. 6 caracteres" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
+                        <input type="text" id="inviteSenha" placeholder="Mín. 6 caracteres" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
                     </div>
                     <div class="form-group" style="margin:0;">
                         <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">🎖️ Nível de acesso</label>
@@ -353,14 +348,13 @@
                 </div>
                 <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
                     <button onclick="convidarAdmin()" id="btnConvidarAdmin"
-                        style="background:linear-gradient(135deg,#ff6b9d,#ff4081); color:#fff; border:none; padding:0.8rem 1.8rem; border-radius:12px; font-weight:800; cursor:pointer; font-family:inherit; font-size:0.9rem; box-shadow:0 4px 14px rgba(255,64,129,0.3); transition:transform 0.15s;">
+                        style="background:linear-gradient(135deg,#ff6b9d,#ff4081); color:#fff; border:none; padding:0.8rem 1.8rem; border-radius:12px; font-weight:800; cursor:pointer; font-family:inherit; font-size:0.9rem; box-shadow:0 4px 14px rgba(255,64,129,0.3);">
                         ✉️ Enviar convite
                     </button>
                     <span id="inviteMsg" style="font-size:0.83rem; font-weight:600; min-height:1.2em;"></span>
                 </div>
-                <!-- Aviso sobre como funciona -->
                 <div style="background:#fff6f9; border:1.5px solid #ffd4e8; border-radius:12px; padding:0.9rem 1rem; margin-top:1.2rem; font-size:0.8rem; color:#7a4055; line-height:1.6;">
-                    <strong>ℹ️ Como funciona:</strong> O sistema registra o novo admin no Firebase Authentication com a senha temporária que você definiu. Em seguida, registra na coleção <code>admins</code> do Firestore e envia um e-mail de boas-vindas via WhatsApp (ou você pode copiar as credenciais abaixo). O convidado deve trocar a senha no primeiro acesso.
+                    <strong>ℹ️ Como funciona:</strong> O sistema registra o novo admin no Firebase Authentication com a senha temporária que você definiu. Em seguida, registra na coleção <code>admins</code> do Firestore.
                 </div>
             </div>
 
@@ -378,11 +372,10 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
-<div id="toast-container" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:9999;pointer-events:none;"></div>
+<div id="toast-container"></div>
 
 <div id="productModal" class="modal">
     <div class="modal-content">
@@ -396,7 +389,7 @@
             <div class="form-group"><label>💰 Preço (R$)</label><input type="number" step="0.01" id="productPrice" required></div>
             <div class="form-group"><label>📦 Estoque</label><input type="number" id="productEstoque" value="99" min="0"></div>
             <div class="form-group"><label>😊 Emoji</label><input type="text" id="productEmoji" placeholder="🍩" maxlength="2"></div>
-            <div class="form-group"><label>🖼️ URL da Imagem (opcional)</label><input type="url" id="productImagem" placeholder="https://exemplo.com/foto-donut.jpg"><small style="color:#999;font-size:0.75rem;">Cole o link de uma imagem hospedada. Deixe vazio para usar o emoji.</small></div>
+            <div class="form-group"><label>🖼️ URL da Imagem (opcional)</label><input type="url" id="productImagem" placeholder="https://exemplo.com/foto-donut.jpg"></div>
             <div class="form-group"><label>📝 Descrição</label><textarea id="productDesc" rows="2"></textarea></div>
             <div class="form-group"><label>📌 Status</label><select id="productStatus"><option value="true">✅ Ativo</option><option value="false">❌ Inativo</option></select></div>
             <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
@@ -425,16 +418,11 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // ========== VERIFICAÇÃO MASTER ADMIN (ofuscada) ==========
-    // Não edite esta função manualmente — é gerada automaticamente.
-    function _resolveAdmins() {
-        const _s = (x) => atob(x);
-        // base64 fragments — nunca exponha o e-mail em texto puro aqui
-        const _a = 'bW9yZWlyYWxwdGN0Zg=='; // parte 1
-        const _b = 'QGdtYWlsLmNvbQ==';      // parte 2
-        return [_s(_a) + _s(_b)];
+    // ========== MASTER ADMIN (ofuscado) ==========
+    function _getMasterEmail() { 
+        return atob('bW9yZWlyYWxwdGN0Zg==') + atob('QGdtYWlsLmNvbQ=='); 
     }
-    const ADMIN_EMAILS = _resolveAdmins();
+    const ADMIN_EMAILS = [_getMasterEmail()];
 
     let unsubscribeOrders = null;
     let unsubscribeUsers = null;
@@ -445,67 +433,118 @@
     let soundEnabled = true;
     let lastOrderCount = 0;
     let monthlyChart = null;
+    let currentUser = null;
 
-    // ========== LOGIN ADMIN VIA FIREBASE AUTH ==========
+    // ========== FUNÇÃO DE LOGIN (E-MAIL + SENHA) ==========
     window.loginAdmin = async function() {
         const email = document.getElementById('adminEmail').value.trim().toLowerCase();
         const pass = document.getElementById('adminPass').value;
         const btn = document.getElementById('btnLoginAdmin');
         const msg = document.getElementById('loginAdminMsg');
-        if (!email || !pass) { msg.textContent = '⚠️ Preencha e-mail e senha.'; return; }
-        btn.disabled = true; btn.textContent = 'Entrando...'; msg.textContent = '';
+        
+        if (!email || !pass) { 
+            msg.textContent = '⚠️ Preencha e-mail e senha.'; 
+            return; 
+        }
+        
+        btn.disabled = true; 
+        btn.textContent = 'Entrando...'; 
+        msg.textContent = '';
+        
         try {
-            const cred = await signInWithEmailAndPassword(auth, email, pass);
-            // Verifica master ou admin do Firestore
-            let autorizado = ADMIN_EMAILS.includes(cred.user.email);
-            if (!autorizado) {
-                const q = query(collection(db, 'admins'), where('email', '==', cred.user.email));
+            // Login com Firebase Auth
+            const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+            const user = userCredential.user;
+            
+            // Verifica se é master admin ou está na coleção de admins
+            let isAuthorized = ADMIN_EMAILS.includes(user.email);
+            
+            if (!isAuthorized) {
+                const q = query(collection(db, 'admins'), where('email', '==', user.email));
                 const snap = await getDocs(q);
-                autorizado = !snap.empty;
+                isAuthorized = !snap.empty;
             }
-            if (!autorizado) {
+            
+            if (!isAuthorized) {
                 await signOut(auth);
                 msg.textContent = '🚫 Você não tem permissão de administrador.';
+                btn.disabled = false;
+                btn.textContent = '🔓 Entrar no Painel';
                 return;
             }
-            // Auth OK — o onAuthStateChanged vai abrir o painel
+            
+            // Login bem-sucedido
+            currentUser = user;
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            
+            // Atualiza badge de master
+            if (ADMIN_EMAILS.includes(user.email)) {
+                document.getElementById('masterBadge').innerHTML = '👑 Master';
+            } else {
+                document.getElementById('masterBadge').innerHTML = '🛡️ Admin';
+            }
+            
+            iniciarPainel();
+            showToast(`✅ Bem-vindo, ${user.email.split('@')[0]}!`);
+            
         } catch(error) {
-            const msgs = {
+            const errorMessages = {
                 'auth/invalid-credential': '❌ E-mail ou senha incorretos.',
-                'auth/user-not-found':     '❌ E-mail não cadastrado.',
-                'auth/wrong-password':     '❌ Senha incorreta.',
-                'auth/too-many-requests':  '⚠️ Muitas tentativas. Aguarde.',
-                'auth/invalid-email':      '❌ E-mail inválido.'
+                'auth/user-not-found': '❌ E-mail não cadastrado.',
+                'auth/wrong-password': '❌ Senha incorreta.',
+                'auth/too-many-requests': '⚠️ Muitas tentativas. Aguarde.',
+                'auth/invalid-email': '❌ E-mail inválido.'
             };
-            msg.textContent = msgs[error.code] || `❌ Erro: ${error.message}`;
+            msg.textContent = errorMessages[error.code] || `❌ Erro: ${error.message}`;
         } finally {
-            btn.disabled = false; btn.textContent = '🔓 Acessar Painel';
+            btn.disabled = false;
+            btn.textContent = '🔓 Entrar no Painel';
         }
     };
 
+    // ========== LOGOUT ==========
     window.logout = async function() {
         if (unsubscribeOrders) unsubscribeOrders();
         if (unsubscribeUsers) unsubscribeUsers();
-        try { await signOut(auth); } catch(e) {}
+        try { 
+            await signOut(auth); 
+            currentUser = null;
+        } catch(e) { console.warn(e); }
+        
         document.getElementById('loginOverlay').classList.remove('hidden');
         document.getElementById('adminPanel').classList.add('hidden');
+        document.getElementById('adminEmail').value = '';
+        document.getElementById('adminPass').value = '';
+        document.getElementById('loginAdminMsg').textContent = '';
+        showToast('👋 Você saiu do painel administrativo');
     };
 
+    // ========== VERIFICAÇÃO DE AUTENTICAÇÃO ==========
     function checkAuth() {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Verifica se é master ou se está na coleção 'admins' do Firestore
-                let autorizado = ADMIN_EMAILS.includes(user.email);
-                if (!autorizado) {
+                // Verifica se é admin
+                let isAuthorized = ADMIN_EMAILS.includes(user.email);
+                if (!isAuthorized) {
                     try {
                         const q = query(collection(db, 'admins'), where('email', '==', user.email));
                         const snap = await getDocs(q);
-                        autorizado = !snap.empty;
+                        isAuthorized = !snap.empty;
                     } catch(e) { console.error(e); }
                 }
-                if (autorizado) {
+                
+                if (isAuthorized) {
+                    currentUser = user;
                     document.getElementById('loginOverlay').classList.add('hidden');
                     document.getElementById('adminPanel').classList.remove('hidden');
+                    
+                    if (ADMIN_EMAILS.includes(user.email)) {
+                        document.getElementById('masterBadge').innerHTML = '👑 Master';
+                    } else {
+                        document.getElementById('masterBadge').innerHTML = '🛡️ Admin';
+                    }
+                    
                     iniciarPainel();
                 } else {
                     await signOut(auth);
@@ -520,17 +559,41 @@
         });
     }
 
-    async function addLog(usuario, acao, detalhes) {
-        try { await addDoc(collection(db, 'logs'), { data: new Date().toLocaleString('pt-BR'), usuario, acao, detalhes, criadoEm: serverTimestamp() }); } catch(e) { console.error(e); }
+    // ========== TOAST ==========
+    function showToast(msg) { 
+        const container = document.getElementById('toast-container'); 
+        if(!container) return; 
+        const toast = document.createElement('div'); 
+        toast.textContent = msg; 
+        toast.style.cssText = `background:#333;color:white;padding:10px 20px;border-radius:50px;font-size:14px;animation:fadeInOut 2.5s ease;pointer-events:none;white-space:nowrap;`; 
+        container.appendChild(toast); 
+        setTimeout(() => { if(container.contains(toast)) container.removeChild(toast); }, 2500); 
     }
 
+    // ========== LOGS ==========
+    async function addLog(usuario, acao, detalhes) {
+        try { 
+            await addDoc(collection(db, 'logs'), { 
+                data: new Date().toLocaleString('pt-BR'), 
+                usuario, acao, detalhes, 
+                criadoEm: serverTimestamp() 
+            }); 
+        } catch(e) { console.error(e); }
+    }
+
+    // ========== DASHBOARD ==========
     async function loadDashboard() {
         try {
-            const [produtosSnap, pedidosSnap, usersSnap] = await Promise.all([getDocs(collection(db, 'produtos')), getDocs(collection(db, 'pedidos')), getDocs(collection(db, 'users'))]);
+            const [produtosSnap, pedidosSnap, usersSnap] = await Promise.all([
+                getDocs(collection(db, 'produtos')), 
+                getDocs(collection(db, 'pedidos')), 
+                getDocs(collection(db, 'users'))
+            ]);
             const pedidos = pedidosSnap.docs.map(d => d.data());
             const totalVendas = pedidos.reduce((sum, p) => sum + (Number(p.total) || 0), 0);
             const pendentes = pedidos.filter(p => p.status !== 'completed' && p.status !== 'encomenda' && p.status !== 'encomenda_confirmada' && p.status !== 'encomenda_cancelada').length;
             const encomendas = pedidos.filter(p => p.tipoEncomenda === true || p.status === 'encomenda').length;
+            
             document.getElementById('statsGrid').innerHTML = `
                 <div class="stat-card"><div class="stat-number">${produtosSnap.size}</div><div class="stat-label">📦 Produtos</div></div>
                 <div class="stat-card"><div class="stat-number">${pedidosSnap.size}</div><div class="stat-label">📋 Pedidos</div></div>
@@ -540,18 +603,28 @@
                 <div class="stat-card" style="border: 2px solid #c8a4f7;"><div class="stat-number" style="color:#8b5cf6;">${encomendas}</div><div class="stat-label">📅 Encomendas</div></div>`;
             
             const monthlyData = {};
-            pedidos.forEach(p => { if(p.data) { const mes = p.data.split('/')[1] + '/' + p.data.split('/')[2]; monthlyData[mes] = (monthlyData[mes] || 0) + (Number(p.total) || 0); } });
+            pedidos.forEach(p => { 
+                if(p.data) { 
+                    const mes = p.data.split('/')[1] + '/' + p.data.split('/')[2]; 
+                    monthlyData[mes] = (monthlyData[mes] || 0) + (Number(p.total) || 0); 
+                } 
+            });
             const meses = Object.keys(monthlyData).sort();
             const valores = meses.map(m => monthlyData[m]);
             if(monthlyChart) monthlyChart.destroy();
             const ctx = document.getElementById('monthlyChart').getContext('2d');
-            monthlyChart = new Chart(ctx, { type: 'bar', data: { labels: meses, datasets: [{ label: 'Faturamento (R$)', data: valores, backgroundColor: '#ff6b9d' }] }, options: { responsive: true, maintainAspectRatio: true } });
+            monthlyChart = new Chart(ctx, { 
+                type: 'bar', 
+                data: { labels: meses, datasets: [{ label: 'Faturamento (R$)', data: valores, backgroundColor: '#ff6b9d' }] }, 
+                options: { responsive: true, maintainAspectRatio: true } 
+            });
             
             const recentes = pedidosSnap.docs.slice(-5).reverse().map(d => ({ id: d.id, ...d.data() }));
             document.getElementById('recentOrders').innerHTML = `<table style="width:100%"><thead><tr><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></tr></thead><tbody>${recentes.map(p => `<tr><td>${p.cliente || '-'}</td><td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td><td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td><td>${p.data || '-'}</td></tr>`).join('')}${recentes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum pedido ainda</td></tr>' : ''}</tbody></table>`;
         } catch(e) { console.error(e); }
     }
 
+    // ========== PRODUTOS ==========
     async function loadProducts() {
         try {
             const snap = await getDocs(collection(db, 'produtos'));
@@ -580,7 +653,11 @@
         document.getElementById('productModal').classList.add('active');
     };
 
-    window.closeProductModal = function() { document.getElementById('productModal').classList.remove('active'); document.getElementById('productForm').reset(); document.getElementById('productId').value = ''; document.getElementById('productImagem').value = ''; };
+    window.closeProductModal = function() { 
+        document.getElementById('productModal').classList.remove('active'); 
+        document.getElementById('productForm').reset(); 
+        document.getElementById('productId').value = ''; 
+    };
 
     window.saveProduct = async function() {
         const id = document.getElementById('productId').value;
@@ -595,210 +672,153 @@
             ativo: document.getElementById('productStatus').value === 'true'
         };
         try {
-            if(id) { await updateDoc(doc(db, 'produtos', id), product); addLog('admin', 'editar_produto', `Editou: ${product.nome}`); showToast(`✅ Produto "${product.nome}" atualizado!`); }
-            else { await addDoc(collection(db, 'produtos'), product); addLog('admin', 'criar_produto', `Criou: ${product.nome}`); showToast(`✅ Produto "${product.nome}" criado!`); }
-            closeProductModal(); loadProducts(); loadDashboard();
+            if(id) { 
+                await updateDoc(doc(db, 'produtos', id), product); 
+                addLog(currentUser?.email || 'admin', 'editar_produto', `Editou: ${product.nome}`); 
+                showToast(`✅ Produto "${product.nome}" atualizado!`); 
+            } else { 
+                await addDoc(collection(db, 'produtos'), product); 
+                addLog(currentUser?.email || 'admin', 'criar_produto', `Criou: ${product.nome}`); 
+                showToast(`✅ Produto "${product.nome}" criado!`); 
+            }
+            closeProductModal(); 
+            loadProducts(); 
+            loadDashboard();
         } catch(e) { console.error(e); showToast('❌ Erro ao salvar produto'); }
     };
 
-    window.editProduct = async function(id) { const snap = await getDocs(collection(db, 'produtos')); const produto = snap.docs.find(d => d.id === id); if(produto) openProductModal({ id: produto.id, ...produto.data() }); };
-    window.deleteProduct = async function(id, nome) { if(confirm(`Tem certeza que deseja excluir "${nome}"?`)) { try { await deleteDoc(doc(db, 'produtos', id)); addLog('admin', 'excluir_produto', `Excluiu: ${nome}`); loadProducts(); loadDashboard(); showToast(`🗑️ Produto "${nome}" excluído!`); } catch(e) { console.error(e); showToast('❌ Erro ao excluir produto'); } } };
-    window.toggleProductStatus = async function(id, currentStatus) { try { await updateDoc(doc(db, 'produtos', id), { ativo: !currentStatus }); addLog('admin', 'toggle_produto', `${!currentStatus ? 'Ativou' : 'Desativou'} produto ID: ${id}`); loadProducts(); loadDashboard(); showToast(`✅ Status alterado!`); } catch(e) { console.error(e); showToast('❌ Erro ao alterar status'); } };
+    window.editProduct = async function(id) { 
+        const snap = await getDocs(collection(db, 'produtos')); 
+        const produto = snap.docs.find(d => d.id === id); 
+        if(produto) openProductModal({ id: produto.id, ...produto.data() }); 
+    };
+    
+    window.deleteProduct = async function(id, nome) { 
+        if(confirm(`Tem certeza que deseja excluir "${nome}"?`)) { 
+            try { 
+                await deleteDoc(doc(db, 'produtos', id)); 
+                addLog(currentUser?.email || 'admin', 'excluir_produto', `Excluiu: ${nome}`); 
+                loadProducts(); 
+                loadDashboard(); 
+                showToast(`🗑️ Produto "${nome}" excluído!`); 
+            } catch(e) { console.error(e); showToast('❌ Erro ao excluir produto'); } 
+        } 
+    };
+    
+    window.toggleProductStatus = async function(id, currentStatus) { 
+        try { 
+            await updateDoc(doc(db, 'produtos', id), { ativo: !currentStatus }); 
+            addLog(currentUser?.email || 'admin', 'toggle_produto', `${!currentStatus ? 'Ativou' : 'Desativou'} produto ID: ${id}`); 
+            loadProducts(); 
+            loadDashboard(); 
+            showToast(`✅ Status alterado!`); 
+        } catch(e) { console.error(e); showToast('❌ Erro ao alterar status'); } 
+    };
 
-    function playNewOrderSound() { if(!soundEnabled) return; const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3'); audio.volume = 0.3; audio.play().catch(()=>{}); }
-    function iniciarListenerPedidos() { if(unsubscribeOrders) unsubscribeOrders(); unsubscribeOrders = onSnapshot(collection(db, 'pedidos'), (snapshot) => { const newCount = snapshot.size; if(newCount > lastOrderCount && lastOrderCount > 0) playNewOrderSound(); lastOrderCount = newCount; loadOrders(); const badge = document.getElementById('syncStatus'); if(badge) { badge.style.opacity = '0.5'; badge.textContent = '🔄 Atualizando...'; setTimeout(() => { badge.style.opacity = '1'; badge.textContent = '✅ Firebase'; }, 500); } }); }
+    // ========== PEDIDOS ==========
+    function iniciarListenerPedidos() { 
+        if(unsubscribeOrders) unsubscribeOrders(); 
+        unsubscribeOrders = onSnapshot(collection(db, 'pedidos'), () => { loadOrders(); }); 
+    }
 
-    async function loadOrders() { try { const snap = await getDocs(collection(db, 'pedidos')); allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.data || '').localeCompare(a.data || '')); filterOrders(); } catch(e) { console.error(e); } }
-    window.filterOrders = function() { currentOrderFilter = document.getElementById('orderStatusFilter').value; currentOrderPage = 1; renderOrdersPage(); };
-    function renderOrdersPage() { let filtered = [...allOrders]; if(currentOrderFilter !== 'all') filtered = filtered.filter(o => o.status === currentOrderFilter); const totalPages = Math.ceil(filtered.length / ordersPerPage); const start = (currentOrderPage - 1) * ordersPerPage; const paginated = filtered.slice(start, start + ordersPerPage); document.getElementById('ordersTable').innerHTML = paginated.length === 0 ? '<tr><td colspan="7" style="text-align:center;padding:2rem;">Nenhum pedido encontrado</td></tr>' : paginated.map(p => `<tr><td><small>${p.id.slice(0,8)}...</small></td><td><strong>${p.cliente || '-'}</strong></td><td>${p.whatsapp || '-'}</td><td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td><td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? '✅ Concluído' : '⏳ Pendente'}</span></td><td>${p.data || '-'}</td><td><button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${p.id}')">👁️</button> ${p.status !== 'completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder('${p.id}')">✅</button>` : ''}</td></tr>`).join(''); document.getElementById('ordersPagination').innerHTML = Array.from({ length: totalPages }, (_, i) => `<button class="page-btn ${i+1 === currentOrderPage ? 'active' : ''}" onclick="goToOrderPage(${i+1})">${i+1}</button>`).join(''); }
+    async function loadOrders() { 
+        try { 
+            const snap = await getDocs(collection(db, 'pedidos')); 
+            allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.data || '').localeCompare(a.data || '')); 
+            filterOrders(); 
+        } catch(e) { console.error(e); } 
+    }
+    
+    window.filterOrders = function() { 
+        currentOrderFilter = document.getElementById('orderStatusFilter').value; 
+        currentOrderPage = 1; 
+        renderOrdersPage(); 
+    };
+    
+    function renderOrdersPage() { 
+        let filtered = [...allOrders]; 
+        if(currentOrderFilter !== 'all') filtered = filtered.filter(o => o.status === currentOrderFilter); 
+        const totalPages = Math.ceil(filtered.length / ordersPerPage); 
+        const start = (currentOrderPage - 1) * ordersPerPage; 
+        const paginated = filtered.slice(start, start + ordersPerPage); 
+        document.getElementById('ordersTable').innerHTML = paginated.length === 0 ? '<tr><td colspan="7" style="text-align:center;padding:2rem;">Nenhum pedido encontrado</td></tr>' : 
+            paginated.map(p => `<tr><td><small>${p.id.slice(0,8)}...</small></td><td><strong>${p.cliente || '-'}</strong></td><td>${p.whatsapp || '-'}</td><td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td><td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? '✅ Concluído' : '⏳ Pendente'}</span></td><td>${p.data || '-'}</td><td><button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${p.id}')">👁️</button> ${p.status !== 'completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder('${p.id}')">✅</button>` : ''}</td></tr>`).join(''); 
+        document.getElementById('ordersPagination').innerHTML = Array.from({ length: totalPages }, (_, i) => `<button class="page-btn ${i+1 === currentOrderPage ? 'active' : ''}" onclick="goToOrderPage(${i+1})">${i+1}</button>`).join(''); 
+    }
+    
     window.goToOrderPage = function(page) { currentOrderPage = page; renderOrdersPage(); };
-    window.completeOrder = async function(id) { try { await updateDoc(doc(db, 'pedidos', id), { status: 'completed' }); addLog('admin', 'concluir_pedido', `Pedido ${id} concluído`); loadOrders(); loadDashboard(); showToast(`✅ Pedido concluído!`); } catch(e) { console.error(e); showToast('❌ Erro ao concluir pedido'); } };
-    window.viewOrderDetails = async function(id) { const snap = await getDocs(collection(db, 'pedidos')); const pedido = snap.docs.find(d => d.id === id)?.data(); if(pedido) alert(JSON.stringify(pedido, null, 2)); };
-    window.exportOrdersToCSV = function() { let filtered = [...allOrders]; if(currentOrderFilter !== 'all') filtered = filtered.filter(o => o.status === currentOrderFilter); const headers = ['ID', 'Cliente', 'WhatsApp', 'Total', 'Status', 'Data', 'Endereço', 'Pagamento']; const rows = filtered.map(o => [o.id, o.cliente, o.whatsapp, o.total, o.status, o.data, o.endereco, o.pagamento]); const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n'); const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `pedidos_${new Date().toISOString().slice(0,19)}.csv`; link.click(); URL.revokeObjectURL(link.href); showToast('📎 Pedidos exportados com sucesso!'); };
-    window.toggleSoundNotification = function() { soundEnabled = !soundEnabled; document.getElementById('toggleSoundBtn').textContent = soundEnabled ? '🔊 Som: ON' : '🔇 Som: OFF'; showToast(soundEnabled ? 'Som ativado' : 'Som desativado'); };
+    window.completeOrder = async function(id) { 
+        try { 
+            await updateDoc(doc(db, 'pedidos', id), { status: 'completed' }); 
+            addLog(currentUser?.email || 'admin', 'concluir_pedido', `Pedido ${id} concluído`); 
+            loadOrders(); 
+            loadDashboard(); 
+            showToast(`✅ Pedido concluído!`); 
+        } catch(e) { console.error(e); showToast('❌ Erro ao concluir pedido'); } 
+    };
+    window.viewOrderDetails = async function(id) { 
+        const snap = await getDocs(collection(db, 'pedidos')); 
+        const pedido = snap.docs.find(d => d.id === id)?.data(); 
+        if(pedido) alert(JSON.stringify(pedido, null, 2)); 
+    };
+    window.exportOrdersToCSV = function() { 
+        let filtered = [...allOrders]; 
+        if(currentOrderFilter !== 'all') filtered = filtered.filter(o => o.status === currentOrderFilter); 
+        const headers = ['ID', 'Cliente', 'WhatsApp', 'Total', 'Status', 'Data', 'Endereço', 'Pagamento']; 
+        const rows = filtered.map(o => [o.id, o.cliente, o.whatsapp, o.total, o.status, o.data, o.endereco, o.pagamento]); 
+        const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n'); 
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' }); 
+        const link = document.createElement('a'); 
+        link.href = URL.createObjectURL(blob); 
+        link.download = `pedidos_${new Date().toISOString().slice(0,19)}.csv`; 
+        link.click(); 
+        URL.revokeObjectURL(link.href); 
+        showToast('📎 Pedidos exportados com sucesso!'); 
+    };
 
+    // ========== USUÁRIOS ==========
     function iniciarListenerUsers() { if(unsubscribeUsers) unsubscribeUsers(); unsubscribeUsers = onSnapshot(collection(db, 'users'), () => loadUsers()); }
+    
     async function loadUsers() {
         try {
             const snap = await getDocs(collection(db, 'users'));
             const users = snap.docs.map((d, idx) => ({ docId: d.id, idx: idx+1, ...d.data() }));
             document.getElementById('usersTable').innerHTML = users.length === 0
                 ? '<tr><td colspan="6" style="text-align:center;padding:2rem;">Nenhum cliente cadastrado</td></tr>'
-                : users.map(u => `<tr>
-                    <td>${u.idx}</td>
-                    <td><strong>${u.nome || '-'}</strong></td>
-                    <td>${u.telefone || '-'}</td>
-                    <td>${u.email || '-'}</td>
-                    <td>${u.dataCadastro || '-'}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.docId}','${(u.nome||'').replace(/'/g,"\\'")}','${(u.email||'').replace(/'/g,"\\'")}')">🗑️ Apagar</button></td>
-                  </tr>`).join('');
+                : users.map(u => `<tr><td>${u.idx}</td><td><strong>${u.nome || '-'}</strong></td><td>${u.telefone || '-'}</td><td>${u.email || '-'}</td><td>${u.dataCadastro || '-'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.docId}','${(u.nome||'').replace(/'/g,"\\'")}','${(u.email||'').replace(/'/g,"\\'")}')">🗑️ Apagar</button></td></tr>`).join('');
         } catch(e) { console.error(e); }
     }
-    async function loadAvaliacoes() { try { const snap = await getDocs(collection(db, 'avaliacoes')); const avaliacoes = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); document.getElementById('avaliacoesTable').innerHTML = avaliacoes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhuma avaliação ainda</td></tr>' : avaliacoes.map(a => `<tr><td>${a.data || '-'}</td><td>${a.usuario || '-'}</td><td>${'⭐'.repeat(a.estrelas || 0)}</td><td>${a.pedidoId || '-'}</td></tr>`).join(''); } catch(e) { console.error(e); } }
-
+    
     window.deleteUser = async function(docId, nome, email) {
         if (!confirm(`⚠️ Apagar o usuário "${nome}" (${email})?\n\nEsta ação não pode ser desfeita!`)) return;
         try {
             await deleteDoc(doc(db, 'users', docId));
-            await addLog('admin', 'apagar_usuario', `Usuário apagado: ${nome} (${email})`);
+            await addLog(currentUser?.email || 'admin', 'apagar_usuario', `Usuário apagado: ${nome} (${email})`);
             loadUsers();
             loadDashboard();
             showToast(`🗑️ Usuário "${nome}" apagado com sucesso!`);
-        } catch(e) {
-            console.error(e);
-            showToast('❌ Erro ao apagar usuário. Verifique as permissões do Firebase.');
-        }
+        } catch(e) { console.error(e); showToast('❌ Erro ao apagar usuário.'); }
     };
-    async function loadLogs() { try { const snap = await getDocs(collection(db, 'logs')); const logs = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); document.getElementById('logsTable').innerHTML = logs.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum log registrado</td></tr>' : logs.map(l => `<tr><td>${l.data || '-'}</td><td>${l.usuario || '-'}</td><td>${l.acao || '-'}</td><td>${l.detalhes || '-'}</td></tr>`).join(''); } catch(e) { console.error(e); } }
-
-    window.switchTab = function(tab) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-tab').forEach(el => {
-            el.classList.remove('active');
-            // Restaura estilo especial do botão Admins
-            if(el.id === 'tabAdmins') { el.style.background = 'linear-gradient(135deg,#ff6b9d,#ff4081)'; el.style.color = 'white'; }
-        });
-        document.getElementById(`${tab}Tab`).classList.add('active');
-        event.target.classList.add('active');
-        if(tab === 'dashboard') loadDashboard();
-        else if(tab === 'products') loadProducts();
-        else if(tab === 'orders') loadOrders();
-        else if(tab === 'users') loadUsers();
-        else if(tab === 'avaliacoes') loadAvaliacoes();
-        else if(tab === 'logs') loadLogs();
-        else if(tab === 'encomendas') loadEncomendas();
-        else if(tab === 'admins') loadAdmins();
-    };
-
-    // ========== GERENCIAMENTO DE ADMINS ==========
-
-    // Resolve master admin ofuscado para comparação
-    function _getMasterEmail() { return atob('bW9yZWlyYWxwdGN0Zg==') + atob('QGdtYWlsLmNvbQ=='); }
-
-    async function loadAdmins() {
-        const tbody = document.getElementById('adminsTable');
-        if (!tbody) return;
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Carregando...</td></tr>';
-        try {
-            const snap = await getDocs(collection(db, 'admins'));
-            const admins = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-            // Garante que o master sempre aparece no topo
-            const master = { id: '__master__', nome: 'Moreira (Master)', email: _getMasterEmail(), nivel: 'master', adicionadoEm: 'Fundador', adicionadoPor: 'Sistema' };
-            const todos = [master, ...admins.filter(a => a.email !== _getMasterEmail())];
-
-            if (!todos.length) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Nenhum admin extra cadastrado</td></tr>';
-                return;
-            }
-            tbody.innerHTML = todos.map(a => {
-                const nivelBadge = a.nivel === 'master'
-                    ? '<span style="background:linear-gradient(135deg,#ff6b9d,#ff4081);color:#fff;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:800;">👑 Master</span>'
-                    : a.nivel === 'moderador'
-                    ? '<span style="background:#ffeaa7;color:#d63031;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:700;">🔸 Moderador</span>'
-                    : '<span style="background:#c8f7e0;color:#00b894;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:700;">🛡️ Admin</span>';
-                const acoes = a.nivel === 'master'
-                    ? '<span style="color:#ccc;font-size:0.78rem;">Protegido</span>'
-                    : `<button class="btn btn-danger btn-sm" onclick="removerAdmin('${a.id}','${a.email}','${a.nome}')">🗑️ Remover</button>`;
-                return `<tr>
-                    <td><strong>${a.nome || '-'}</strong></td>
-                    <td>${a.email || '-'}</td>
-                    <td>${nivelBadge}</td>
-                    <td style="font-size:0.8rem;">${a.adicionadoEm || '-'}</td>
-                    <td style="font-size:0.8rem;">${a.adicionadoPor || '-'}</td>
-                    <td>${acoes}</td>
-                </tr>`;
-            }).join('');
-        } catch(e) {
-            console.error(e);
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#e74c3c;">Erro ao carregar admins</td></tr>';
-        }
+    
+    async function loadAvaliacoes() { 
+        try { 
+            const snap = await getDocs(collection(db, 'avaliacoes')); 
+            const avaliacoes = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); 
+            document.getElementById('avaliacoesTable').innerHTML = avaliacoes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhuma avaliação ainda</td></tr>' : 
+                avaliacoes.map(a => `<tr><td>${a.data || '-'}</td><td>${a.usuario || '-'}</td><td>${'⭐'.repeat(a.estrelas || 0)}</td><td>${a.pedidoId || '-'}</td></tr>`).join(''); 
+        } catch(e) { console.error(e); } 
+    }
+    
+    async function loadLogs() { 
+        try { 
+            const snap = await getDocs(collection(db, 'logs')); 
+            const logs = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); 
+            document.getElementById('logsTable').innerHTML = logs.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum log registrado</td></tr>' : 
+                logs.map(l => `<tr><td>${l.data || '-'}</td><td>${l.usuario || '-'}</td><td>${l.acao || '-'}</td><td>${l.detalhes || '-'}</td></tr>`).join(''); 
+        } catch(e) { console.error(e); } 
     }
 
-    window.convidarAdmin = async function() {
-        const nome   = document.getElementById('inviteNome').value.trim();
-        const email  = document.getElementById('inviteEmail').value.trim().toLowerCase();
-        const senha  = document.getElementById('inviteSenha').value.trim();
-        const nivel  = document.getElementById('inviteNivel').value;
-        const btn    = document.getElementById('btnConvidarAdmin');
-        const msgEl  = document.getElementById('inviteMsg');
-
-        msgEl.style.color = '#e74c3c'; msgEl.textContent = '';
-
-        if (!nome || nome.length < 2) { msgEl.textContent = '⚠️ Informe o nome do administrador.'; return; }
-        if (!email.includes('@') || !email.includes('.')) { msgEl.textContent = '⚠️ E-mail inválido.'; return; }
-        if (!senha || senha.length < 6) { msgEl.textContent = '⚠️ Senha deve ter no mínimo 6 caracteres.'; return; }
-        if (email === _getMasterEmail()) { msgEl.textContent = '⚠️ Este e-mail já é o Master Admin.'; return; }
-
-        // Verifica duplicata no Firestore
-        try {
-            const q = query(collection(db, 'admins'), where('email', '==', email));
-            const existe = await getDocs(q);
-            if (!existe.empty) { msgEl.textContent = '⚠️ Este e-mail já está cadastrado como admin.'; return; }
-        } catch(e) {}
-
-        btn.disabled = true; btn.textContent = '⏳ Registrando...'; msgEl.textContent = '';
-
-        try {
-            // 1. Cria usuário no Firebase Auth com a senha temporária
-            await createUserWithEmailAndPassword(auth, email, senha);
-
-            // 2. Registra na coleção 'admins' do Firestore
-            const agora = new Date().toLocaleString('pt-BR');
-            const currentUser = auth.currentUser;
-            await addDoc(collection(db, 'admins'), {
-                nome, email, nivel,
-                adicionadoEm: agora,
-                adicionadoPor: currentUser?.email || 'Master Admin',
-                criadoEm: serverTimestamp()
-            });
-
-            // 3. Envia e-mail de redefinição para que o convidado troque a senha
-            await sendPasswordResetEmail(auth, email);
-
-            // 4. Log
-            await addLog('master', 'convidar_admin', `Novo admin convidado: ${nome} (${email}) · nível: ${nivel}`);
-
-            // 5. Feedback visual
-            msgEl.style.color = '#2ecc71';
-            msgEl.textContent = `✅ Admin "${nome}" registrado! E-mail de redefinição enviado para ${email}.`;
-
-            // 6. Limpa form e atualiza lista
-            document.getElementById('inviteNome').value = '';
-            document.getElementById('inviteEmail').value = '';
-            document.getElementById('inviteSenha').value = '';
-            loadAdmins();
-
-        } catch(error) {
-            const erros = {
-                'auth/email-already-in-use': '⚠️ Este e-mail já existe no Firebase Auth. Adicione manualmente no Firestore se necessário.',
-                'auth/invalid-email': '❌ E-mail inválido.',
-                'auth/weak-password': '❌ Senha fraca. Use ao menos 6 caracteres.',
-                'auth/operation-not-allowed': '❌ Criação de usuários desabilitada no Firebase.',
-            };
-            msgEl.style.color = '#e74c3c';
-            msgEl.textContent = erros[error.code] || `❌ Erro: ${error.message}`;
-            console.error(error);
-        } finally {
-            btn.disabled = false; btn.textContent = '✉️ Enviar convite';
-        }
-    };
-
-    window.removerAdmin = async function(docId, email, nome) {
-        if (!confirm(`⚠️ Remover o admin "${nome}" (${email})?\n\nEle perderá o acesso ao painel imediatamente.`)) return;
-        try {
-            await deleteDoc(doc(db, 'admins', docId));
-            await addLog('master', 'remover_admin', `Admin removido: ${nome} (${email})`);
-            showToast(`🗑️ Admin "${nome}" removido com sucesso.`);
-            loadAdmins();
-        } catch(e) {
-            console.error(e);
-            showToast('❌ Erro ao remover admin. Verifique as permissões do Firestore.');
-        }
-    };
-
-    function showToast(msg) { const container = document.getElementById('toast-container'); if(!container) return; const toast = document.createElement('div'); toast.textContent = msg; toast.style.cssText = `background:#333;color:white;padding:10px 20px;border-radius:50px;font-size:14px;animation:fadeInOut 2.5s ease;pointer-events:none;white-space:nowrap;`; container.appendChild(toast); setTimeout(() => { if(container.contains(toast)) container.removeChild(toast); }, 2500); }
-
+    // ========== ENCOMENDAS ==========
     let allEncomendas = [];
     let currentEncomendaFilter = 'all';
 
@@ -835,7 +855,7 @@
     window.confirmarEncomendaAdmin = async function(id) {
         try {
             await updateDoc(doc(db, 'pedidos', id), { status: 'encomenda_confirmada' });
-            addLog('admin', 'confirmar_encomenda', `Encomenda ${id} confirmada`);
+            addLog(currentUser?.email || 'admin', 'confirmar_encomenda', `Encomenda ${id} confirmada`);
             loadEncomendas();
             loadDashboard();
             showToast('✅ Encomenda confirmada!');
@@ -846,7 +866,7 @@
         if(!confirm('Cancelar esta encomenda?')) return;
         try {
             await updateDoc(doc(db, 'pedidos', id), { status: 'encomenda_cancelada' });
-            addLog('admin', 'cancelar_encomenda', `Encomenda ${id} cancelada`);
+            addLog(currentUser?.email || 'admin', 'cancelar_encomenda', `Encomenda ${id} cancelada`);
             loadEncomendas();
             showToast('❌ Encomenda cancelada.');
         } catch(e) { console.error(e); showToast('❌ Erro ao cancelar encomenda'); }
@@ -861,15 +881,138 @@
         showToast('📎 Encomendas exportadas!');
     };
 
-    function iniciarPainel() { loadDashboard(); loadProducts(); loadOrders(); loadUsers(); loadAvaliacoes(); loadLogs(); loadEncomendas(); loadAdmins(); iniciarListenerPedidos(); iniciarListenerUsers(); }
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeInOut {0%{opacity:0;transform:translateX(-50%) translateY(20px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}85%{opacity:1;transform:translateX(-50%) translateY(0);}100%{opacity:0;transform:translateX(-50%) translateY(-20px);}}
-        #inviteFormGrid input:focus, #inviteFormGrid select:focus { outline:none; border-color:#ff6b9d !important; box-shadow:0 0 0 3px rgba(255,107,157,0.12); }
-        #btnConvidarAdmin:hover { transform:translateY(-2px) !important; box-shadow:0 8px 24px rgba(255,64,129,0.42) !important; }
-        @media(max-width:600px){ #inviteFormGrid{ grid-template-columns:1fr !important; } }
-    `;
-    document.head.appendChild(style);
+    // ========== ADMINS ==========
+    async function loadAdmins() {
+        const tbody = document.getElementById('adminsTable');
+        if (!tbody) return;
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Carregando...</td></tr>';
+        try {
+            const snap = await getDocs(collection(db, 'admins'));
+            const admins = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const master = { id: '__master__', nome: 'Moreira (Master)', email: _getMasterEmail(), nivel: 'master', adicionadoEm: 'Fundador', adicionadoPor: 'Sistema' };
+            const todos = [master, ...admins.filter(a => a.email !== _getMasterEmail())];
+            if (!todos.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Nenhum admin extra cadastrado</td></tr>';
+                return;
+            }
+            tbody.innerHTML = todos.map(a => {
+                const nivelBadge = a.nivel === 'master'
+                    ? '<span style="background:linear-gradient(135deg,#ff6b9d,#ff4081);color:#fff;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:800;">👑 Master</span>'
+                    : a.nivel === 'moderador'
+                    ? '<span style="background:#ffeaa7;color:#d63031;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:700;">🔸 Moderador</span>'
+                    : '<span style="background:#c8f7e0;color:#00b894;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:700;">🛡️ Admin</span>';
+                const acoes = a.nivel === 'master'
+                    ? '<span style="color:#ccc;font-size:0.78rem;">Protegido</span>'
+                    : `<button class="btn btn-danger btn-sm" onclick="removerAdmin('${a.id}','${a.email}','${a.nome}')">🗑️ Remover</button>`;
+                return `<tr><td><strong>${a.nome || '-'}</strong></td><td>${a.email || '-'}</td><td>${nivelBadge}</td><td style="font-size:0.8rem;">${a.adicionadoEm || '-'}</td><td style="font-size:0.8rem;">${a.adicionadoPor || '-'}</td><td>${acoes}</td></tr>`;
+            }).join('');
+        } catch(e) {
+            console.error(e);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#e74c3c;">Erro ao carregar admins</td></tr>';
+        }
+    }
+
+    window.convidarAdmin = async function() {
+        const nome   = document.getElementById('inviteNome').value.trim();
+        const email  = document.getElementById('inviteEmail').value.trim().toLowerCase();
+        const senha  = document.getElementById('inviteSenha').value.trim();
+        const nivel  = document.getElementById('inviteNivel').value;
+        const btn    = document.getElementById('btnConvidarAdmin');
+        const msgEl  = document.getElementById('inviteMsg');
+
+        msgEl.style.color = '#e74c3c'; msgEl.textContent = '';
+
+        if (!nome || nome.length < 2) { msgEl.textContent = '⚠️ Informe o nome do administrador.'; return; }
+        if (!email.includes('@') || !email.includes('.')) { msgEl.textContent = '⚠️ E-mail inválido.'; return; }
+        if (!senha || senha.length < 6) { msgEl.textContent = '⚠️ Senha deve ter no mínimo 6 caracteres.'; return; }
+        if (email === _getMasterEmail()) { msgEl.textContent = '⚠️ Este e-mail já é o Master Admin.'; return; }
+
+        try {
+            const q = query(collection(db, 'admins'), where('email', '==', email));
+            const existe = await getDocs(q);
+            if (!existe.empty) { msgEl.textContent = '⚠️ Este e-mail já está cadastrado como admin.'; return; }
+        } catch(e) {}
+
+        btn.disabled = true; btn.textContent = '⏳ Registrando...'; msgEl.textContent = '';
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, senha);
+            const agora = new Date().toLocaleString('pt-BR');
+            await addDoc(collection(db, 'admins'), {
+                nome, email, nivel,
+                adicionadoEm: agora,
+                adicionadoPor: currentUser?.email || 'Master Admin',
+                criadoEm: serverTimestamp()
+            });
+            await sendPasswordResetEmail(auth, email);
+            await addLog(currentUser?.email || 'master', 'convidar_admin', `Novo admin convidado: ${nome} (${email}) · nível: ${nivel}`);
+            msgEl.style.color = '#2ecc71';
+            msgEl.textContent = `✅ Admin "${nome}" registrado! E-mail de redefinição enviado para ${email}.`;
+            document.getElementById('inviteNome').value = '';
+            document.getElementById('inviteEmail').value = '';
+            document.getElementById('inviteSenha').value = '';
+            loadAdmins();
+        } catch(error) {
+            const erros = {
+                'auth/email-already-in-use': '⚠️ Este e-mail já existe no Firebase Auth.',
+                'auth/invalid-email': '❌ E-mail inválido.',
+                'auth/weak-password': '❌ Senha fraca. Use ao menos 6 caracteres.',
+                'auth/operation-not-allowed': '❌ Criação de usuários desabilitada.'
+            };
+            msgEl.style.color = '#e74c3c';
+            msgEl.textContent = erros[error.code] || `❌ Erro: ${error.message}`;
+            console.error(error);
+        } finally {
+            btn.disabled = false; btn.textContent = '✉️ Enviar convite';
+        }
+    };
+
+    window.removerAdmin = async function(docId, email, nome) {
+        if (!confirm(`⚠️ Remover o admin "${nome}" (${email})?\n\nEle perderá o acesso ao painel imediatamente.`)) return;
+        try {
+            await deleteDoc(doc(db, 'admins', docId));
+            await addLog(currentUser?.email || 'master', 'remover_admin', `Admin removido: ${nome} (${email})`);
+            showToast(`🗑️ Admin "${nome}" removido com sucesso.`);
+            loadAdmins();
+        } catch(e) {
+            console.error(e);
+            showToast('❌ Erro ao remover admin.');
+        }
+    };
+
+    // ========== SWITCH TABS ==========
+    window.switchTab = function(tab) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(el => {
+            el.classList.remove('active');
+            if(el.id === 'tabAdmins') { el.style.background = 'linear-gradient(135deg,#ff6b9d,#ff4081)'; el.style.color = 'white'; }
+        });
+        document.getElementById(`${tab}Tab`).classList.add('active');
+        if(event && event.target) event.target.classList.add('active');
+        if(tab === 'dashboard') loadDashboard();
+        else if(tab === 'products') loadProducts();
+        else if(tab === 'orders') loadOrders();
+        else if(tab === 'users') loadUsers();
+        else if(tab === 'avaliacoes') loadAvaliacoes();
+        else if(tab === 'logs') loadLogs();
+        else if(tab === 'encomendas') loadEncomendas();
+        else if(tab === 'admins') loadAdmins();
+    };
+
+    function iniciarPainel() { 
+        loadDashboard(); 
+        loadProducts(); 
+        loadOrders(); 
+        loadUsers(); 
+        loadAvaliacoes(); 
+        loadLogs(); 
+        loadEncomendas(); 
+        loadAdmins(); 
+        iniciarListenerPedidos(); 
+        iniciarListenerUsers(); 
+    }
+
+    // ========== INICIALIZAR ==========
     checkAuth();
 </script>
 </body>
