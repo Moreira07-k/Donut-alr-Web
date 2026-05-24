@@ -270,6 +270,7 @@
             <div class="form-group"><label>💰 Preço (R$)</label><input type="number" step="0.01" id="productPrice" required></div>
             <div class="form-group"><label>📦 Estoque</label><input type="number" id="productEstoque" value="99" min="0"></div>
             <div class="form-group"><label>😊 Emoji</label><input type="text" id="productEmoji" placeholder="🍩" maxlength="2"></div>
+            <div class="form-group"><label>🖼️ URL da Imagem (opcional)</label><input type="url" id="productImagem" placeholder="https://exemplo.com/foto-donut.jpg"><small style="color:#999;font-size:0.75rem;">Cole o link de uma imagem hospedada. Deixe vazio para usar o emoji.</small></div>
             <div class="form-group"><label>📝 Descrição</label><textarea id="productDesc" rows="2"></textarea></div>
             <div class="form-group"><label>📌 Status</label><select id="productStatus"><option value="true">✅ Ativo</option><option value="false">❌ Inativo</option></select></div>
             <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
@@ -391,7 +392,12 @@
             const snap = await getDocs(collection(db, 'produtos'));
             const produtos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
             document.getElementById('productsTable').innerHTML = produtos.length === 0 ? '<tr><td colspan="6" style="text-align:center;padding:2rem;">Nenhum produto cadastrado</td></tr>' :
-                produtos.map(p => `<tr><td><strong>${p.emoji || '🍩'}</strong> ${p.nome}</td><td>${p.categoria || '-'}</td><td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td><td>${p.estoque ?? '-'}</td><td><span class="status-badge ${p.ativo !== false ? 'status-active' : 'status-inactive'}">${p.ativo !== false ? 'Ativo' : 'Inativo'}</span></td><td><button class="btn btn-warning btn-sm" onclick="editProduct('${p.id}')">✏️</button> <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}', '${p.nome}')">🗑️</button> <button class="btn btn-sm" onclick="toggleProductStatus('${p.id}', ${p.ativo !== false})">${p.ativo !== false ? '🔴' : '🟢'}</button></td></tr>`).join('');
+                produtos.map(p => {
+                    const thumb = p.imagem && p.imagem.startsWith('http')
+                        ? `<img src="${p.imagem}" alt="${p.nome}" style="width:36px;height:36px;object-fit:cover;border-radius:8px;vertical-align:middle;margin-right:6px;">`
+                        : `<strong style="margin-right:4px;">${p.emoji || '🍩'}</strong>`;
+                    return `<tr><td>${thumb}${p.nome}</td><td>${p.categoria || '-'}</td><td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td><td>${p.estoque ?? '-'}</td><td><span class="status-badge ${p.ativo !== false ? 'status-active' : 'status-inactive'}">${p.ativo !== false ? 'Ativo' : 'Inativo'}</span></td><td><button class="btn btn-warning btn-sm" onclick="editProduct('${p.id}')">✏️</button> <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}', '${p.nome}')">🗑️</button> <button class="btn btn-sm" onclick="toggleProductStatus('${p.id}', ${p.ativo !== false})">${p.ativo !== false ? '🔴' : '🟢'}</button></td></tr>`;
+                }).join('');
         } catch(e) { console.error(e); }
     }
 
@@ -403,12 +409,13 @@
         document.getElementById('productPrice').value = product?.preco || '';
         document.getElementById('productEstoque').value = product?.estoque ?? 99;
         document.getElementById('productEmoji').value = product?.emoji || '🍩';
+        document.getElementById('productImagem').value = product?.imagem || '';
         document.getElementById('productDesc').value = product?.descricao || '';
         document.getElementById('productStatus').value = product?.ativo !== false ? 'true' : 'false';
         document.getElementById('productModal').classList.add('active');
     };
 
-    window.closeProductModal = function() { document.getElementById('productModal').classList.remove('active'); document.getElementById('productForm').reset(); document.getElementById('productId').value = ''; };
+    window.closeProductModal = function() { document.getElementById('productModal').classList.remove('active'); document.getElementById('productForm').reset(); document.getElementById('productId').value = ''; document.getElementById('productImagem').value = ''; };
 
     window.saveProduct = async function() {
         const id = document.getElementById('productId').value;
@@ -418,6 +425,7 @@
             preco: parseFloat(document.getElementById('productPrice').value),
             estoque: parseInt(document.getElementById('productEstoque').value) || 0,
             emoji: document.getElementById('productEmoji').value || '🍩',
+            imagem: document.getElementById('productImagem').value.trim(),
             descricao: document.getElementById('productDesc').value,
             ativo: document.getElementById('productStatus').value === 'true'
         };
