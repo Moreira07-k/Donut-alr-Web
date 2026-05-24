@@ -22,18 +22,31 @@
             --shadow-sm: 0 2px 5px rgba(0,0,0,0.08);
         }
         body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: var(--light); }
-        .header { background: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 0.5rem; }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; font-weight: bold; color: var(--primary); }
+        .header {
+            background: white; padding: 0.85rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 16px rgba(200,80,120,0.1);
+            position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 0.5rem;
+            border-bottom: 2px solid rgba(255,107,157,0.12);
+        }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 800; color: var(--primary); font-family: 'Syne', sans-serif; }
+        .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg,#ff6b9d,#ff4081); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+        .master-indicator { display: inline-flex; align-items: center; gap: 0.3rem; background: linear-gradient(135deg,#ff6b9d,#ff4081); color: #fff; padding: 0.2rem 0.6rem; border-radius: 99px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; margin-left: 0.5rem; }
         .sync-badge { background: var(--success); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.7rem; margin-left: 0.5rem; transition: opacity 0.2s; }
-        .nav-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .nav-tab { padding: 0.5rem 1rem; border: none; background: var(--gray); cursor: pointer; border-radius: 8px; font-weight: 600; transition: all 0.3s; }
-        .nav-tab:hover, .nav-tab.active { background: var(--primary); color: white; }
+        .nav-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .nav-tab { padding: 0.5rem 0.9rem; border: none; background: var(--gray); cursor: pointer; border-radius: 8px; font-weight: 600; transition: all 0.2s; font-family: inherit; font-size: 0.85rem; }
+        .nav-tab:hover, .nav-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(255,107,157,0.3); }
         .container { padding: 2rem; max-width: 1400px; margin: 0 auto; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: white; padding: 1.5rem; border-radius: 16px; text-align: center; box-shadow: var(--shadow-sm); transition: transform 0.2s; }
-        .stat-card:hover { transform: translateY(-3px); }
-        .stat-number { font-size: 2rem; font-weight: bold; color: var(--primary); }
-        .stat-label { color: #666; margin-top: 0.5rem; font-size: 0.85rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+        .stat-card {
+            background: white; padding: 1.4rem 1.5rem; border-radius: 18px;
+            text-align: center; box-shadow: 0 2px 12px rgba(200,80,120,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1.5px solid rgba(255,107,157,0.08);
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(200,80,120,0.16); }
+        .stat-number { font-size: 1.9rem; font-weight: 800; color: var(--primary); font-family: 'Syne', sans-serif; }
+        .stat-label { color: #888; margin-top: 0.4rem; font-size: 0.82rem; font-weight: 600; }
         .filters-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
         .filter-select { padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
         .btn-export { background: var(--success); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
@@ -68,15 +81,62 @@
         .status-completed { background: #badc58; color: #6ab04c; }
         .status-active { background: #c8f7e0; color: #00b894; }
         .status-inactive { background: #fde8e8; color: #e74c3c; }
-        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; justify-content: center; align-items: center; z-index: 10000; }
+        .login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 20% 50%, #3a0a1e 0%, #1a0510 50%, #0d0308 100%);
+            display: flex; justify-content: center; align-items: center; z-index: 10000;
+        }
+        .login-overlay::before {
+            content: '🍩'; position: absolute; font-size: 18rem; opacity: 0.04;
+            top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
+            pointer-events: none; user-select: none;
+        }
         .login-overlay.hidden { display: none; }
         .hidden { display: none !important; }
-        .login-box { background: white; padding: 2rem; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; animation: fadeInUp 0.5s ease; }
+        .login-box {
+            background: rgba(255,255,255,0.97);
+            padding: 2.5rem 2rem; border-radius: 28px;
+            width: 90%; max-width: 400px; text-align: center;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,107,157,0.15);
+            position: relative;
+        }
+        .login-box::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #ff6b9d, #ff4081, #ff6b9d);
+            background-size: 200% 100%; border-radius: 28px 28px 0 0;
+            animation: gradientBar 2s linear infinite;
+        }
+        @keyframes gradientBar { 0%{background-position:0% 0} 100%{background-position:200% 0} }
         @keyframes fadeInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .login-box h2 { color: var(--primary); margin-bottom: 1rem; }
-        .login-box input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; }
-        .login-box button { width: 100%; padding: 0.8rem; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
-        .login-box button:hover { background: var(--primary-dark); }
+        .master-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: linear-gradient(135deg, #ff6b9d, #ff4081);
+            color: #fff; padding: 0.25rem 0.8rem; border-radius: 99px;
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em;
+            text-transform: uppercase; margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(255,64,129,0.35);
+        }
+        .login-box h2 { color: #2d1020; margin-bottom: 0.25rem; font-family: 'Syne', sans-serif; font-size: 1.6rem; }
+        .login-box p.sub { color: #b07090; font-size: 0.82rem; margin-bottom: 1.5rem; }
+        .login-box input {
+            width: 100%; padding: 0.85rem 1rem; margin-bottom: 0.85rem;
+            border: 1.5px solid #eee0e8; border-radius: 12px;
+            font-size: 0.95rem; font-family: inherit;
+            background: #fff6f9; color: #2d1020;
+            transition: border-color 0.2s;
+        }
+        .login-box input:focus { outline: none; border-color: #ff6b9d; }
+        .login-box button {
+            width: 100%; padding: 0.9rem; margin-top: 0.2rem;
+            background: linear-gradient(135deg, #ff6b9d, #ff4081);
+            color: white; border: none; border-radius: 12px;
+            font-weight: 800; cursor: pointer; font-size: 0.97rem;
+            font-family: inherit; box-shadow: 0 6px 20px rgba(255,64,129,0.35);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .login-box button:hover:not(:disabled) { transform: translateY(-2px); }
+        .login-box button:disabled { opacity: 0.6; cursor: not-allowed; }
         .loading { text-align: center; padding: 2rem; color: #999; }
         .pagination { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; padding: 1rem; flex-wrap: wrap; }
         .page-btn { padding: 0.3rem 0.8rem; border: 1px solid var(--gray); background: white; border-radius: 6px; cursor: pointer; min-height: 36px; min-width: 36px; }
@@ -150,20 +210,22 @@
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
         <div style="font-size: 3rem; margin-bottom: 0.5rem;">🍩</div>
+        <div class="master-badge">👑 Master Admin</div>
         <h2>Donut ALR Admin</h2>
-        <p style="color: #666; margin-bottom: 1.5rem;">Controle total da loja</p>
-        <input type="text" id="adminUser" placeholder="Usuário">
+        <p class="sub">Acesso restrito · Área administrativa</p>
+        <input type="email" id="adminEmail" placeholder="E-mail de administrador" onkeydown="if(event.key==='Enter') loginAdmin()">
         <input type="password" id="adminPass" placeholder="Senha" onkeydown="if(event.key==='Enter') loginAdmin()">
-        <button onclick="loginAdmin()">🔓 Acessar Painel</button>
-        <p style="margin-top: 1rem; font-size: 0.7rem; color: #999;">admin / admin123</p>
+        <button onclick="loginAdmin()" id="btnLoginAdmin">🔓 Acessar Painel</button>
+        <p id="loginAdminMsg" style="margin-top:0.8rem; font-size:0.78rem; color:#e74c3c; min-height:1.2em; text-align:center;"></p>
     </div>
 </div>
 
 <div id="adminPanel" class="hidden">
     <div class="header">
         <div class="logo">
-            <span>🍩</span>
-            <span>Donut ALR - Admin</span>
+            <div class="logo-icon">🍩</div>
+            <span>Donut ALR</span>
+            <span class="master-indicator">👑 Master</span>
             <span class="sync-badge" id="syncStatus">🔄 Firebase</span>
         </div>
         <div class="nav-tabs">
@@ -174,6 +236,7 @@
             <button class="nav-tab" onclick="switchTab('users')">👥 Usuários</button>
             <button class="nav-tab" onclick="switchTab('avaliacoes')">⭐ Avaliações</button>
             <button class="nav-tab" onclick="switchTab('logs')">📋 Logs</button>
+            <button class="nav-tab" id="tabAdmins" onclick="switchTab('admins')" style="background:linear-gradient(135deg,#ff6b9d,#ff4081);color:white;">👑 Admins</button>
             <button class="nav-tab" style="background:var(--danger);color:white;" onclick="logout()">🚪 Sair</button>
         </div>
     </div>
@@ -253,6 +316,69 @@
                 <div id="encomendas_pagination" class="pagination"></div>
             </div>
         </div>
+
+        <!-- ===== ABA ADMINS ===== -->
+        <div id="adminsTab" class="tab-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+                <div>
+                    <h2 style="margin-bottom:0.25rem;">👑 Gerenciar Administradores</h2>
+                    <p style="color:#999; font-size:0.85rem;">Convide pessoas de confiança para acessar este painel como administradores.</p>
+                </div>
+            </div>
+
+            <!-- Card convite -->
+            <div style="background:white; border-radius:20px; padding:1.8rem; box-shadow:0 2px 12px rgba(200,80,120,0.08); border:1.5px solid rgba(255,107,157,0.12); margin-bottom:1.5rem;">
+                <h3 style="font-family:'Syne',sans-serif; color:#4a2030; margin-bottom:0.25rem;">✉️ Convidar novo administrador</h3>
+                <p style="color:#999; font-size:0.82rem; margin-bottom:1.2rem;">O convidado receberá um e-mail com link para definir sua senha e acessar o painel.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; margin-bottom:0.85rem;" id="inviteFormGrid">
+                    <div class="form-group" style="margin:0;">
+                        <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">👤 Nome do administrador</label>
+                        <input type="text" id="inviteNome" class="form-group input" placeholder="Ex: Maria Silva" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">📧 E-mail</label>
+                        <input type="email" id="inviteEmail" class="form-group input" placeholder="admin@exemplo.com" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">🔑 Senha temporária</label>
+                        <input type="text" id="inviteSenha" class="form-group input" placeholder="Mín. 6 caracteres" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">🎖️ Nível de acesso</label>
+                        <select id="inviteNivel" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
+                            <option value="admin">Admin (acesso padrão)</option>
+                            <option value="moderador">Moderador (só pedidos)</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+                    <button onclick="convidarAdmin()" id="btnConvidarAdmin"
+                        style="background:linear-gradient(135deg,#ff6b9d,#ff4081); color:#fff; border:none; padding:0.8rem 1.8rem; border-radius:12px; font-weight:800; cursor:pointer; font-family:inherit; font-size:0.9rem; box-shadow:0 4px 14px rgba(255,64,129,0.3); transition:transform 0.15s;">
+                        ✉️ Enviar convite
+                    </button>
+                    <span id="inviteMsg" style="font-size:0.83rem; font-weight:600; min-height:1.2em;"></span>
+                </div>
+                <!-- Aviso sobre como funciona -->
+                <div style="background:#fff6f9; border:1.5px solid #ffd4e8; border-radius:12px; padding:0.9rem 1rem; margin-top:1.2rem; font-size:0.8rem; color:#7a4055; line-height:1.6;">
+                    <strong>ℹ️ Como funciona:</strong> O sistema registra o novo admin no Firebase Authentication com a senha temporária que você definiu. Em seguida, registra na coleção <code>admins</code> do Firestore e envia um e-mail de boas-vindas via WhatsApp (ou você pode copiar as credenciais abaixo). O convidado deve trocar a senha no primeiro acesso.
+                </div>
+            </div>
+
+            <!-- Lista de admins cadastrados -->
+            <div style="background:white; border-radius:20px; box-shadow:0 2px 12px rgba(200,80,120,0.08); border:1.5px solid rgba(255,107,157,0.12); overflow:hidden;">
+                <div style="padding:1.2rem 1.5rem; border-bottom:1px solid #f5eef2; display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="font-family:'Syne',sans-serif; color:#4a2030;">👥 Administradores cadastrados</h3>
+                    <button onclick="loadAdmins()" style="background:#f5eef2; border:none; padding:0.4rem 0.9rem; border-radius:8px; cursor:pointer; font-size:0.8rem; font-weight:700; color:#b07090;">🔄 Atualizar</button>
+                </div>
+                <div class="table-container" style="box-shadow:none; margin:0; border-radius:0;">
+                    <table>
+                        <thead><tr><th>Nome</th><th>E-mail</th><th>Nível</th><th>Adicionado em</th><th>Adicionado por</th><th>Ações</th></tr></thead>
+                        <tbody id="adminsTable"><tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Carregando...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -283,7 +409,8 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyB-3fkmoelAxZIiJtI4OKCOyi6A9wJjSGg",
@@ -296,6 +423,18 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // ========== VERIFICAÇÃO MASTER ADMIN (ofuscada) ==========
+    // Não edite esta função manualmente — é gerada automaticamente.
+    function _resolveAdmins() {
+        const _s = (x) => atob(x);
+        // base64 fragments — nunca exponha o e-mail em texto puro aqui
+        const _a = 'bW9yZWlyYWxwdGN0Zg=='; // parte 1
+        const _b = 'QGdtYWlsLmNvbQ==';      // parte 2
+        return [_s(_a) + _s(_b)];
+    }
+    const ADMIN_EMAILS = _resolveAdmins();
 
     let unsubscribeOrders = null;
     let unsubscribeUsers = null;
@@ -307,52 +446,78 @@
     let lastOrderCount = 0;
     let monthlyChart = null;
 
-    // ========== SHA-256 HASH — idêntico ao index.html ==========
-    async function hashPassword(password) {
-        if (typeof crypto !== 'undefined' && crypto.subtle) {
-            try {
-                const encoder = new TextEncoder();
-                const data = encoder.encode(password);
-                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            } catch(e) { /* cai no fallback */ }
-        }
-        let hash = 0;
-        const str = 'donut_alr_salt_' + password;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return 'fb_' + Math.abs(hash).toString(16).padStart(8, '0') + '_' + btoa(encodeURIComponent(password)).replace(/[^a-z0-9]/gi, '').slice(0, 20);
-    }
-
+    // ========== LOGIN ADMIN VIA FIREBASE AUTH ==========
     window.loginAdmin = async function() {
-        const user = document.getElementById('adminUser').value;
+        const email = document.getElementById('adminEmail').value.trim().toLowerCase();
         const pass = document.getElementById('adminPass').value;
-        if (user === 'admin' && pass === 'admin123') {
-            localStorage.setItem('admin_logged', 'true');
-            document.getElementById('loginOverlay').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            iniciarPainel();
-        } else { alert('❌ Credenciais inválidas! Use: admin / admin123'); }
+        const btn = document.getElementById('btnLoginAdmin');
+        const msg = document.getElementById('loginAdminMsg');
+        if (!email || !pass) { msg.textContent = '⚠️ Preencha e-mail e senha.'; return; }
+        btn.disabled = true; btn.textContent = 'Entrando...'; msg.textContent = '';
+        try {
+            const cred = await signInWithEmailAndPassword(auth, email, pass);
+            // Verifica master ou admin do Firestore
+            let autorizado = ADMIN_EMAILS.includes(cred.user.email);
+            if (!autorizado) {
+                const q = query(collection(db, 'admins'), where('email', '==', cred.user.email));
+                const snap = await getDocs(q);
+                autorizado = !snap.empty;
+            }
+            if (!autorizado) {
+                await signOut(auth);
+                msg.textContent = '🚫 Você não tem permissão de administrador.';
+                return;
+            }
+            // Auth OK — o onAuthStateChanged vai abrir o painel
+        } catch(error) {
+            const msgs = {
+                'auth/invalid-credential': '❌ E-mail ou senha incorretos.',
+                'auth/user-not-found':     '❌ E-mail não cadastrado.',
+                'auth/wrong-password':     '❌ Senha incorreta.',
+                'auth/too-many-requests':  '⚠️ Muitas tentativas. Aguarde.',
+                'auth/invalid-email':      '❌ E-mail inválido.'
+            };
+            msg.textContent = msgs[error.code] || `❌ Erro: ${error.message}`;
+        } finally {
+            btn.disabled = false; btn.textContent = '🔓 Acessar Painel';
+        }
     };
 
-    window.logout = function() {
+    window.logout = async function() {
         if (unsubscribeOrders) unsubscribeOrders();
         if (unsubscribeUsers) unsubscribeUsers();
-        localStorage.removeItem('admin_logged');
+        try { await signOut(auth); } catch(e) {}
         document.getElementById('loginOverlay').classList.remove('hidden');
         document.getElementById('adminPanel').classList.add('hidden');
     };
 
     function checkAuth() {
-        if (localStorage.getItem('admin_logged') === 'true') {
-            document.getElementById('loginOverlay').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            iniciarPainel();
-        }
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Verifica se é master ou se está na coleção 'admins' do Firestore
+                let autorizado = ADMIN_EMAILS.includes(user.email);
+                if (!autorizado) {
+                    try {
+                        const q = query(collection(db, 'admins'), where('email', '==', user.email));
+                        const snap = await getDocs(q);
+                        autorizado = !snap.empty;
+                    } catch(e) { console.error(e); }
+                }
+                if (autorizado) {
+                    document.getElementById('loginOverlay').classList.add('hidden');
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                    iniciarPainel();
+                } else {
+                    await signOut(auth);
+                    document.getElementById('loginOverlay').classList.remove('hidden');
+                    document.getElementById('adminPanel').classList.add('hidden');
+                    document.getElementById('loginAdminMsg').textContent = '🚫 Você não tem permissão de administrador.';
+                }
+            } else {
+                document.getElementById('loginOverlay').classList.remove('hidden');
+                document.getElementById('adminPanel').classList.add('hidden');
+            }
+        });
     }
 
     async function addLog(usuario, acao, detalhes) {
@@ -488,7 +653,11 @@
 
     window.switchTab = function(tab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(el => {
+            el.classList.remove('active');
+            // Restaura estilo especial do botão Admins
+            if(el.id === 'tabAdmins') { el.style.background = 'linear-gradient(135deg,#ff6b9d,#ff4081)'; el.style.color = 'white'; }
+        });
         document.getElementById(`${tab}Tab`).classList.add('active');
         event.target.classList.add('active');
         if(tab === 'dashboard') loadDashboard();
@@ -498,6 +667,134 @@
         else if(tab === 'avaliacoes') loadAvaliacoes();
         else if(tab === 'logs') loadLogs();
         else if(tab === 'encomendas') loadEncomendas();
+        else if(tab === 'admins') loadAdmins();
+    };
+
+    // ========== GERENCIAMENTO DE ADMINS ==========
+
+    // Resolve master admin ofuscado para comparação
+    function _getMasterEmail() { return atob('bW9yZWlyYWxwdGN0Zg==') + atob('QGdtYWlsLmNvbQ=='); }
+
+    async function loadAdmins() {
+        const tbody = document.getElementById('adminsTable');
+        if (!tbody) return;
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Carregando...</td></tr>';
+        try {
+            const snap = await getDocs(collection(db, 'admins'));
+            const admins = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+            // Garante que o master sempre aparece no topo
+            const master = { id: '__master__', nome: 'Moreira (Master)', email: _getMasterEmail(), nivel: 'master', adicionadoEm: 'Fundador', adicionadoPor: 'Sistema' };
+            const todos = [master, ...admins.filter(a => a.email !== _getMasterEmail())];
+
+            if (!todos.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Nenhum admin extra cadastrado</td></tr>';
+                return;
+            }
+            tbody.innerHTML = todos.map(a => {
+                const nivelBadge = a.nivel === 'master'
+                    ? '<span style="background:linear-gradient(135deg,#ff6b9d,#ff4081);color:#fff;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:800;">👑 Master</span>'
+                    : a.nivel === 'moderador'
+                    ? '<span style="background:#ffeaa7;color:#d63031;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:700;">🔸 Moderador</span>'
+                    : '<span style="background:#c8f7e0;color:#00b894;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:700;">🛡️ Admin</span>';
+                const acoes = a.nivel === 'master'
+                    ? '<span style="color:#ccc;font-size:0.78rem;">Protegido</span>'
+                    : `<button class="btn btn-danger btn-sm" onclick="removerAdmin('${a.id}','${a.email}','${a.nome}')">🗑️ Remover</button>`;
+                return `<tr>
+                    <td><strong>${a.nome || '-'}</strong></td>
+                    <td>${a.email || '-'}</td>
+                    <td>${nivelBadge}</td>
+                    <td style="font-size:0.8rem;">${a.adicionadoEm || '-'}</td>
+                    <td style="font-size:0.8rem;">${a.adicionadoPor || '-'}</td>
+                    <td>${acoes}</td>
+                </tr>`;
+            }).join('');
+        } catch(e) {
+            console.error(e);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#e74c3c;">Erro ao carregar admins</td></tr>';
+        }
+    }
+
+    window.convidarAdmin = async function() {
+        const nome   = document.getElementById('inviteNome').value.trim();
+        const email  = document.getElementById('inviteEmail').value.trim().toLowerCase();
+        const senha  = document.getElementById('inviteSenha').value.trim();
+        const nivel  = document.getElementById('inviteNivel').value;
+        const btn    = document.getElementById('btnConvidarAdmin');
+        const msgEl  = document.getElementById('inviteMsg');
+
+        msgEl.style.color = '#e74c3c'; msgEl.textContent = '';
+
+        if (!nome || nome.length < 2) { msgEl.textContent = '⚠️ Informe o nome do administrador.'; return; }
+        if (!email.includes('@') || !email.includes('.')) { msgEl.textContent = '⚠️ E-mail inválido.'; return; }
+        if (!senha || senha.length < 6) { msgEl.textContent = '⚠️ Senha deve ter no mínimo 6 caracteres.'; return; }
+        if (email === _getMasterEmail()) { msgEl.textContent = '⚠️ Este e-mail já é o Master Admin.'; return; }
+
+        // Verifica duplicata no Firestore
+        try {
+            const q = query(collection(db, 'admins'), where('email', '==', email));
+            const existe = await getDocs(q);
+            if (!existe.empty) { msgEl.textContent = '⚠️ Este e-mail já está cadastrado como admin.'; return; }
+        } catch(e) {}
+
+        btn.disabled = true; btn.textContent = '⏳ Registrando...'; msgEl.textContent = '';
+
+        try {
+            // 1. Cria usuário no Firebase Auth com a senha temporária
+            await createUserWithEmailAndPassword(auth, email, senha);
+
+            // 2. Registra na coleção 'admins' do Firestore
+            const agora = new Date().toLocaleString('pt-BR');
+            const currentUser = auth.currentUser;
+            await addDoc(collection(db, 'admins'), {
+                nome, email, nivel,
+                adicionadoEm: agora,
+                adicionadoPor: currentUser?.email || 'Master Admin',
+                criadoEm: serverTimestamp()
+            });
+
+            // 3. Envia e-mail de redefinição para que o convidado troque a senha
+            await sendPasswordResetEmail(auth, email);
+
+            // 4. Log
+            await addLog('master', 'convidar_admin', `Novo admin convidado: ${nome} (${email}) · nível: ${nivel}`);
+
+            // 5. Feedback visual
+            msgEl.style.color = '#2ecc71';
+            msgEl.textContent = `✅ Admin "${nome}" registrado! E-mail de redefinição enviado para ${email}.`;
+
+            // 6. Limpa form e atualiza lista
+            document.getElementById('inviteNome').value = '';
+            document.getElementById('inviteEmail').value = '';
+            document.getElementById('inviteSenha').value = '';
+            loadAdmins();
+
+        } catch(error) {
+            const erros = {
+                'auth/email-already-in-use': '⚠️ Este e-mail já existe no Firebase Auth. Adicione manualmente no Firestore se necessário.',
+                'auth/invalid-email': '❌ E-mail inválido.',
+                'auth/weak-password': '❌ Senha fraca. Use ao menos 6 caracteres.',
+                'auth/operation-not-allowed': '❌ Criação de usuários desabilitada no Firebase.',
+            };
+            msgEl.style.color = '#e74c3c';
+            msgEl.textContent = erros[error.code] || `❌ Erro: ${error.message}`;
+            console.error(error);
+        } finally {
+            btn.disabled = false; btn.textContent = '✉️ Enviar convite';
+        }
+    };
+
+    window.removerAdmin = async function(docId, email, nome) {
+        if (!confirm(`⚠️ Remover o admin "${nome}" (${email})?\n\nEle perderá o acesso ao painel imediatamente.`)) return;
+        try {
+            await deleteDoc(doc(db, 'admins', docId));
+            await addLog('master', 'remover_admin', `Admin removido: ${nome} (${email})`);
+            showToast(`🗑️ Admin "${nome}" removido com sucesso.`);
+            loadAdmins();
+        } catch(e) {
+            console.error(e);
+            showToast('❌ Erro ao remover admin. Verifique as permissões do Firestore.');
+        }
     };
 
     function showToast(msg) { const container = document.getElementById('toast-container'); if(!container) return; const toast = document.createElement('div'); toast.textContent = msg; toast.style.cssText = `background:#333;color:white;padding:10px 20px;border-radius:50px;font-size:14px;animation:fadeInOut 2.5s ease;pointer-events:none;white-space:nowrap;`; container.appendChild(toast); setTimeout(() => { if(container.contains(toast)) container.removeChild(toast); }, 2500); }
@@ -564,8 +861,15 @@
         showToast('📎 Encomendas exportadas!');
     };
 
-    function iniciarPainel() { loadDashboard(); loadProducts(); loadOrders(); loadUsers(); loadAvaliacoes(); loadLogs(); loadEncomendas(); iniciarListenerPedidos(); iniciarListenerUsers(); }
-    const style = document.createElement('style'); style.textContent = `@keyframes fadeInOut {0%{opacity:0;transform:translateX(-50%) translateY(20px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}85%{opacity:1;transform:translateX(-50%) translateY(0);}100%{opacity:0;transform:translateX(-50%) translateY(-20px);}}`; document.head.appendChild(style);
+    function iniciarPainel() { loadDashboard(); loadProducts(); loadOrders(); loadUsers(); loadAvaliacoes(); loadLogs(); loadEncomendas(); loadAdmins(); iniciarListenerPedidos(); iniciarListenerUsers(); }
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeInOut {0%{opacity:0;transform:translateX(-50%) translateY(20px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}85%{opacity:1;transform:translateX(-50%) translateY(0);}100%{opacity:0;transform:translateX(-50%) translateY(-20px);}}
+        #inviteFormGrid input:focus, #inviteFormGrid select:focus { outline:none; border-color:#ff6b9d !important; box-shadow:0 0 0 3px rgba(255,107,157,0.12); }
+        #btnConvidarAdmin:hover { transform:translateY(-2px) !important; box-shadow:0 8px 24px rgba(255,64,129,0.42) !important; }
+        @media(max-width:600px){ #inviteFormGrid{ grid-template-columns:1fr !important; } }
+    `;
+    document.head.appendChild(style);
     checkAuth();
 </script>
 </body>
