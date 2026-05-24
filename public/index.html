@@ -636,6 +636,7 @@
             <button class="tab-btn" data-cat="cupcakes">🧁 Cupcakes</button>
             <button class="tab-btn" data-cat="bolos">🎂 Bolos</button>
             <button class="tab-btn" data-cat="combos">🎁 Combos</button>
+            <button class="tab-btn" data-cat="bebidas">🥤 Bebidas</button>
         </div>
         <div class="products-grid" id="productsGrid"></div>
     </section>
@@ -789,7 +790,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, deleteDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -805,7 +806,7 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // ========== FALLBACK LOCAIS ==========
+    // ========== FALLBACK LOCAIS (caso Firebase falhe) ==========
     const PRODUTOS_LOCAL = [
         { id:1, name:"Donut Glitter Rosa", emoji:"🍩", desc:"Cobertura rosé com confeitos", price:12.9, category:"donuts", badge:"❤️" },
         { id:2, name:"Donut Nutella Love", emoji:"🍩", desc:"Recheio cremoso de Nutella", price:16.9, category:"donuts", badge:"⭐", tag:"Mais pedido" },
@@ -858,6 +859,7 @@
     let freteCalculado = 7.9;
     let avaliacaoEstrela = 0;
     let ultimoPedidoId = null;
+    let produtosUnsubscribe = null;
 
     let produtosFirebase = [...PRODUTOS_LOCAL];
     let combosFirebase = [...COMBOS_LOCAL];
@@ -1039,7 +1041,6 @@
                 atualizarHeaderLogin();
                 esconderLoginOverlay();
                 carregarCarrinho();
-                carregarProdutosFirebase();
                 lancarConfete();
             }, 1000);
             
@@ -1113,7 +1114,6 @@
                 atualizarHeaderLogin();
                 esconderLoginOverlay();
                 carregarCarrinho();
-                carregarProdutosFirebase();
             }, 500);
             
         } catch(error) {
@@ -1148,84 +1148,55 @@
         switchAuthScreen('login');
     };
 
-    // ========== VERIFICAÇÃO DE AUTENTICAÇÃO ==========
-    function carregarSessao() {
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    const q = query(collection(db, 'users'), where('email', '==', user.email));
-                    const snap = await getDocs(q);
-                    if (!snap.empty) {
-                        const d = snap.docs[0].data();
-                        usuarioAtual = { 
-                            email: user.email, 
-                            nome: d.nome || user.email.split('@')[0], 
-                            telefone: d.telefone || '', 
-                            docId: snap.docs[0].id, 
-                            uid: user.uid 
-                        };
-                        if (d.endereco) enderecoCadastrado = d.endereco;
-                    } else {
-                        const cached = localStorage.getItem('donut_session');
-                        if (cached) { 
-                            try { 
-                                usuarioAtual = JSON.parse(cached); 
-                            } catch(e) {} 
-                        }
-                        if (!usuarioAtual) {
-                            usuarioAtual = { 
-                                email: user.email, 
-                                nome: user.email.split('@')[0], 
-                                telefone: '', 
-                                docId: '', 
-                                uid: user.uid 
-                            };
-                        }
-                    }
-                } catch(e) {
-                    const cached = localStorage.getItem('donut_session');
-                    if (cached) { 
-                        try { 
-                            usuarioAtual = JSON.parse(cached); 
-                        } catch(e2) {} 
-                    }
-                }
-                localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
-                atualizarHeaderLogin();
-                esconderLoginOverlay();
-                carregarCarrinho();
-                carregarProdutosFirebase();
-            } else {
-                if (verificarSessaoUsuario()) {
-                    setTimeout(() => fazerLogin(), 100);
-                } else {
-                    usuarioAtual = null;
-                    localStorage.removeItem('donut_session');
-                    atualizarHeaderLogin();
-                    mostrarLoginOverlay();
-                }
-            }
+    // ========== CARREGAR PRODUTOS DO FIREBASE (COM LISTENER EM TEMPO REAL) ==========
+    function iniciarListenerProdutos() {
+        if (produtosUnsubscribe) produtosUnsubscribe();
+        
+        produtosUnsubscribe = onSnapshot(collection(db, 'produtos'), (snapshot) => {
+            // Apenas produtos ativos
+            const todos = snapshot.docs
+                .map(doc => ({ id: doc.id, ...doc.data() }))
+                .filter(p => p.ativo !== false);
+            
+            produtosFirebase = todos
+                .filter(p => p.categoria !== 'Combos' && p.categoria !== 'Bebidas')
+                .map(p => ({
+                    id: p.id, name: p.nome, emoji: p.emoji || '🍩',
+                    imagem: p.imagem || '', desc: p.descricao || '',
+                    price: p.preco || 0,
+                    category: p.categoria?.toLowerCase() || 'donuts',
+                    badge: p.badge, tag: p.tag, estoque: p.estoque ?? 99
+                }));
+            
+            combosFirebase = todos
+                .filter(p => p.categoria === 'Combos')
+                .map(p => ({
+                    id: p.id, name: p.nome, emoji: p.emoji || '🎁',
+                    imagem: p.imagem || '', desc: p.descricao || '',
+                    price: p.preco || 0, originalPrice: p.precoOriginal,
+                    badge: p.badge, category: 'combos', estoque: p.estoque ?? 99
+                }));
+            
+            bebidasFirebase = todos
+                .filter(p => p.categoria === 'Bebidas')
+                .map(p => ({
+                    id: p.id, name: p.nome, emoji: p.emoji || '🥤',
+                    imagem: p.imagem || '', desc: p.descricao || '',
+                    price: p.preco || 0, estoque: p.estoque ?? 99
+                }));
+            
+            renderProdutos();
+            renderCombos();
+            renderBebidas_grid();
+            
+            console.log('✅ Firebase sync:', produtosFirebase.length, 'produtos,', combosFirebase.length, 'combos,', bebidasFirebase.length, 'bebidas');
+        }, (error) => {
+            console.error('❌ Erro ao carregar produtos do Firebase:', error);
+            // Mantém os dados locais como fallback
+            renderProdutos();
+            renderCombos();
+            renderBebidas_grid();
         });
-    }
-
-    // ========== CARREGAR PRODUTOS ==========
-    async function carregarProdutosFirebase() {
-        try {
-            const snap = await getDocs(collection(db, 'produtos'));
-            const todos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            produtosFirebase = todos.filter(p => p.categoria !== 'Combos' && p.categoria !== 'Bebidas').map(p => ({
-                id: p.id, name: p.nome, emoji: p.emoji, desc: p.descricao, price: p.preco,
-                category: p.categoria?.toLowerCase(), badge: p.badge, tag: p.tag, estoque: p.estoque ?? 99
-            }));
-            combosFirebase = todos.filter(p => p.categoria === 'Combos').map(p => ({
-                id: p.id, name: p.nome, emoji: p.emoji, desc: p.descricao, price: p.preco,
-                originalPrice: p.precoOriginal, badge: p.badge, category: 'combos', estoque: p.estoque ?? 99
-            }));
-            bebidasFirebase = todos.filter(p => p.categoria === 'Bebidas').map(p => ({
-                id: p.id, name: p.nome, emoji: p.emoji, desc: p.descricao, price: p.preco, estoque: p.estoque ?? 99
-            }));
-            renderProdutos(); renderCombos(); renderBebidas_grid();
-        } catch(e) { console.warn('Erro ao carregar produtos:', e); }
     }
 
     // ========== RENDER PRODUTOS ==========
@@ -1238,24 +1209,55 @@
         }
         let list;
         if (currentCat === 'combos') list = [...combosFirebase];
-        else if (currentCat === 'all') list = [...produtosFirebase, ...combosFirebase];
+        else if (currentCat === 'bebidas') list = [...bebidasFirebase];
+        else if (currentCat === 'all') list = [...produtosFirebase, ...combosFirebase, ...bebidasFirebase];
         else list = produtosFirebase.filter(p => p.category === currentCat);
         if (searchTerm) list = list.filter(p => p.name.toLowerCase().includes(searchTerm) || (p.desc||'').toLowerCase().includes(searchTerm));
         if (!list.length) { 
             grid.innerHTML = `<div style="text-align:center;padding:2rem;">😔 Nenhum produto encontrado</div>`; 
             return; 
         }
-        grid.innerHTML = list.map(p => `<div class="product-card" onclick="abrirModalProduto('${p.id}')"><div class="product-img-wrap"><span style="font-size:4rem;">${p.emoji}</span>${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}${p.tag ? `<div class="product-tag">${p.tag}</div>` : ''}</div><div class="product-info"><div class="product-title">${p.name}</div><div class="product-desc">${p.desc || ''}</div><div class="product-footer"><div class="product-price">R$ ${p.price.toFixed(2).replace('.',',')}</div>${(p.estoque ?? 99) <= 0 ? '<button class="btn-add" disabled style="opacity:0.5;cursor:not-allowed;">🚫</button>' : `<button class="btn-add" onclick="event.stopPropagation(); addToCartById('${p.id}')">+</button>`}</div></div></div>`).join('');
+        grid.innerHTML = list.map(p => {
+            const imgHtml = p.imagem && p.imagem.startsWith('http')
+                ? `<img src="${p.imagem}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;border-radius:0;" onerror="this.style.display='none'">`
+                : '';
+            const esgotado = (p.estoque ?? 99) <= 0;
+            return `<div class="product-card" onclick="abrirModalProduto('${p.id}')">
+                <div class="product-img-wrap" style="position:relative;overflow:hidden;">
+                    ${imgHtml}<span style="font-size:${p.imagem ? '2.5' : '4'}rem;position:relative;z-index:1;">${p.emoji}</span>
+                    ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+                    ${p.tag ? `<div class="product-tag">${p.tag}</div>` : ''}
+                </div>
+                <div class="product-info">
+                    <div class="product-title">${p.name}</div>
+                    <div class="product-desc">${p.desc || ''}</div>
+                    <div class="product-footer">
+                        <div class="product-price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+                        ${esgotado 
+                            ? '<button class="btn-add" disabled style="opacity:0.5;cursor:not-allowed;font-size:0.8rem;width:auto;padding:0 8px;">Esgotado</button>'
+                            : `<button class="btn-add" onclick="event.stopPropagation(); addToCartById('${p.id}')">+</button>`}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
     }
 
     function abrirModalProduto(id) {
-        const produto = [...produtosFirebase, ...combosFirebase].find(p => p.id == id);
+        const produto = [...produtosFirebase, ...combosFirebase, ...bebidasFirebase].find(p => p.id == id);
         if (!produto) return;
-        document.getElementById('modalProductImgWrap').innerHTML = produto.emoji;
+        const imgWrap = document.getElementById('modalProductImgWrap');
+        if (produto.imagem && produto.imagem.startsWith('http')) {
+            imgWrap.innerHTML = `<img src="${produto.imagem}" alt="${produto.name}" style="width:100%;max-height:220px;object-fit:cover;border-radius:14px;" onerror="this.outerHTML='<span style=\\'font-size:5rem;\\'>${produto.emoji}</span>'">`;
+        } else {
+            imgWrap.innerHTML = `<span style="font-size:5rem;">${produto.emoji}</span>`;
+        }
         document.getElementById('modalProductTitle').textContent = produto.name;
         document.getElementById('modalProductDesc').textContent = produto.desc || '';
         const action = document.getElementById('modalProductAction');
-        if(action) action.innerHTML = `<button class="btn-primary" style="width:100%;" onclick="addToCartById('${produto.id}'); closeModal('productModal')">🛒 Adicionar ao Pedido</button>`;
+        const esgotado = (produto.estoque ?? 99) <= 0;
+        if(action) action.innerHTML = esgotado
+            ? `<button class="btn-primary" style="width:100%;opacity:0.5;cursor:not-allowed;" disabled>🚫 Produto Esgotado</button>`
+            : `<button class="btn-primary" style="width:100%;" onclick="addToCartById('${produto.id}'); closeModal('productModal')">🛒 Adicionar ao Pedido — R$ ${produto.price.toFixed(2).replace('.',',')}</button>`;
         openModal('productModal');
     }
     window.abrirModalProduto = abrirModalProduto;
@@ -1264,20 +1266,48 @@
         const grid = document.getElementById('combosGrid'); 
         if(!grid) return;
         if(combosFirebase.length === 0) { 
-            grid.innerHTML = '<div style="text-align:center;padding:1rem;">Carregando combos...</div>'; 
+            grid.innerHTML = '<div style="text-align:center;padding:2rem;color:#999;">Nenhum combo disponível no momento</div>'; 
             return; 
         }
-        grid.innerHTML = combosFirebase.map(c => `<div class="combo-card"><div class="combo-badge">${c.badge || '🔥'}</div><div style="font-size:2.5rem;">${c.emoji || '🎁'}</div><h3>${c.name}</h3><p>${c.desc || ''}</p><div class="combo-price">${c.originalPrice ? `<span class="combo-original">R$ ${c.originalPrice.toFixed(2).replace('.',',')}</span>` : ''} R$ ${(c.price || 0).toFixed(2).replace('.',',')}</div><button class="btn-primary" style="width:100%;margin-top:0.8rem;" onclick="addToCartById('${c.id}')">🎁 Adicionar Combo</button></div>`).join('');
+        grid.innerHTML = combosFirebase.map(c => {
+            const imgHtml = c.imagem && c.imagem.startsWith('http')
+                ? `<img src="${c.imagem}" alt="${c.name}" style="width:100%;height:160px;object-fit:cover;border-radius:14px;margin-bottom:0.8rem;" onerror="this.outerHTML='<div style=\\'font-size:2.5rem;margin-bottom:0.5rem;\\'>${c.emoji || '🎁'}</div>'">`
+                : `<div style="font-size:2.5rem;margin-bottom:0.5rem;">${c.emoji || '🎁'}</div>`;
+            return `<div class="combo-card">
+                <div class="combo-badge">${c.badge || '🔥 Oferta'}</div>
+                ${imgHtml}
+                <h3>${c.name}</h3>
+                <p style="color:var(--brown-light);font-size:0.85rem;margin:0.4rem 0 0.8rem;">${c.desc || ''}</p>
+                <div class="combo-price">
+                    ${c.originalPrice ? `<span class="combo-original">R$ ${c.originalPrice.toFixed(2).replace('.',',')}</span>` : ''}
+                    R$ ${(c.price || 0).toFixed(2).replace('.',',')}
+                </div>
+                <button class="btn-primary" style="width:100%;margin-top:0.8rem;" onclick="addToCartById('${c.id}')">🎁 Adicionar Combo</button>
+            </div>`;
+        }).join('');
     }
 
     function renderBebidas_grid() {
         const grid = document.getElementById("drinksGrid"); 
         if(!grid) return;
         if(bebidasFirebase.length === 0) { 
-            grid.innerHTML = '<div style="text-align:center;padding:1rem;">Carregando bebidas...</div>'; 
+            grid.innerHTML = '<div style="text-align:center;padding:2rem;color:#999;">Nenhuma bebida disponível no momento</div>'; 
             return; 
         }
-        grid.innerHTML = bebidasFirebase.map(d => `<div class="drink-card"><div class="drink-thumb">${d.emoji || '🥤'}</div><div class="drink-info"><div class="drink-name">${d.name}</div><div class="drink-desc">${d.desc || ''}</div><div class="drink-price">R$ ${(d.price || 0).toFixed(2).replace('.',',')}</div></div><button style="background:var(--gradient);border:none;width:34px;height:34px;border-radius:50%;color:#fff;cursor:pointer;" onclick="addToCartById('${d.id}')">+</button></div>`).join('');
+        grid.innerHTML = bebidasFirebase.map(d => {
+            const imgHtml = d.imagem && d.imagem.startsWith('http')
+                ? `<img src="${d.imagem}" alt="${d.name}" class="drink-thumb" style="object-fit:cover;border-radius:12px;" onerror="this.outerHTML='<div class=\\'drink-thumb\\'>${d.emoji || '🥤'}</div>'">`
+                : `<div class="drink-thumb">${d.emoji || '🥤'}</div>`;
+            return `<div class="drink-card">
+                ${imgHtml}
+                <div class="drink-info">
+                    <div class="drink-name">${d.name}</div>
+                    <div class="drink-desc">${d.desc || ''}</div>
+                    <div class="drink-price">R$ ${(d.price || 0).toFixed(2).replace('.',',')}</div>
+                </div>
+                <button style="background:var(--gradient);border:none;width:34px;height:34px;border-radius:50%;color:#fff;cursor:pointer;flex-shrink:0;" onclick="addToCartById('${d.id}')">+</button>
+            </div>`;
+        }).join('');
     }
 
     // ========== CARRINHO ==========
@@ -2022,8 +2052,11 @@
         setInterval(atualizarStatusHorario, 60000); 
         startOfferTimer(); 
         initPaymentSelection(); 
-        renderProdutos(true); 
-        carregarProdutosFirebase();
+        
+        // CARREGA PRODUTOS DO FIREBASE EM TEMPO REAL
+        iniciarListenerProdutos();
+        
+        renderProdutos(true);
         
         document.getElementById("cartBtn")?.addEventListener('click', openCart);
         document.getElementById("closeCartBtn")?.addEventListener('click', closeCart);

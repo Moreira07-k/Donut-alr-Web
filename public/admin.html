@@ -446,17 +446,33 @@
             <input type="hidden" id="productId">
             <div class="form-group"><label>🍩 Nome</label><input type="text" id="productName" required></div>
             <div class="form-group"><label>📂 Categoria</label>
-                <select id="productCategory" required><option value="Donuts">Donuts</option><option value="Cupcakes">Cupcakes</option><option value="Bolos">Bolos</option><option value="Bebidas">Bebidas</option><option value="Combos">Combos</option></select>
+                <select id="productCategory" required onchange="toggleComboFields()">
+                    <option value="Donuts">🍩 Donuts</option>
+                    <option value="Cupcakes">🧁 Cupcakes</option>
+                    <option value="Bolos">🎂 Bolos</option>
+                    <option value="Bebidas">🥤 Bebidas</option>
+                    <option value="Combos">🎁 Combos</option>
+                </select>
             </div>
-            <div class="form-group"><label>💰 Preço (R$)</label><input type="number" step="0.01" id="productPrice" required></div>
-            <div class="form-group"><label>📦 Estoque</label><input type="number" id="productEstoque" value="99" min="0"></div>
-            <div class="form-group"><label>😊 Emoji</label><input type="text" id="productEmoji" placeholder="🍩" maxlength="2"></div>
-            <div class="form-group"><label>🖼️ URL da Imagem (opcional)</label><input type="url" id="productImagem" placeholder="https://exemplo.com/foto-donut.jpg"></div>
-            <div class="form-group"><label>📝 Descrição</label><textarea id="productDesc" rows="2"></textarea></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div class="form-group"><label>💰 Preço (R$)</label><input type="number" step="0.01" id="productPrice" required></div>
+                <div class="form-group" id="precoOriginalGroup" style="display:none;"><label>💸 Preço Original (R$)</label><input type="number" step="0.01" id="productPrecoOriginal" placeholder="Ex: 68.90"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div class="form-group"><label>📦 Estoque</label><input type="number" id="productEstoque" value="99" min="0"></div>
+                <div class="form-group"><label>😊 Emoji</label><input type="text" id="productEmoji" placeholder="🍩" maxlength="2"></div>
+            </div>
+            <div class="form-group"><label>🖼️ URL da Imagem (opcional)</label><input type="url" id="productImagem" placeholder="https://exemplo.com/foto-donut.jpg" oninput="previewProductImage(this.value)"></div>
+            <div id="imagePreviewContainer" style="display:none;margin-bottom:1rem;"><img id="imagePreview" src="" alt="Preview" style="width:100%;max-height:160px;object-fit:cover;border-radius:12px;border:1px solid #eee;"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div class="form-group"><label>🏷️ Badge (ex: ⭐, 🔥, Novo)</label><input type="text" id="productBadge" placeholder="Ex: ⭐ Top" maxlength="20"></div>
+                <div class="form-group"><label>🔖 Tag (ex: Mais pedido, Premium)</label><input type="text" id="productTag" placeholder="Ex: Mais pedido" maxlength="20"></div>
+            </div>
+            <div class="form-group"><label>📝 Descrição</label><textarea id="productDesc" rows="2" placeholder="Ex: Donut com cobertura de Nutella..."></textarea></div>
             <div class="form-group"><label>📌 Status</label><select id="productStatus"><option value="true">✅ Ativo</option><option value="false">❌ Inativo</option></select></div>
             <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
                 <button type="button" class="btn" onclick="closeProductModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="submit" class="btn btn-primary">💾 Salvar Produto</button>
             </div>
         </form>
     </div>
@@ -761,12 +777,38 @@
         document.getElementById('productName').value = product?.nome || '';
         document.getElementById('productCategory').value = product?.categoria || 'Donuts';
         document.getElementById('productPrice').value = product?.preco || '';
+        document.getElementById('productPrecoOriginal').value = product?.precoOriginal || '';
         document.getElementById('productEstoque').value = product?.estoque ?? 99;
         document.getElementById('productEmoji').value = product?.emoji || '🍩';
         document.getElementById('productImagem').value = product?.imagem || '';
+        document.getElementById('productBadge').value = product?.badge || '';
+        document.getElementById('productTag').value = product?.tag || '';
         document.getElementById('productDesc').value = product?.descricao || '';
         document.getElementById('productStatus').value = product?.ativo !== false ? 'true' : 'false';
+        // Preview image
+        const imgPreview = product?.imagem && product.imagem.startsWith('http');
+        document.getElementById('imagePreviewContainer').style.display = imgPreview ? 'block' : 'none';
+        if(imgPreview) document.getElementById('imagePreview').src = product.imagem;
+        // Toggle combo fields
+        toggleComboFields();
         document.getElementById('productModal').classList.add('active');
+    };
+
+    window.toggleComboFields = function() {
+        const cat = document.getElementById('productCategory').value;
+        const group = document.getElementById('precoOriginalGroup');
+        if(group) group.style.display = cat === 'Combos' ? 'block' : 'none';
+    };
+
+    window.previewProductImage = function(url) {
+        const container = document.getElementById('imagePreviewContainer');
+        const img = document.getElementById('imagePreview');
+        if(url && url.startsWith('http')) {
+            img.src = url;
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
     };
 
     window.closeProductModal = function() { 
@@ -777,16 +819,25 @@
 
     window.saveProduct = async function() {
         const id = document.getElementById('productId').value;
+        const categoria = document.getElementById('productCategory').value;
+        const precoOriginalVal = document.getElementById('productPrecoOriginal').value;
         const product = {
-            nome: document.getElementById('productName').value,
-            categoria: document.getElementById('productCategory').value,
+            nome: document.getElementById('productName').value.trim(),
+            categoria: categoria,
             preco: parseFloat(document.getElementById('productPrice').value),
             estoque: parseInt(document.getElementById('productEstoque').value) || 0,
             emoji: document.getElementById('productEmoji').value || '🍩',
             imagem: document.getElementById('productImagem').value.trim(),
-            descricao: document.getElementById('productDesc').value,
+            badge: document.getElementById('productBadge').value.trim() || null,
+            tag: document.getElementById('productTag').value.trim() || null,
+            descricao: document.getElementById('productDesc').value.trim(),
             ativo: document.getElementById('productStatus').value === 'true'
         };
+        if(categoria === 'Combos' && precoOriginalVal) {
+            product.precoOriginal = parseFloat(precoOriginalVal);
+        }
+        // Remove nulls para não poluir o Firestore
+        Object.keys(product).forEach(k => { if(product[k] === null || product[k] === '') delete product[k]; });
         try {
             if(id) { 
                 await updateDoc(doc(db, 'produtos', id), product); 
