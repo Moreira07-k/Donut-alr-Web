@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Cardápio Donut ALR - Donuts artesanais, cupcakes e bebidas feitos com amor em Floriano-PI">
+    <meta name="description" content="Quinn Bakery - Donuts artesanais, cupcakes e bebidas feitos com amor em Floriano-PI">
     <meta name="theme-color" content="#FF6BA8">
-    <title>Cardápio · Donut ALR 🍩</title>
+    <title>Cardápio · Quinn Bakery 🍩</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -506,7 +506,7 @@
 <!-- LOADER -->
 <div id="loader">
     <div class="spin">🍩</div>
-    <p>Donut ALR · Carregando...</p>
+    <p>Quinn Bakery · Carregando...</p>
     <div class="bar"><div class="bar-fill"></div></div>
 </div>
 
@@ -515,7 +515,7 @@
     <div class="header-inner">
         <a href="index.html" class="logo">
             <div class="logo-icon">🍩</div>
-            <div class="logo-text">Donut ALR<span class="logo-sub">Cardápio Completo</span></div>
+            <div class="logo-text">Quinn Bakery<span class="logo-sub">Cardápio Completo</span></div>
         </a>
         <div class="header-actions">
             <button class="btn-dark" id="btnDark" title="Tema escuro" aria-label="Alternar tema">🌙</button>
@@ -587,9 +587,9 @@
 
 <!-- FOOTER -->
 <footer class="footer-mini">
-    © 2026 Donut ALR · Floriano-PI ·
+    © 2026 Quinn Bakery · Floriano-PI ·
     <a href="https://wa.me/5589994112913" target="_blank" rel="noopener">💬 WhatsApp</a> ·
-    <a href="https://instagram.com/donutalr" target="_blank" rel="noopener">📸 @donutalr</a> ·
+    <a href="https://instagram.com/QuinnBakery" target="_blank" rel="noopener">📸 @QuinnBakery</a> ·
     <a href="index.html">🏠 Site</a>
 </footer>
 
@@ -1050,7 +1050,7 @@ window.finalizarPedido = function() {
     let msg = `🍩 *Olá! Quero fazer um pedido pelo site:*\n\n*ITENS:*\n`;
     carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} ×${i.qtd} = R$ ${(i.price*i.qtd).toFixed(2).replace('.',',')}\n`; });
     if (desconto > 0) msg += `\n🏷 Cupom (${cupomAplicado}): -R$ ${desconto.toFixed(2).replace('.',',')}`;
-    msg += `\n\n💰 *TOTAL: R$ ${total.toFixed(2).replace('.',',')}*\n\n🟢 *Chave PIX:* 89 99411-2913\n👤 *Titular:* Kauã Moreira (Mercado Pago)\n_Envie o comprovante após o pagamento._\n\n_Pedido via Cardápio Online - Donut ALR_`;
+    msg += `\n\n💰 *TOTAL: R$ ${total.toFixed(2).replace('.',',')}*\n\n🟢 *Chave PIX:* 89 99411-2913\n👤 *Titular:* Kauã Moreira (Mercado Pago)\n_Envie o comprovante após o pagamento._\n\n_Pedido via Cardápio Online - Quinn Bakery_`;
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
 };
 
