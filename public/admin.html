@@ -368,6 +368,17 @@
     <div class="container">
         <div id="dashboardTab" class="tab-content active">
             <div class="stats-grid" id="statsGrid"></div>
+            <div class="table-container" style="margin-bottom:1.5rem;">
+                <div class="table-header"><h3>🟢 Dados do PIX</h3></div>
+                <div style="padding:1.2rem;display:flex;flex-wrap:wrap;gap:1.2rem;align-items:center;">
+                    <div style="background:linear-gradient(135deg,rgba(46,207,138,0.15),rgba(255,107,168,0.10));border:2px solid rgba(46,207,138,0.3);border-radius:16px;padding:1rem 1.5rem;flex:1;min-width:220px;">
+                        <div style="font-size:0.78rem;font-weight:700;color:#2ECF8A;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;">Chave PIX (Mercado Pago)</div>
+                        <div style="font-family:monospace;font-size:1.3rem;font-weight:900;color:var(--text);letter-spacing:0.05em;">89 99411-2913</div>
+                        <div style="font-size:0.83rem;color:var(--brown-mid);margin-top:0.2rem;">Titular: <strong>Kauã Moreira</strong></div>
+                    </div>
+                    <button onclick="navigator.clipboard&&navigator.clipboard.writeText('89994112913').then(()=>showToast('📋 Chave PIX copiada!'))" class="btn btn-success" style="font-size:1rem;padding:0.7rem 1.4rem;">📋 Copiar Chave</button>
+                </div>
+            </div>
             <div class="table-container">
                 <div class="table-header"><h3>📈 Últimos Pedidos</h3></div>
                 <div id="recentOrders"></div>

@@ -637,8 +637,9 @@
   <section class="section reveal" id="contato">
     <h2 class="section-title">📬 <span class="accent">Contato</span></h2>
     <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-      <a href="https://wa.me/5589994112913" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">💬 WhatsApp (89) 9 9411-2913</a>
-      <a href="https://instagram.com/donutalr" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">📸 @donutalr</a>
+      <a href="https://wa.me/5589994112913" target="_blank" rel="noopener noreferrer" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">💬 WhatsApp (89) 9 9411-2913</a>
+      <a href="https://instagram.com/donutalr" target="_blank" rel="noopener noreferrer" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">📸 @donutalr</a>
+      <div style="background:linear-gradient(135deg,rgba(46,204,113,0.12),rgba(255,107,157,0.10));border:1.5px solid rgba(46,204,113,0.3);padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;cursor:pointer;" onclick="navigator.clipboard&&navigator.clipboard.writeText('89994112913').then(()=>showToast('📋 Chave PIX copiada!'))">🟢 <strong>PIX:</strong> 89 99411-2913 · Kauã Moreira (Mercado Pago) 📋</div>
     </div>
   </section>
 
@@ -693,6 +694,12 @@
         <div class="payment-option selected" data-payment="pix"><input type="radio" name="payment" id="paymentPix" value="pix" checked><label for="paymentPix">PIX</label></div>
         <div class="payment-option" data-payment="card"><input type="radio" name="payment" id="paymentCard" value="cartao"><label for="paymentCard">Cartão</label></div>
         <div class="payment-option" data-payment="cash"><input type="radio" name="payment" id="paymentCash" value="especie"><label for="paymentCash">Espécie</label></div>
+      </div>
+      <div id="pixInfoBox" style="margin-top:0.8rem;background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(46,204,113,0.10));border:1.5px solid rgba(46,204,113,0.3);border-radius:14px;padding:0.85rem 1rem;font-size:0.82rem;">
+        <div style="font-weight:800;color:var(--mint-dark);margin-bottom:0.35rem;">🟢 Chave PIX (Mercado Pago)</div>
+        <div style="font-family:monospace;font-size:1rem;font-weight:700;color:var(--text);letter-spacing:0.04em;cursor:pointer;" onclick="navigator.clipboard&&navigator.clipboard.writeText('89994112913').then(()=>showToast('📋 Chave copiada!'))">89 99411-2913 📋</div>
+        <div style="color:var(--brown-light);margin-top:0.2rem;">Titular: <strong>Kauã Moreira</strong></div>
+        <div style="color:var(--brown-light);font-size:0.76rem;margin-top:0.2rem;">Envie o comprovante pelo WhatsApp após o pagamento.</div>
       </div>
     </div>
     <div class="cart-summary" id="cartSummary"></div>
@@ -1268,10 +1275,10 @@
 
     function finalizarPedido() {
         if (!carrinho.length) { showToast("❌ Carrinho vazio!"); return; }
-        if (!isLojaAberta()) { showToast("⏰ Loja fechada! Seg–Sex 08h–18h"); return; }
         const { subtotal } = calcTotais();
         if (subtotal < VALOR_MINIMO_PEDIDO) { showToast(`❌ Pedido mínimo: R$ ${VALOR_MINIMO_PEDIDO.toFixed(2).replace('.',',')}`); return; }
         if (!usuarioAtual) { mostrarLoginOverlay(); return; }
+        if (!isLojaAberta()) { showToast("⏰ Fora do horário – enviaremos quando abrirmos!"); }
         document.getElementById('modalEndRua').value = enderecoCadastrado.rua || '';
         document.getElementById('modalEndBairro').value = enderecoCadastrado.bairro || '';
         document.getElementById('modalEndCidade').value = enderecoCadastrado.cidade || '';
@@ -1301,6 +1308,7 @@
         msg += `\n📍 Endereço: ${endCompleto}\n🚚 Frete: ${frete===0?"Grátis ✅":formatBRL(frete)}`;
         if(desconto>0) msg += `\n🎟 Desconto (${cupomAtivo}): -${formatBRL(desconto)}`;
         msg += `\n💰 *TOTAL: ${formatBRL(total)}*\n💳 Pagamento: ${pagTexto}`;
+        if (pagamento === "pix") msg += `\n\n🟢 *Chave PIX:* 89 99411-2913\n👤 *Titular:* Kauã Moreira (Mercado Pago)\n_Envie o comprovante pelo WhatsApp após o pagamento._`;
         
         closeModal('enderecoModal');
         window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -1384,6 +1392,8 @@
         document.getElementById("couponInput")?.addEventListener('keydown',e=>{if(e.key==='Enter')aplicarCupom();});
         document.getElementById('surpriseBtn')?.addEventListener('click',abrirCaixaSurpresa);
         document.getElementById("cepInput")?.addEventListener('input',function(e){let v=this.value.replace(/\D/g,'');if(v.length>8)v=v.slice(0,8);if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5);this.value=v;});
+        // PIX box toggle
+        document.querySelectorAll('input[name="payment"]').forEach(r=>{r.addEventListener('change',()=>{const box=document.getElementById('pixInfoBox');if(box)box.style.display=r.value==='pix'?'block':'none';});});
         window.navTo = navTo;
     });
 </script>

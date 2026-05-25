@@ -634,6 +634,12 @@
             <span class="val" id="cartTotal">R$ 0,00</span>
         </div>
         <button class="btn-checkout" id="btnCheckout" onclick="finalizarPedido()" disabled>✅ Pedir via WhatsApp</button>
+        <div id="pixCartInfo" style="margin-top:0.7rem;background:linear-gradient(135deg,rgba(255,107,168,0.12),rgba(46,207,138,0.10));border:1.5px solid rgba(46,207,138,0.3);border-radius:14px;padding:0.8rem 1rem;font-size:0.81rem;">
+            <div style="font-weight:800;color:#2ECF8A;margin-bottom:0.3rem;">🟢 Chave PIX (Mercado Pago)</div>
+            <div style="font-family:monospace;font-size:0.98rem;font-weight:700;cursor:pointer;" onclick="navigator.clipboard&&navigator.clipboard.writeText('89994112913').then(()=>toast('📋 Chave copiada!'))">89 99411-2913 📋</div>
+            <div style="opacity:0.75;margin-top:0.15rem;">Titular: <strong>Kauã Moreira</strong></div>
+            <div style="opacity:0.6;font-size:0.74rem;margin-top:0.15rem;">Envie o comprovante pelo WhatsApp.</div>
+        </div>
         <button class="btn-clear" onclick="limparCarrinho()">🗑 Limpar carrinho</button>
     </div>
 </div>
@@ -1044,7 +1050,7 @@ window.finalizarPedido = function() {
     let msg = `🍩 *Olá! Quero fazer um pedido pelo site:*\n\n*ITENS:*\n`;
     carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} ×${i.qtd} = R$ ${(i.price*i.qtd).toFixed(2).replace('.',',')}\n`; });
     if (desconto > 0) msg += `\n🏷 Cupom (${cupomAplicado}): -R$ ${desconto.toFixed(2).replace('.',',')}`;
-    msg += `\n\n💰 *TOTAL: R$ ${total.toFixed(2).replace('.',',')}*\n\n_Pedido via Cardápio Online - Donut ALR_`;
+    msg += `\n\n💰 *TOTAL: R$ ${total.toFixed(2).replace('.',',')}*\n\n🟢 *Chave PIX:* 89 99411-2913\n👤 *Titular:* Kauã Moreira (Mercado Pago)\n_Envie o comprovante após o pagamento._\n\n_Pedido via Cardápio Online - Donut ALR_`;
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
 };
 
