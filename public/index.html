@@ -136,46 +136,6 @@
             box-shadow: 0 0 0 3px rgba(255,107,157,0.12);
             background: #fff;
         }
-        .password-wrapper {
-            position: relative;
-            width: 100%;
-            margin-bottom: 0.85rem;
-        }
-        .password-wrapper input {
-            width: 100%; padding: 0.8rem 1rem;
-            border: 1.5px solid #eee0e8; border-radius: 12px;
-            font-size: 0.9rem; font-family: inherit;
-            background: #fff6f9; color: #2d1020;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            padding-right: 45px;
-        }
-        .password-wrapper input:focus {
-            outline: none; border-color: #ff6b9d;
-            box-shadow: 0 0 0 3px rgba(255,107,157,0.12);
-            background: #fff;
-        }
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 5px;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-            color: #b07090;
-        }
-        .toggle-password:hover {
-            background: rgba(0,0,0,0.05);
-        }
         .auth-screen-right .auth-btn-submit {
             width: 100%;
             background: linear-gradient(135deg,#ff6b9d,#ff4081);
@@ -190,27 +150,12 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 26px rgba(255,64,129,0.42);
         }
-        .remember-checkbox {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin: 0.8rem 0;
-            font-size: 0.75rem;
-            color: #999;
-            cursor: pointer;
-        }
-        .remember-checkbox input {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            margin: 0;
-        }
         .auth-screen-msg { font-size: 0.83rem; text-align: center; margin-top: 0.8rem; min-height: 1.2em; }
         .auth-screen-msg.ok { color: #2ecc71; font-weight: 600; }
         .auth-screen-msg.err { color: #e74c3c; font-weight: 600; }
         .main-content { display: none; }
         .main-content.visible { display: block; }
+        
         .status-banner { background:var(--mint-dark); color:#fff; text-align:center; padding:0.45rem; font-size:0.82rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:0.5rem; }
         .status-dot { width:8px; height:8px; background:#aeffd8; border-radius:50%; animation:pulse 1.5s infinite; }
         .status-dot.fechado { background:#ff6b6b; animation:none; }
@@ -257,9 +202,11 @@
         .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.5rem; }
         .product-card { background:var(--card); border-radius:var(--radius); overflow:hidden; border:1px solid rgba(255,180,210,0.2); cursor:pointer; transition:0.2s; }
         .product-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-md); }
-        .product-img-wrap { aspect-ratio:1; background:linear-gradient(135deg,#ffd4e8,#eed6f8); display:flex; align-items:center; justify-content:center; font-size:4rem; position:relative; }
-        .product-badge { position:absolute; top:8px; right:8px; background:var(--gradient); color:#fff; border-radius:99px; padding:0.15rem 0.55rem; font-size:0.7rem; }
-        .product-tag { position:absolute; top:8px; left:8px; background:var(--yellow); color:var(--brown); border-radius:99px; padding:0.15rem 0.55rem; font-size:0.7rem; }
+        .product-img-wrap { aspect-ratio:1; background:linear-gradient(135deg,#ffd4e8,#eed6f8); display:flex; align-items:center; justify-content:center; font-size:4rem; position:relative; overflow:hidden; }
+        .product-img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+        .product-emoji { font-size:4rem; position:relative; z-index:1; }
+        .product-badge { position:absolute; top:8px; right:8px; background:var(--gradient); color:#fff; border-radius:99px; padding:0.15rem 0.55rem; font-size:0.7rem; z-index:2; }
+        .product-tag { position:absolute; top:8px; left:8px; background:var(--yellow); color:var(--brown); border-radius:99px; padding:0.15rem 0.55rem; font-size:0.7rem; z-index:2; }
         .product-info { padding:1rem; }
         .product-footer { display:flex; justify-content:space-between; align-items:center; margin-top:0.8rem; }
         .product-price { font-weight:800; font-size:1.2rem; color:var(--pink); }
@@ -276,7 +223,8 @@
         .payment-option.selected { border-color:var(--pink); background:var(--peach); }
         .drinks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
         .drink-card { background:var(--card); border-radius:var(--radius-sm); padding:1rem; display:flex; align-items:center; gap:1rem; }
-        .drink-thumb { width:50px; height:50px; background:var(--yellow); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.8rem; }
+        .drink-thumb { width:50px; height:50px; background:var(--yellow); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.8rem; overflow:hidden; flex-shrink:0; }
+        .drink-img { width:100%; height:100%; object-fit:cover; }
         .delivery-wrapper { background:var(--gradient); padding:3rem 1.5rem; }
         .calc-box { background:var(--card); border-radius:24px; padding:1.8rem; max-width:550px; margin:0 auto; }
         .cep-row { display:flex; gap:0.5rem; margin-bottom:1rem; }
@@ -399,63 +347,47 @@
         .skeleton-item { background:linear-gradient(90deg,var(--gray) 25%,var(--gray-2) 50%,var(--gray) 75%); background-size:200% 100%; animation:skeleton-shine 1.5s infinite; border-radius:var(--radius); height:280px; }
         @keyframes skeleton-shine { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeInUp   { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fadeInLeft { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
-        @keyframes fadeInRight{ from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
-        @keyframes zoomIn { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
-        @keyframes popIn { 0%{opacity:0;transform:scale(0.7)} 70%{transform:scale(1.06)} 100%{opacity:1;transform:scale(1)} }
-        @keyframes wiggle { 0%,100%{transform:rotate(0deg)} 25%{transform:rotate(-6deg)} 75%{transform:rotate(6deg)} }
-        @keyframes bounceDot { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+        @keyframes fadeInRight{ from{opacity:0;transform:translateX(28px)}  to{opacity:1;transform:translateX(0)} }
+        @keyframes zoomIn     { from{opacity:0;transform:scale(0.88)}       to{opacity:1;transform:scale(1)} }
+        @keyframes popIn      { 0%{opacity:0;transform:scale(0.7)} 70%{transform:scale(1.06)} 100%{opacity:1;transform:scale(1)} }
+        @keyframes wiggle     { 0%,100%{transform:rotate(0deg)} 25%{transform:rotate(-6deg)} 75%{transform:rotate(6deg)} }
+        @keyframes bounceDot  { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
         @keyframes gradientShift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-        @keyframes floatSlow { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-14px) rotate(2deg)} }
+        @keyframes floatSlow  { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-14px) rotate(2deg)} }
         @keyframes slideInCart{ from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
-        @keyframes countUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         @keyframes borderGlow { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,157,0)} 50%{box-shadow:0 0 0 6px rgba(255,107,157,0.25)} }
-        @keyframes heartBeat { 0%,100%{transform:scale(1)} 14%{transform:scale(1.2)} 28%{transform:scale(1)} 42%{transform:scale(1.15)} 70%{transform:scale(1)} }
+        @keyframes heartBeat  { 0%,100%{transform:scale(1)} 14%{transform:scale(1.2)} 28%{transform:scale(1)} 42%{transform:scale(1.15)} 70%{transform:scale(1)} }
 
         .reveal { opacity:0; transform:translateY(32px); transition:opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
         .reveal.visible { opacity:1; transform:translateY(0); }
-        .reveal-left { opacity:0; transform:translateX(-32px); transition:opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
-        .reveal-left.visible { opacity:1; transform:translateX(0); }
+        .reveal-left  { opacity:0; transform:translateX(-32px); transition:opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
+        .reveal-left.visible  { opacity:1; transform:translateX(0); }
         .reveal-right { opacity:0; transform:translateX(32px); transition:opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1); }
         .reveal-right.visible { opacity:1; transform:translateX(0); }
-        .reveal-zoom { opacity:0; transform:scale(0.9); transition:opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.5s cubic-bezier(.22,1,.36,1); }
-        .reveal-zoom.visible { opacity:1; transform:scale(1); }
+        .reveal-zoom  { opacity:0; transform:scale(0.9); transition:opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.5s cubic-bezier(.22,1,.36,1); }
+        .reveal-zoom.visible  { opacity:1; transform:scale(1); }
         .reveal-delay-1 { transition-delay:0.08s; }
         .reveal-delay-2 { transition-delay:0.18s; }
         .reveal-delay-3 { transition-delay:0.28s; }
         .reveal-delay-4 { transition-delay:0.38s; }
 
-        .hero-text { animation:fadeInLeft 0.75s cubic-bezier(.22,1,.36,1) both; }
-        .hero-card { animation:fadeInRight 0.75s cubic-bezier(.22,1,.36,1) 0.15s both; }
-        .stats-bar { animation:fadeInUp 0.6s cubic-bezier(.22,1,.36,1) 0.3s both; }
-
+        .hero-text     { animation:fadeInLeft  0.75s cubic-bezier(.22,1,.36,1) both; }
+        .hero-card     { animation:fadeInRight 0.75s cubic-bezier(.22,1,.36,1) 0.15s both; }
+        .stats-bar     { animation:fadeInUp 0.6s cubic-bezier(.22,1,.36,1) 0.3s both; }
         .logo-blob { transition:transform 0.3s; }
         .logo-blob:hover { transform:rotate(15deg) scale(1.1); animation:wiggle 0.5s ease; }
-
         .product-card { transition:transform 0.28s cubic-bezier(.22,1,.36,1), box-shadow 0.28s; will-change:transform; }
         .product-card:hover { transform:translateY(-8px) scale(1.015); box-shadow:0 24px 48px rgba(200,80,120,0.22); }
-        .product-card:hover .product-img-wrap { background:linear-gradient(135deg,#ffb3d0,#eed6f8); }
-        .product-img-wrap { transition:background 0.35s; }
-        .product-img-wrap .product-emoji-inner { display:inline-block; transition:transform 0.3s; }
-        .product-card:hover .product-emoji-inner { transform:scale(1.12) rotate(-5deg); }
-
         .btn-add { transition:transform 0.15s, box-shadow 0.15s; position:relative; overflow:hidden; }
         .btn-add:hover { transform:scale(1.15); box-shadow:0 6px 18px rgba(255,64,129,0.4); }
         .btn-add:active { transform:scale(0.92); }
-        .btn-add::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.35); border-radius:50%; transform:scale(0); opacity:0; transition:transform 0.4s, opacity 0.4s; }
-        .btn-add:active::after { transform:scale(4); opacity:0; transition:0s; }
-
         .btn-primary, .auth-submit, .btn-checkout { transition:transform 0.18s, box-shadow 0.18s; }
         .btn-primary:hover, .auth-submit:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,64,129,0.38); }
-        .btn-primary:active, .auth-submit:active { transform:translateY(0) scale(0.97); }
-
-        .btn-checkout.has-items { animation:borderGlow 2s infinite; }
-        .cart-item { animation:slideInCart 0.3s cubic-bezier(.22,1,.36,1) both; }
         .cart-badge.pop { animation:popIn 0.35s cubic-bezier(.22,1,.36,1); }
         .game-card { transition:transform 0.22s, background 0.22s; }
         .game-card:hover { transform:translateY(-5px) scale(1.04); background:rgba(255,255,255,0.28); }
-        .game-card:active { transform:scale(0.96); }
         .stat-num { animation:countUp 0.5s ease both; }
         .hero-donut-float { display:inline-block; animation:floatSlow 4s ease-in-out infinite; }
         .status-banner { background-size:200% 200%; animation:gradientShift 4s ease infinite; }
@@ -478,14 +410,12 @@
         .scroll-dot:nth-child(1){animation-delay:0s}
         .scroll-dot:nth-child(2){animation-delay:0.16s}
         .scroll-dot:nth-child(3){animation-delay:0.32s}
-
         #pageLoader { position:fixed; inset:0; background:linear-gradient(135deg,#ff6b9d,#ff4081); z-index:99999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1rem; transition:opacity 0.5s, visibility 0.5s; }
         #pageLoader.done { opacity:0; visibility:hidden; }
         #pageLoader .loader-donut { font-size:4rem; animation:wiggle 0.6s infinite; }
         #pageLoader .loader-bar { width:180px; height:5px; background:rgba(255,255,255,0.3); border-radius:99px; overflow:hidden; }
         #pageLoader .loader-fill { height:100%; background:#fff; border-radius:99px; animation:loaderFill 1s ease forwards; }
         @keyframes loaderFill { from{width:0} to{width:100%} }
-
         #scrollProgress { position:fixed; top:0; left:0; height:3px; background:var(--gradient); z-index:9999; width:0%; transition:width 0.1s linear; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -495,255 +425,245 @@
 <div id="pageLoader"><div class="loader-donut">🍩</div><div class="loader-bar"><div class="loader-fill"></div></div><div style="color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;opacity:0.85;">Donut ALR · Carregando...</div></div>
 <div id="scrollProgress"></div>
 
-<!-- TELA DE LOGIN COM E-MAIL E SENHA -->
 <div class="login-required-overlay" id="loginRequiredOverlay">
-    <div class="auth-screen">
-        <div class="auth-screen-left">
-            <div class="auth-bg-donut">🍩</div>
-            <div class="auth-brand-logo">🍩</div>
-            <div class="auth-brand-title">Os melhores doces de Floriano!</div>
-            <div class="auth-brand-sub">Crie sua conta gratuita e aproveite descontos exclusivos, acompanhe seus pedidos e ganhe prêmios toda semana.</div>
-            <div class="auth-brand-feats">
-                <div class="auth-feat"><div class="auth-feat-icon">🚚</div><span>Entrega rápida em Floriano-PI</span></div>
-                <div class="auth-feat"><div class="auth-feat-icon">🎁</div><span>Cupons e promoções exclusivas</span></div>
-                <div class="auth-feat"><div class="auth-feat-icon">⭐</div><span>Avaliação 4.9 · 500+ pedidos</span></div>
-                <div class="auth-feat"><div class="auth-feat-icon">🎡</div><span>Roda da sorte e quiz com prêmios</span></div>
-            </div>
-        </div>
-        <div class="auth-screen-right">
-            <div class="auth-screen-title" id="authScreenTitle">Criar conta ou entrar</div>
-            <div class="auth-screen-sub" id="authScreenSub">Preencha seus dados para começar</div>
-
-            <div class="auth-toggle">
-                <button class="auth-toggle-btn active" id="toggleCadastro" onclick="switchAuthScreen('cadastro')">✨ Criar conta</button>
-                <button class="auth-toggle-btn" id="toggleLogin" onclick="switchAuthScreen('login')">🔑 Entrar</button>
-            </div>
-
-            <!-- TELA DE CADASTRO -->
-            <div id="authScreenCadastro">
-                <input type="text" id="cadNome" class="auth-field" placeholder="👤 Nome completo">
-                <input type="tel" id="cadTelefone" class="auth-field" placeholder="📱 WhatsApp (89) 99999-9999" oninput="mascararTelefone(this)">
-                <input type="email" id="cadEmail" class="auth-field" placeholder="📧 E-mail">
-                <div class="password-wrapper">
-                    <input type="password" id="cadSenha" class="auth-field" placeholder="🔒 Senha (mínimo 6 caracteres)">
-                    <button type="button" class="toggle-password" onclick="togglePasswordVisibilidade('cadSenha', this)">👁️</button>
-                </div>
-                <button class="auth-btn-submit" id="btnCadastrar" onclick="fazerCadastro()">✨ Criar conta</button>
-            </div>
-
-            <!-- TELA DE LOGIN -->
-            <div id="authScreenLogin" style="display:none">
-                <input type="email" id="loginEmail" class="auth-field" placeholder="📧 E-mail">
-                <div class="password-wrapper">
-                    <input type="password" id="loginSenha" class="auth-field" placeholder="🔒 Senha">
-                    <button type="button" class="toggle-password" onclick="togglePasswordVisibilidade('loginSenha', this)">👁️</button>
-                </div>
-                <label class="remember-checkbox">
-                    <input type="checkbox" id="rememberLogin" checked> Manter conectado
-                </label>
-                <button class="auth-btn-submit" id="btnLogin" onclick="fazerLogin()">🔑 Entrar</button>
-            </div>
-
-            <div class="auth-screen-msg" id="authScreenMsg"></div>
-        </div>
+  <div class="auth-screen">
+    <div class="auth-screen-left">
+      <div class="auth-bg-donut">🍩</div>
+      <div class="auth-brand-logo">🍩</div>
+      <div class="auth-brand-title">Os melhores doces de Floriano!</div>
+      <div class="auth-brand-sub">Crie sua conta gratuita e aproveite descontos exclusivos, acompanhe seus pedidos e ganhe prêmios toda semana.</div>
+      <div class="auth-brand-feats">
+        <div class="auth-feat"><div class="auth-feat-icon">🚚</div><span>Entrega rápida em Floriano-PI</span></div>
+        <div class="auth-feat"><div class="auth-feat-icon">🎁</div><span>Cupons e promoções exclusivas</span></div>
+        <div class="auth-feat"><div class="auth-feat-icon">⭐</div><span>Avaliação 4.9 · 500+ pedidos</span></div>
+        <div class="auth-feat"><div class="auth-feat-icon">🎡</div><span>Roda da sorte e quiz com prêmios</span></div>
+      </div>
     </div>
+    <div class="auth-screen-right">
+      <div class="auth-screen-title" id="authScreenTitle">Entrar ou cadastrar</div>
+      <div class="auth-screen-sub" id="authScreenSub">Digite e-mail e senha para acessar</div>
+
+      <div id="authStep1">
+        <div class="auth-toggle">
+          <button class="auth-toggle-btn active" id="toggleCadastro" onclick="switchAuthScreen('cadastro')">✨ Criar conta</button>
+          <button class="auth-toggle-btn" id="toggleLogin" onclick="switchAuthScreen('login')">🔑 Entrar</button>
+        </div>
+        
+        <div id="authScreenCadastro">
+          <input type="text" id="cadNome" class="auth-field" placeholder="👤 Nome completo" required>
+          <input type="tel" id="cadTelefone" class="auth-field" placeholder="📱 WhatsApp (89) 99999-9999" oninput="mascararTelefone(this)" required>
+          <input type="email" id="cadEmail" class="auth-field" placeholder="📧 Seu e-mail" required>
+          <input type="password" id="cadSenha" class="auth-field" placeholder="🔒 Senha (mínimo 6 caracteres)" required>
+          <button class="auth-btn-submit" id="btnCadastrar" onclick="fazerCadastro()">✅ Criar conta</button>
+        </div>
+        
+        <div id="authScreenLogin" style="display:none">
+          <input type="email" id="loginEmail" class="auth-field" placeholder="📧 Seu e-mail" required>
+          <input type="password" id="loginSenha" class="auth-field" placeholder="🔒 Sua senha" required>
+          <button class="auth-btn-submit" id="btnLogin" onclick="fazerLogin()">🔓 Entrar</button>
+        </div>
+      </div>
+
+      <div class="auth-screen-msg" id="authScreenMsg"></div>
+    </div>
+  </div>
 </div>
 
 <div class="status-banner" id="statusBanner">
-    <span class="status-dot" id="statusDot"></span>
-    <span id="horarioStatus">Verificando horário...</span>
+  <span class="status-dot" id="statusDot"></span>
+  <span id="horarioStatus">Verificando horário...</span>
 </div>
 
 <header class="site-header">
-    <nav class="navbar">
-        <a href="#" class="logo-area">
-            <div class="logo-blob">🍩</div>
-            <div class="logo-text">Donut ALR<em>Floriano · PI</em></div>
-        </a>
-        <ul class="nav-links">
-            <li><a onclick="navTo('#cardapio')">Cardápio</a></li>
-            <li><a onclick="navTo('#bebidas')">Bebidas</a></li>
-            <li><a onclick="navTo('#delivery')">Delivery</a></li>
-            <li><a onclick="navTo('#contato')">Contato</a></li>
-            <li><a onclick="abrirEncomenda()" style="color:var(--pink);font-weight:800;">📅 Encomendas</a></li>
-        </ul>
-        <div class="header-actions">
-            <button class="dark-toggle" id="darkToggle">🌙</button>
-            <button class="login-btn" id="headerLoginBtn">👤 Entrar</button>
-            <button class="cart-btn" id="cartBtn">🛒 Carrinho <span class="cart-badge" id="cartCount">0</span></button>
-        </div>
-    </nav>
+  <nav class="navbar">
+    <a href="#" class="logo-area">
+      <div class="logo-blob">🍩</div>
+      <div class="logo-text">Donut ALR<em>Floriano · PI</em></div>
+    </a>
+    <ul class="nav-links">
+      <li><a onclick="navTo('#cardapio')">Cardápio</a></li>
+      <li><a onclick="navTo('#bebidas')">Bebidas</a></li>
+      <li><a onclick="navTo('#delivery')">Delivery</a></li>
+      <li><a onclick="navTo('#contato')">Contato</a></li>
+      <li><a onclick="abrirEncomenda()" style="color:var(--pink);font-weight:800;">📅 Encomendas</a></li>
+    </ul>
+    <div class="header-actions">
+      <button class="dark-toggle" id="darkToggle">🌙</button>
+      <button class="login-btn" id="headerLoginBtn">👤 Entrar</button>
+      <button class="cart-btn" id="cartBtn">🛒 Carrinho <span class="cart-badge" id="cartCount">0</span></button>
+    </div>
+  </nav>
 </header>
 
 <div class="main-content" id="mainContent">
-    <div class="offers-banner reveal">
-        <div class="offers-container">
-            <div class="offer-text"><h3>🔥 OFERTA RELÂMPAGO</h3><p>20% OFF em Donuts com cupom <strong>DONUT20</strong></p></div>
-            <div class="offer-timer" id="offerTimer">02:00:00</div>
-        </div>
+
+  <div class="offers-banner reveal">
+    <div class="offers-container">
+      <div class="offer-text"><h3>🔥 OFERTA RELÂMPAGO</h3><p>20% OFF em Donuts com cupom <strong>DONUT20</strong></p></div>
+      <div class="offer-timer" id="offerTimer">00:40:00</div>
     </div>
+  </div>
 
-    <section class="hero">
-        <div class="hero-text">
-            <div class="hero-badge reveal reveal-delay-1">⭐ 4.9 · 500+ pedidos</div>
-            <h1>Os melhores doces<br />de <span class="accent">Floriano</span> <span class="hero-donut-float">🍩</span></h1>
-            <p>Donuts artesanais, cupcakes decorados e bebidas especiais. Entrega em toda Floriano-PI e Barão de Grajaú.</p>
-            <div class="hero-cta">
-                <button class="btn-primary" onclick="navTo('#cardapio')">🍩 Pedir agora</button>
-                <button class="btn-outline" onclick="navTo('#delivery')">🚚 Ver entrega</button>
-            </div>
-            <div class="scroll-indicator"><div class="scroll-dot"></div><div class="scroll-dot"></div><div class="scroll-dot"></div></div>
-        </div>
-        <div class="hero-right">
-            <div class="hero-card reveal-zoom">
-                <div class="hero-card-header"><strong>Pedido em andamento</strong> <span style="color:#2ecc71;">✓ A caminho</span></div>
-                <div style="margin:0.5rem 0;">🍩 Donut Nutella Love <span style="float:right;">R$ 16,90</span></div>
-                <div>🧁 Cupcake Red Velvet <span style="float:right;">R$ 17,90</span></div>
-                <div>🍓 Milk Shake Morango <span style="float:right;">R$ 18,90</span></div>
-                <hr style="margin:0.8rem 0;">
-                <div><strong>Total com frete</strong> <span style="float:right;">R$ 61,60</span></div>
-            </div>
-        </div>
-    </section>
-
-    <div class="stats-bar">
-        <div class="stats-inner">
-            <div class="stat"><div class="stat-num">500+</div><div>Pedidos</div></div>
-            <div class="stat"><div class="stat-num">⭐4.9</div><div>Avaliação</div></div>
-            <div class="stat"><div class="stat-num">30+</div><div>Produtos</div></div>
-            <div class="stat"><div class="stat-num">20+</div><div>Bairros</div></div>
-        </div>
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-badge reveal reveal-delay-1">⭐ 4.9 · 500+ pedidos</div>
+      <h1>Os melhores doces<br />de <span class="accent">Floriano</span> <span class="hero-donut-float">🍩</span></h1>
+      <p>Donuts artesanais, cupcakes decorados e bebidas especiais. Entrega em toda Floriano-PI e Barão de Grajaú.</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="navTo('#cardapio')">🍩 Pedir agora</button>
+        <button class="btn-outline" onclick="navTo('#delivery')">🚚 Ver entrega</button>
+      </div>
+      <div class="scroll-indicator"><div class="scroll-dot"></div><div class="scroll-dot"></div><div class="scroll-dot"></div></div>
     </div>
-
-    <div class="game-banner reveal">
-        <div class="game-banner-inner">
-            <div class="game-card" onclick="openModal('surpriseModal')"><div class="game-card-icon">🎁</div><div>Caixa Surpresa</div></div>
-            <div class="game-card" onclick="openModal('quizModal')"><div class="game-card-icon">🧠</div><div>Quiz do Donut</div></div>
-            <div class="game-card" onclick="openModal('rodaModal')"><div class="game-card-icon">🎡</div><div>Roda da Sorte</div></div>
-            <div class="game-card" onclick="renderPerfil(); openModal('perfilModal')"><div class="game-card-icon">👤</div><div>Meu Perfil</div></div>
-        </div>
+    <div class="hero-right">
+      <div class="hero-card reveal-zoom">
+        <div class="hero-card-header"><strong>Pedido em andamento</strong> <span style="color:#2ecc71;">✓ A caminho</span></div>
+        <div style="margin:0.5rem 0;">🍩 Donut Nutella Love <span style="float:right;">R$ 16,90</span></div>
+        <div>🧁 Cupcake Red Velvet <span style="float:right;">R$ 17,90</span></div>
+        <div>🍓 Milk Shake Morango <span style="float:right;">R$ 18,90</span></div>
+        <hr style="margin:0.8rem 0;">
+        <div><strong>Total com frete</strong> <span style="float:right;">R$ 61,60</span></div>
+      </div>
     </div>
+  </section>
 
-    <section class="section reveal" id="cardapio">
-        <h2 class="section-title">Nosso <span class="accent">Cardápio</span></h2>
-        <div class="search-wrap">
-            <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="searchInput" placeholder="Buscar donut, cupcake...">
-        </div>
-        <div class="tab-nav" id="tabNav">
-            <button class="tab-btn active" data-cat="all">🍬 Todos</button>
-            <button class="tab-btn" data-cat="donuts">🍩 Donuts</button>
-            <button class="tab-btn" data-cat="cupcakes">🧁 Cupcakes</button>
-            <button class="tab-btn" data-cat="bolos">🎂 Bolos</button>
-            <button class="tab-btn" data-cat="combos">🎁 Combos</button>
-            <button class="tab-btn" data-cat="bebidas">🥤 Bebidas</button>
-        </div>
-        <div class="products-grid" id="productsGrid"></div>
-    </section>
-
-    <section class="section reveal" id="combosSection">
-        <h2 class="section-title">🎁 <span class="accent">Combos</span> Especiais</h2>
-        <div class="combos-grid" id="combosGrid"></div>
-    </section>
-
-    <div id="bebidas">
-        <div class="section">
-            <h2 class="section-title">🥤 <span class="accent">Bebidas</span></h2>
-            <div class="drinks-grid" id="drinksGrid"></div>
-        </div>
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat"><div class="stat-num">500+</div><div>Pedidos</div></div>
+      <div class="stat"><div class="stat-num">⭐4.9</div><div>Avaliação</div></div>
+      <div class="stat"><div class="stat-num">40+</div><div>Produtos</div></div>
+      <div class="stat"><div class="stat-num">20+</div><div>Bairros</div></div>
     </div>
+  </div>
 
-    <div class="delivery-wrapper" id="delivery">
-        <div class="delivery-inner">
-            <div class="delivery-title"><h2>🚚 Calcule o Frete</h2><p>Entregamos em toda Floriano-PI e Barão de Grajaú</p></div>
-            <div class="calc-box">
-                <h3>📍 Digite seu CEP</h3>
-                <div class="cep-row">
-                    <input type="text" class="cep-input" id="cepInput" placeholder="Ex: 64800-000" maxlength="9">
-                    <button class="btn-buscar" id="buscarCepBtn">🔍 Buscar</button>
-                </div>
-                <div class="endereco-fields" id="enderecoFields">
-                    <input type="text" id="endRua" placeholder="Rua" readonly>
-                    <input type="text" id="endBairro" placeholder="Bairro" readonly>
-                    <input type="text" id="endCidade" placeholder="Cidade" readonly>
-                    <input type="text" id="endNumero" placeholder="Número *">
-                    <input type="text" id="endComplemento" placeholder="Complemento" style="grid-column:span 2;">
-                </div>
-                <button class="btn-calc" id="calcFreteBtn" style="width:100%; margin-top:1rem; background:var(--gradient); color:#fff; border:none; padding:0.75rem; border-radius:12px; font-weight:700; cursor:pointer;">🚚 Calcular Frete</button>
-                <div class="frete-resultado" id="freteResultado">
-                    <div id="freteInfo"></div>
-                    <div class="frete-valor" id="freteValorDisplay">-</div>
-                </div>
-            </div>
-        </div>
+  <div class="game-banner reveal">
+    <div class="game-banner-inner">
+      <div class="game-card" onclick="openModal('surpriseModal')"><div class="game-card-icon">🎁</div><div>Caixa Surpresa</div></div>
+      <div class="game-card" onclick="openModal('quizModal')"><div class="game-card-icon">🧠</div><div>Quiz do Donut</div></div>
+      <div class="game-card" onclick="openModal('rodaModal')"><div class="game-card-icon">🎡</div><div>Roda da Sorte</div></div>
+      <div class="game-card" onclick="renderPerfil(); openModal('perfilModal')"><div class="game-card-icon">👤</div><div>Meu Perfil</div></div>
     </div>
+  </div>
 
-    <section class="section reveal" id="contato">
-        <h2 class="section-title">📬 <span class="accent">Contato</span></h2>
-        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-            <a href="https://wa.me/5589994112913" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">💬 WhatsApp (89) 9 9411-2913</a>
-            <a href="https://instagram.com/donutalr" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">📸 @donutalr</a>
-        </div>
-    </section>
+  <section class="section reveal" id="cardapio">
+    <h2 class="section-title">Nosso <span class="accent">Cardápio</span></h2>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Buscar donut, cupcake...">
+    </div>
+    <div class="tab-nav" id="tabNav">
+      <button class="tab-btn active" data-cat="all">🍬 Todos</button>
+      <button class="tab-btn" data-cat="donuts">🍩 Donuts</button>
+      <button class="tab-btn" data-cat="cupcakes">🧁 Cupcakes</button>
+      <button class="tab-btn" data-cat="bolos">🎂 Bolos</button>
+      <button class="tab-btn" data-cat="combos">🎁 Combos</button>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
 
-    <section class="section reveal" id="encomendas" style="padding-top:0;">
-        <div style="background:linear-gradient(135deg,var(--lavender),var(--peach));border-radius:24px;padding:2.5rem;text-align:center;">
-            <div style="font-size:3rem;margin-bottom:0.75rem;">📅</div>
-            <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--brown);margin-bottom:0.5rem;">Faça sua <span style="color:var(--pink);">Encomenda</span></h2>
-            <p style="color:var(--brown-mid);max-width:480px;margin:0 auto 1.5rem;line-height:1.6;">Quer garantir seu pedido especial? Encomende com pelo menos <strong>2 dias úteis de antecedência</strong> e receba com toda a atenção que você merece! 🍩</p>
-            <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;">
-                <div style="text-align:center;"><div style="font-size:1.5rem;">🎂</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Bolos especiais</div></div>
-                <div style="text-align:center;"><div style="font-size:1.5rem;">🎁</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Kits presenteáveis</div></div>
-                <div style="text-align:center;"><div style="font-size:1.5rem;">🍩</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Donuts personalizados</div></div>
-                <div style="text-align:center;"><div style="font-size:1.5rem;">🧁</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Cupcakes para evento</div></div>
-            </div>
-            <button class="btn-primary" onclick="abrirEncomenda()" style="font-size:1rem;padding:0.9rem 2.5rem;">📅 Fazer Encomenda Agora</button>
-        </div>
-    </section>
+  <section class="section reveal" id="combosSection">
+    <h2 class="section-title">🎁 <span class="accent">Combos</span> Especiais</h2>
+    <div class="combos-grid" id="combosGrid"></div>
+  </section>
 
-    <footer>
-        <div class="footer-inner">
-            <div><div style="display:flex; gap:10px; margin-bottom:0.75rem;"><div class="logo-blob" style="width:38px;height:38px;">🍩</div><span style="font-weight:800;">Donut ALR</span></div><p>Doces artesanais feitos com amor em Floriano-PI.</p></div>
-            <div><div class="footer-col-title">Cardápio</div><ul><li><a onclick="navTo('#cardapio')">Donuts</a></li><li><a onclick="navTo('#cardapio')">Cupcakes</a></li><li><a onclick="navTo('#bebidas')">Bebidas</a></li></ul></div>
-            <div><div class="footer-col-title">Ajuda</div><ul><li><a onclick="navTo('#delivery')">Calcular frete</a></li><li><a onclick="navTo('#contato')">Suporte</a></li></ul></div>
+  <div id="bebidas">
+    <div class="section">
+      <h2 class="section-title">🥤 <span class="accent">Bebidas</span></h2>
+      <div class="drinks-grid" id="drinksGrid"></div>
+    </div>
+  </div>
+
+  <div class="delivery-wrapper" id="delivery">
+    <div class="delivery-inner">
+      <div class="delivery-title"><h2>🚚 Calcule o Frete</h2><p>Entregamos em toda Floriano-PI e Barão de Grajaú</p></div>
+      <div class="calc-box">
+        <h3>📍 Digite seu CEP</h3>
+        <div class="cep-row">
+          <input type="text" class="cep-input" id="cepInput" placeholder="Ex: 64800-000" maxlength="9">
+          <button class="btn-buscar" id="buscarCepBtn">🔍 Buscar</button>
         </div>
-        <div class="footer-bottom">© 2026 Donut ALR · Floriano-PI · Todos os direitos reservados</div>
-    </footer>
+        <div class="endereco-fields" id="enderecoFields">
+          <input type="text" id="endRua" placeholder="Rua" readonly>
+          <input type="text" id="endBairro" placeholder="Bairro" readonly>
+          <input type="text" id="endCidade" placeholder="Cidade" readonly>
+          <input type="text" id="endNumero" placeholder="Número *">
+          <input type="text" id="endComplemento" placeholder="Complemento" style="grid-column:span 2;">
+        </div>
+        <button class="btn-calc" id="calcFreteBtn" style="width:100%; margin-top:1rem; background:var(--gradient); color:#fff; border:none; padding:0.75rem; border-radius:12px; font-weight:700; cursor:pointer;">🚚 Calcular Frete</button>
+        <div class="frete-resultado" id="freteResultado">
+          <div id="freteInfo"></div>
+          <div class="frete-valor" id="freteValorDisplay">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section reveal" id="contato">
+    <h2 class="section-title">📬 <span class="accent">Contato</span></h2>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="https://wa.me/5589994112913" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">💬 WhatsApp (89) 9 9411-2913</a>
+      <a href="https://instagram.com/donutalr" target="_blank" style="background:var(--card); padding:1rem 1.5rem; border-radius:18px; display:flex; align-items:center; gap:1rem;">📸 @donutalr</a>
+    </div>
+  </section>
+
+  <section class="section reveal" id="encomendas" style="padding-top:0;">
+    <div style="background:linear-gradient(135deg,var(--lavender),var(--peach));border-radius:24px;padding:2.5rem;text-align:center;">
+      <div style="font-size:3rem;margin-bottom:0.75rem;">📅</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--brown);margin-bottom:0.5rem;">Faça sua <span style="color:var(--pink);">Encomenda</span></h2>
+      <p style="color:var(--brown-mid);max-width:480px;margin:0 auto 1.5rem;line-height:1.6;">Quer garantir seu pedido especial? Encomende com pelo menos <strong>2 dias úteis de antecedência</strong> e receba com toda a atenção que você merece! 🍩</p>
+      <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+        <div style="text-align:center;"><div style="font-size:1.5rem;">🎂</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Bolos especiais</div></div>
+        <div style="text-align:center;"><div style="font-size:1.5rem;">🎁</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Kits presenteáveis</div></div>
+        <div style="text-align:center;"><div style="font-size:1.5rem;">🍩</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Donuts personalizados</div></div>
+        <div style="text-align:center;"><div style="font-size:1.5rem;">🧁</div><div style="font-size:0.8rem;color:var(--brown-mid);margin-top:0.3rem;">Cupcakes para evento</div></div>
+      </div>
+      <button class="btn-primary" onclick="abrirEncomenda()" style="font-size:1rem;padding:0.9rem 2.5rem;">📅 Fazer Encomenda Agora</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div><div style="display:flex; gap:10px; margin-bottom:0.75rem;"><div class="logo-blob" style="width:38px;height:38px;">🍩</div><span style="font-weight:800;">Donut ALR</span></div><p>Doces artesanais feitos com amor em Floriano-PI.</p></div>
+      <div><div class="footer-col-title">Cardápio</div><ul><li><a onclick="navTo('#cardapio')">Donuts</a></li><li><a onclick="navTo('#cardapio')">Cupcakes</a></li><li><a onclick="navTo('#bebidas')">Bebidas</a></li></ul></div>
+      <div><div class="footer-col-title">Ajuda</div><ul><li><a onclick="navTo('#delivery')">Calcular frete</a></li><li><a onclick="navTo('#contato')">Suporte</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2026 Donut ALR · Floriano-PI · Todos os direitos reservados</div>
+  </footer>
 </div>
 
 <nav class="mobile-nav">
-    <div class="mobile-nav-inner" style="display:flex; justify-content:space-around;">
-        <button class="mnav-item" onclick="navTo('#cardapio')"><span>🍩</span><span>Cardápio</span></button>
-        <button class="mnav-item" onclick="navTo('#bebidas')"><span>🥤</span><span>Bebidas</span></button>
-        <button class="mnav-item" onclick="openCart()"><span>🛒</span><span class="mnav-badge" id="mobileCartCount" style="display:none">0</span><span>Carrinho</span></button>
-        <button class="mnav-item" onclick="openModal('surpriseModal')"><span>🎁</span><span>Surpresa</span></button>
-        <button class="mnav-item" onclick="renderPerfil(); openModal('perfilModal')"><span>👤</span><span>Perfil</span></button>
-    </div>
+  <div class="mobile-nav-inner" style="display:flex; justify-content:space-around;">
+    <button class="mnav-item" onclick="navTo('#cardapio')"><span>🍩</span><span>Cardápio</span></button>
+    <button class="mnav-item" onclick="navTo('#bebidas')"><span>🥤</span><span>Bebidas</span></button>
+    <button class="mnav-item" onclick="openCart()"><span>🛒</span><span class="mnav-badge" id="mobileCartCount" style="display:none">0</span><span>Carrinho</span></button>
+    <button class="mnav-item" onclick="openModal('surpriseModal')"><span>🎁</span><span>Surpresa</span></button>
+    <button class="mnav-item" onclick="renderPerfil(); openModal('perfilModal')"><span>👤</span><span>Perfil</span></button>
+  </div>
 </nav>
 
 <div class="overlay" id="overlay"></div>
 
 <div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-header"><h3>🛒 Meu Carrinho</h3><button class="close-btn" id="closeCartBtn">✕</button></div>
-    <div class="cart-body" id="cartBody"><div class="cart-empty">Carrinho vazio</div></div>
-    <div class="cart-footer" id="cartFooterArea">
-        <div class="coupon-section" style="margin-bottom:0.8rem;">
-            <div style="display:flex; gap:0.5rem;"><input type="text" id="couponInput" placeholder="CUPOM" class="coupon-input" style="flex:1; padding:0.6rem; border-radius:10px; border:1px solid var(--gray-2);"><button class="coupon-btn" onclick="aplicarCupom()" style="background:var(--gradient); color:#fff; border:none; padding:0.6rem 1rem; border-radius:10px;">Aplicar</button></div>
-            <div class="coupon-status" id="couponStatus"></div>
-        </div>
-        <div class="payment-section">
-            <div class="payment-title">💳 Forma de Pagamento</div>
-            <div class="payment-options" id="paymentOptions">
-                <div class="payment-option selected" data-payment="pix"><input type="radio" name="payment" id="paymentPix" value="pix" checked><label for="paymentPix">PIX</label></div>
-                <div class="payment-option" data-payment="card"><input type="radio" name="payment" id="paymentCard" value="cartao"><label for="paymentCard">Cartão</label></div>
-                <div class="payment-option" data-payment="cash"><input type="radio" name="payment" id="paymentCash" value="especie"><label for="paymentCash">Espécie</label></div>
-            </div>
-        </div>
-        <div class="cart-summary" id="cartSummary"></div>
-        <button class="btn-checkout" id="checkoutBtn">✅ Finalizar Pedido</button>
-        <button class="btn-encomenda" id="encomendaBtn" onclick="abrirEncomenda()" style="width:100%; margin-top:0.5rem; background:var(--lavender); border:none; padding:0.75rem; border-radius:12px; font-weight:700; cursor:pointer; color:var(--brown); font-family:inherit; font-size:0.9rem;">📅 Fazer Encomenda</button>
-        <button class="btn-secondary" onclick="limparCarrinho()" style="width:100%; margin-top:0.5rem; background:var(--gray); border:none; padding:0.7rem; border-radius:12px;">🗑️ Limpar Carrinho</button>
+  <div class="cart-header"><h3>🛒 Meu Carrinho</h3><button class="close-btn" id="closeCartBtn">✕</button></div>
+  <div class="cart-body" id="cartBody"><div class="cart-empty">Carrinho vazio</div></div>
+  <div class="cart-footer" id="cartFooterArea">
+    <div class="coupon-section" style="margin-bottom:0.8rem;">
+      <div style="display:flex; gap:0.5rem;"><input type="text" id="couponInput" placeholder="CUPOM" class="coupon-input" style="flex:1; padding:0.6rem; border-radius:10px; border:1px solid var(--gray-2);"><button class="coupon-btn" onclick="aplicarCupom()" style="background:var(--gradient); color:#fff; border:none; padding:0.6rem 1rem; border-radius:10px;">Aplicar</button></div>
+      <div class="coupon-status" id="couponStatus"></div>
     </div>
+    <div class="payment-section">
+      <div class="payment-title">💳 Forma de Pagamento</div>
+      <div class="payment-options" id="paymentOptions">
+        <div class="payment-option selected" data-payment="pix"><input type="radio" name="payment" id="paymentPix" value="pix" checked><label for="paymentPix">PIX</label></div>
+        <div class="payment-option" data-payment="card"><input type="radio" name="payment" id="paymentCard" value="cartao"><label for="paymentCard">Cartão</label></div>
+        <div class="payment-option" data-payment="cash"><input type="radio" name="payment" id="paymentCash" value="especie"><label for="paymentCash">Espécie</label></div>
+      </div>
+    </div>
+    <div class="cart-summary" id="cartSummary"></div>
+    <button class="btn-checkout" id="checkoutBtn">✅ Finalizar Pedido</button>
+    <button class="btn-encomenda" id="encomendaBtn" onclick="abrirEncomenda()" style="width:100%; margin-top:0.5rem; background:var(--lavender); border:none; padding:0.75rem; border-radius:12px; font-weight:700; cursor:pointer; color:var(--brown); font-family:inherit; font-size:0.9rem;">📅 Fazer Encomenda</button>
+    <button class="btn-secondary" onclick="limparCarrinho()" style="width:100%; margin-top:0.5rem; background:var(--gray); border:none; padding:0.7rem; border-radius:12px;">🗑️ Limpar Carrinho</button>
+  </div>
 </div>
 
 <div id="productModal" class="modal-overlay"><div class="modal-box"><button class="modal-close" onclick="closeModal('productModal')">✕</button><div id="modalProductImgWrap" style="font-size:5rem; text-align:center;"></div><h3 id="modalProductTitle"></h3><p id="modalProductDesc"></p><div id="modalProductAction"></div></div></div>
@@ -755,33 +675,33 @@
 <div id="avaliacaoModal" class="modal-overlay"><div class="modal-box" style="text-align:center"><div class="surprise-donut">🍩</div><div class="modal-title">Obrigado pelo pedido!</div><div class="stars-row" id="starsRow"><button class="star-btn" data-v="1" onclick="selecionarEstrela(1)">★</button><button class="star-btn" data-v="2" onclick="selecionarEstrela(2)">★</button><button class="star-btn" data-v="3" onclick="selecionarEstrela(3)">★</button><button class="star-btn" data-v="4" onclick="selecionarEstrela(4)">★</button><button class="star-btn" data-v="5" onclick="selecionarEstrela(5)">★</button></div><div id="avaliacaoMsg"></div><button class="auth-submit" id="btnEnviarAvaliacao" onclick="enviarAvaliacao()" disabled>Enviar Avaliação</button><button class="btn-secondary" onclick="closeModal('avaliacaoModal')" style="width:100%; margin-top:0.5rem;">Agora não</button></div></div>
 
 <div id="encomendaModal" class="modal-overlay">
-    <div class="modal-box" style="max-width:500px;">
-        <button class="modal-close" onclick="closeModal('encomendaModal')">✕</button>
-        <div class="modal-title">📅 Fazer Encomenda</div>
-        <p style="color:var(--brown-light);font-size:0.85rem;margin-bottom:1.2rem;">Encomendas devem ser feitas com <strong>no mínimo 2 dias úteis de antecedência</strong>. Selecione a data desejada para entrega:</p>
-        <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
-            <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">📅 Data de Entrega</label>
-            <input type="date" id="encomendaData" class="auth-field" style="width:100%;">
-            <div id="encomendaDataMsg" style="font-size:0.8rem;color:var(--danger);margin-top:0.4rem;min-height:1.2em;"></div>
-        </div>
-        <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
-            <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">⏰ Horário Preferido</label>
-            <select id="encomendaHorario" class="auth-field" style="width:100%;">
-                <option value="08:00-10:00">08h00 – 10h00</option>
-                <option value="10:00-12:00">10h00 – 12h00</option>
-                <option value="12:00-14:00">12h00 – 14h00</option>
-                <option value="14:00-16:00">14h00 – 16h00</option>
-                <option value="16:00-18:00">16h00 – 18h00</option>
-            </select>
-        </div>
-        <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
-            <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">📝 Observações (opcional)</label>
-            <textarea id="encomendaObs" class="auth-field" rows="2" placeholder="Ex: mensagem no bolo, cobertura especial..." style="width:100%;resize:vertical;"></textarea>
-        </div>
-        <div id="encomendaResumo" style="background:var(--gray);border-radius:14px;padding:1rem;margin-bottom:1rem;font-size:0.87rem;"></div>
-        <button class="auth-submit" id="btnConfirmarEncomenda" onclick="confirmarEncomenda()">📅 Confirmar Encomenda</button>
-        <p style="text-align:center;font-size:0.75rem;color:var(--brown-light);margin-top:0.8rem;">Você será redirecionado ao WhatsApp para confirmar com a loja.</p>
+  <div class="modal-box" style="max-width:500px;">
+    <button class="modal-close" onclick="closeModal('encomendaModal')">✕</button>
+    <div class="modal-title">📅 Fazer Encomenda</div>
+    <p style="color:var(--brown-light);font-size:0.85rem;margin-bottom:1.2rem;">Encomendas devem ser feitas com <strong>no mínimo 2 dias úteis de antecedência</strong>. Selecione a data desejada para entrega:</p>
+    <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
+      <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">📅 Data de Entrega</label>
+      <input type="date" id="encomendaData" class="auth-field" style="width:100%;">
+      <div id="encomendaDataMsg" style="font-size:0.8rem;color:var(--danger);margin-top:0.4rem;min-height:1.2em;"></div>
     </div>
+    <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
+      <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">⏰ Horário Preferido</label>
+      <select id="encomendaHorario" class="auth-field" style="width:100%;">
+        <option value="08:00-10:00">08h00 – 10h00</option>
+        <option value="10:00-12:00">10h00 – 12h00</option>
+        <option value="12:00-14:00">12h00 – 14h00</option>
+        <option value="14:00-16:00">14h00 – 16h00</option>
+        <option value="16:00-18:00">16h00 – 18h00</option>
+      </select>
+    </div>
+    <div style="background:var(--peach);border-radius:14px;padding:1rem;margin-bottom:1rem;">
+      <label style="font-weight:700;color:var(--brown);display:block;margin-bottom:0.4rem;">📝 Observações (opcional)</label>
+      <textarea id="encomendaObs" class="auth-field" rows="2" placeholder="Ex: mensagem no bolo, cobertura especial..." style="width:100%;resize:vertical;"></textarea>
+    </div>
+    <div id="encomendaResumo" style="background:var(--gray);border-radius:14px;padding:1rem;margin-bottom:1rem;font-size:0.87rem;"></div>
+    <button class="auth-submit" id="btnConfirmarEncomenda" onclick="confirmarEncomenda()">📅 Confirmar Encomenda</button>
+    <p style="text-align:center;font-size:0.75rem;color:var(--brown-light);margin-top:0.8rem;">Você será redirecionado ao WhatsApp para confirmar com a loja.</p>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -790,7 +710,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, deleteDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -806,42 +726,103 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // ========== FALLBACK LOCAIS (caso Firebase falhe) ==========
+    // ========== PRODUTOS COMPLETOS ==========
     const PRODUTOS_LOCAL = [
-        { id:1, name:"Donut Glitter Rosa", emoji:"🍩", desc:"Cobertura rosé com confeitos", price:12.9, category:"donuts", badge:"❤️" },
-        { id:2, name:"Donut Nutella Love", emoji:"🍩", desc:"Recheio cremoso de Nutella", price:16.9, category:"donuts", badge:"⭐", tag:"Mais pedido" },
-        { id:3, name:"Donut Coração", emoji:"💕", desc:"Geleia de morango", price:18.9, category:"donuts", badge:"💖" },
-        { id:4, name:"Donut Oreo Crush", emoji:"🍩", desc:"Creme branco com Oreo", price:15.9, category:"donuts", badge:"🔥", tag:"Novo" },
-        { id:5, name:"Donut Pistache", emoji:"🍩", desc:"Creme de pistache", price:19.9, category:"donuts", badge:"✨", tag:"Premium" },
-        { id:6, name:"Cupcake Red Velvet", emoji:"🧁", desc:"Cream cheese", price:17.9, category:"cupcakes", badge:"⭐", tag:"Top" },
-        { id:7, name:"Cupcake Unicórnio", emoji:"🦄", desc:"Glitter comestível", price:22.9, category:"cupcakes", badge:"🦄" },
-        { id:8, name:"Cupcake Morango", emoji:"🍓", desc:"Morangos frescos", price:15.5, category:"cupcakes" },
-        { id:9, name:"Bolo Brigadeiro", emoji:"🍫", desc:"Camadas de brigadeiro", price:16.9, category:"bolos" },
-        { id:10, name:"Bolo Morango", emoji:"🍓", desc:"Chantilly e morangos", price:18.9, category:"bolos", badge:"❤️" }
+      { id:1, name:"Donut Glitter Rosa", emoji:"🍩", desc:"Cobertura rosé com confeitos brilhantes", price:12.9, category:"donuts", badge:"❤️", tag:"Top" },
+      { id:2, name:"Donut Nutella Love", emoji:"🍩", desc:"Recheio cremoso de Nutella", price:16.9, category:"donuts", badge:"⭐", tag:"Mais pedido" },
+      { id:3, name:"Donut Coração", emoji:"💕", desc:"Geleia de morango com coração de açúcar", price:18.9, category:"donuts", badge:"💖" },
+      { id:4, name:"Donut Oreo Crush", emoji:"🍩", desc:"Creme branco com pedaços de Oreo", price:15.9, category:"donuts", badge:"🔥", tag:"Novo" },
+      { id:5, name:"Donut Pistache", emoji:"🍩", desc:"Creme de pistache premium", price:19.9, category:"donuts", badge:"✨", tag:"Premium" },
+      { id:6, name:"Donut Chocolate Belga", emoji:"🍫", desc:"Chocolate belga 70% cacau", price:21.9, category:"donuts", badge:"🇧🇪" },
+      { id:7, name:"Donut Doce de Leite", emoji:"🥛", desc:"Doce de leite cremoso com coco", price:14.9, category:"donuts", badge:"🥥" },
+      { id:8, name:"Donut Blueberry", emoji:"🫐", desc:"Cobertura de mirtilo", price:17.9, category:"donuts", badge:"🫐" },
+      { id:9, name:"Donut Red Velvet", emoji:"❤️", desc:"Massa vermelha com cream cheese", price:18.9, category:"donuts", tag:"Especial" },
+      { id:10, name:"Donut Limão Siciliano", emoji:"🍋", desc:"Cobertura cítrica de limão siciliano", price:13.9, category:"donuts" },
+      { id:11, name:"Cupcake Red Velvet", emoji:"🧁", desc:"Cream cheese com geleia de framboesa", price:17.9, category:"cupcakes", badge:"⭐", tag:"Top" },
+      { id:12, name:"Cupcake Unicórnio", emoji:"🦄", desc:"Glitter comestível e núvens de marshmallow", price:22.9, category:"cupcakes", badge:"🦄" },
+      { id:13, name:"Cupcake Morango", emoji:"🍓", desc:"Morangos frescos com chantilly", price:15.5, category:"cupcakes" },
+      { id:14, name:"Cupcake Chocolate", emoji:"🍫", desc:"Brigadeiro gourmet com granulado", price:16.9, category:"cupcakes", badge:"🍫" },
+      { id:15, name:"Cupcake Baunilha", emoji:"🌿", desc:"Creme de baunilha com confeitos coloridos", price:14.9, category:"cupcakes" },
+      { id:16, name:"Cupcake Limão", emoji:"🍋", desc:"Cobertura de limão siciliano", price:14.9, category:"cupcakes" },
+      { id:17, name:"Cupcake Cookies", emoji:"🍪", desc:"Massa com pedaços de cookie", price:18.9, category:"cupcakes", tag:"Novo" },
+      { id:18, name:"Cupcake Ninho", emoji:"🥛", desc:"Leite Ninho com Nutella", price:19.9, category:"cupcakes", badge:"🔥" },
+      { id:19, name:"Bolo Brigadeiro", emoji:"🍫", desc:"Camadas generosas de brigadeiro", price:16.9, category:"bolos" },
+      { id:20, name:"Bolo Morango", emoji:"🍓", desc:"Chantilly e morangos frescos", price:18.9, category:"bolos", badge:"❤️" },
+      { id:21, name:"Bolo Chocolate", emoji:"🍫", desc:"Chocolate belga com calda", price:19.9, category:"bolos", tag:"Premium" },
+      { id:22, name:"Bolo Cenoura", emoji:"🥕", desc:"Cobertura de chocolate", price:15.9, category:"bolos" },
+      { id:23, name:"Bolo Limão", emoji:"🍋", desc:"Calda de limão com raspas", price:16.9, category:"bolos" },
+      { id:24, name:"Bolo Coco", emoji:"🥥", desc:"Coco ralado com leite condensado", price:17.9, category:"bolos" }
     ];
+    
+    // ========== COMBOS COMPLETOS ==========
     const COMBOS_LOCAL = [
-        { id:101, name:"Combo Casal", emoji:"💑", desc:"2 Donuts + 2 Bebidas", price:49.9, originalPrice:68.7, badge:"-27%", category:"combos" },
-        { id:102, name:"Kit Festa 12 Peças", emoji:"🎉", desc:"Donuts + Cupcakes sortidos", price:69.9, originalPrice:94.9, badge:"-26%", category:"combos" },
-        { id:103, name:"Box Presenteável", emoji:"🎀", desc:"4 Donuts gourmet", price:44.9, originalPrice:59.6, badge:"-25%", category:"combos" }
+      { id:101, name:"Combo Casal", emoji:"💑", desc:"2 Donuts + 2 Bebidas à escolha", price:49.9, originalPrice:68.7, badge:"-27%" },
+      { id:102, name:"Kit Festa 12 Peças", emoji:"🎉", desc:"6 Donuts + 6 Cupcakes sortidos", price:69.9, originalPrice:94.9, badge:"-26%" },
+      { id:103, name:"Box Presenteável", emoji:"🎀", desc:"4 Donuts gourmet em caixa especial", price:44.9, originalPrice:59.6, badge:"-25%" },
+      { id:104, name:"Combo Família", emoji:"👨‍👩‍👧‍👦", desc:"8 Donuts + 4 Bebidas + Bolo pequeno", price:129.9, originalPrice:169.9, badge:"-24%" },
+      { id:105, name:"Kit Aniversário", emoji:"🎂", desc:"Bolo médio + 6 Cupcakes", price:89.9, originalPrice:119.9, badge:"-25%" },
+      { id:106, name:"Combo Delícia", emoji:"😋", desc:"4 Donuts + 2 Milk Shakes", price:79.9, originalPrice:109.9, badge:"-27%" },
+      { id:107, name:"Combo Energia", emoji:"⚡", desc:"2 Donuts + Café Expresso + Suco", price:39.9, originalPrice:54.9, badge:"-27%" }
     ];
+    
+    // ========== BEBIDAS COMPLETAS ==========
     const BEBIDAS_LOCAL = [
-        { id:201, name:"Milk Shake Morango", emoji:"🍓", desc:"Sorvete artesanal", price:18.9 },
-        { id:202, name:"Milk Shake Nutella", emoji:"🍫", desc:"Nutella com sorvete", price:21.9 },
-        { id:203, name:"Suco de Laranja", emoji:"🍊", desc:"Natural", price:9.9 },
-        { id:204, name:"Refrigerante Lata", emoji:"🥤", desc:"Coca, Guaraná", price:7.9 }
+      // Milk Shakes
+      { id:201, name:"Milk Shake Morango", emoji:"🍓", desc:"Sorvete artesanal com calda de morango", price:18.9, category:"milkshake" },
+      { id:202, name:"Milk Shake Nutella", emoji:"🍫", desc:"Nutella com sorvete cremoso", price:21.9, category:"milkshake", badge:"⭐" },
+      { id:203, name:"Milk Shake Chocolate", emoji:"🍫", desc:"Chocolate belga com chantilly", price:19.9, category:"milkshake" },
+      { id:204, name:"Milk Shake Ovomaltine", emoji:"🥤", desc:"Ovomaltine crocante", price:20.9, category:"milkshake", tag:"Novo" },
+      { id:205, name:"Milk Shake Doce de Leite", emoji:"🥛", desc:"Doce de leite com canela", price:20.9, category:"milkshake" },
+      { id:206, name:"Milk Shake Cookies", emoji:"🍪", desc:"Cookies cream", price:22.9, category:"milkshake", badge:"🔥" },
+      
+      // Açaí na Garrafa
+      { id:207, name:"Açaí na Garrafa 500ml", emoji:"🫐", desc:"Açaí puro com granola", price:24.9, category:"acai", tag:"Mais vendido" },
+      { id:208, name:"Açaí com Banana", emoji:"🍌", desc:"Açaí com banana e mel", price:26.9, category:"acai" },
+      { id:209, name:"Açaí com Morango", emoji:"🍓", desc:"Açaí com morango e leite condensado", price:27.9, category:"acai", badge:"⭐" },
+      { id:210, name:"Açaí Power", emoji:"💪", desc:"Açaí com whey protein", price:29.9, category:"acai" },
+      { id:211, name:"Açaí na Tigela", emoji:"🥣", desc:"Açaí cremoso com granola e banana", price:22.9, category:"acai" },
+      
+      // Smurf e Especiais
+      { id:212, name:"Smurf Azul", emoji:"🔵", desc:"Refrigerante sabor blueberry", price:9.9, category:"especiais", badge:"Novo" },
+      { id:213, name:"Smurf Rosa", emoji:"💗", desc:"Refrigerante sabor morango", price:9.9, category:"especiais" },
+      { id:214, name:"Smurf Verde", emoji:"💚", desc:"Refrigerante sabor maçã verde", price:9.9, category:"especiais" },
+      { id:215, name:"Limonada Suíça", emoji:"🍋", desc:"Limão com leite condensido e gelo", price:12.9, category:"especiais", tag:"Top" },
+      { id:216, name:"Limonada Rosa", emoji:"💗", desc:"Limão com morango e hortelã", price:13.9, category:"especiais" },
+      { id:217, name:"Chá Gelado Pêssego", emoji:"🍑", desc:"Chá com pedaços de pêssego", price:10.9, category:"especiais" },
+      { id:218, name:"Chá Gelado Morango", emoji:"🍓", desc:"Chá com morango e hortelã", price:10.9, category:"especiais" },
+      
+      // Sucos Naturais
+      { id:219, name:"Suco de Laranja", emoji:"🍊", desc:"Natural, feito na hora", price:9.9, category:"sucos" },
+      { id:220, name:"Suco de Morango", emoji:"🍓", desc:"Polpa de morango com leite", price:12.9, category:"sucos" },
+      { id:221, name:"Suco de Limão", emoji:"🍋", desc:"Limão siciliano", price:8.9, category:"sucos" },
+      { id:222, name:"Suco de Maracujá", emoji:"🟡", desc:"Maracujá com leite condensado", price:11.9, category:"sucos" },
+      { id:223, name:"Suco de Acerola", emoji:"🔴", desc:"Rico em vitamina C", price:10.9, category:"sucos" },
+      { id:224, name:"Suco Detox", emoji:"🥬", desc:"Couve, limão, gengibre e hortelã", price:13.9, category:"sucos", tag:"Saudável" },
+      
+      // Refrigerantes e Águas
+      { id:225, name:"Refrigerante Lata", emoji:"🥤", desc:"Coca, Guaraná, Fanta", price:7.9, category:"refrigerantes" },
+      { id:226, name:"Refrigerante 2L", emoji:"🥤", desc:"Coca-Cola ou Guaraná", price:12.9, category:"refrigerantes" },
+      { id:227, name:"Água Mineral 500ml", emoji:"💧", desc:"Garrafa", price:4.9, category:"aguas" },
+      { id:228, name:"Água com Gás", emoji:"🫧", desc:"Com gás 500ml", price:5.9, category:"aguas" },
+      
+      // Cafés
+      { id:229, name:"Café Expresso", emoji:"☕", desc:"Café especial", price:6.9, category:"cafes" },
+      { id:230, name:"Cappuccino", emoji:"☕", desc:"Cappuccino cremoso", price:9.9, category:"cafes", badge:"🔥" },
+      { id:231, name:"Latte Macchiato", emoji:"☕", desc:"Leite vaporizado com café", price:11.9, category:"cafes" },
+      { id:232, name:"Mocha", emoji:"☕", desc:"Café com chocolate", price:12.9, category:"cafes" }
     ];
 
     const CUPONS = {
-        'BEMVINDO10': { tipo:'percentual', valor:10, minPedido:30, desc:'10% OFF' },
-        'FRETEGRATIS': { tipo:'frete', valor:100, minPedido:50, desc:'Frete grátis' },
-        'DONUT20': { tipo:'percentual', valor:20, minPedido:50, desc:'20% OFF' },
-        'ALR5': { tipo:'fixo', valor:5, minPedido:20, desc:'R$5 OFF' },
-        'DONUT15': { tipo:'percentual', valor:15, minPedido:0, desc:'15% OFF' },
-        'SORTE10': { tipo:'percentual', valor:10, minPedido:0, desc:'10% OFF' },
-        'SORTE15': { tipo:'percentual', valor:15, minPedido:0, desc:'15% OFF' },
-        'SORTE20': { tipo:'percentual', valor:20, minPedido:0, desc:'20% OFF' },
-        'SURPRESA5': { tipo:'fixo', valor:5, minPedido:0, desc:'R$5 OFF' },
-        'SURPRESA10': { tipo:'percentual', valor:10, minPedido:0, desc:'10% OFF' }
+      'BEMVINDO10': { tipo:'percentual', valor:10, minPedido:30, desc:'10% OFF' },
+      'FRETEGRATIS': { tipo:'frete', valor:100, minPedido:50, desc:'Frete grátis' },
+      'DONUT20': { tipo:'percentual', valor:20, minPedido:50, desc:'20% OFF' },
+      'ALR5': { tipo:'fixo', valor:5, minPedido:20, desc:'R$5 OFF' },
+      'DONUT15': { tipo:'percentual', valor:15, minPedido:0, desc:'15% OFF' },
+      'SORTE10': { tipo:'percentual', valor:10, minPedido:0, desc:'10% OFF' },
+      'SORTE15': { tipo:'percentual', valor:15, minPedido:0, desc:'15% OFF' },
+      'SORTE20': { tipo:'percentual', valor:20, minPedido:0, desc:'20% OFF' },
+      'SURPRESA5': { tipo:'fixo', valor:5, minPedido:0, desc:'R$5 OFF' },
+      'SURPRESA10': { tipo:'percentual', valor:10, minPedido:0, desc:'10% OFF' }
     };
 
     const WHATSAPP = "5589994112913";
@@ -859,13 +840,38 @@
     let freteCalculado = 7.9;
     let avaliacaoEstrela = 0;
     let ultimoPedidoId = null;
-    let produtosUnsubscribe = null;
 
     let produtosFirebase = [...PRODUTOS_LOCAL];
     let combosFirebase = [...COMBOS_LOCAL];
     let bebidasFirebase = [...BEBIDAS_LOCAL];
 
-    // ========== FUNÇÕES AUXILIARES ==========
+    async function carregarProdutosFirebase() {
+        try {
+            const snap = await getDocs(collection(db, 'produtos'));
+            if (!snap.empty) {
+                const todos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                produtosFirebase = todos.filter(p => p.categoria !== 'Combos' && p.categoria !== 'Bebidas').map(p => ({
+                    id: p.id, name: p.nome, emoji: p.emoji, desc: p.descricao, price: p.preco,
+                    category: p.categoria?.toLowerCase(), badge: p.badge, tag: p.tag, estoque: p.estoque ?? 99, imagem: p.imagem || ''
+                }));
+                combosFirebase = todos.filter(p => p.categoria === 'Combos').map(p => ({
+                    id: p.id, name: p.nome, emoji: p.emoji, desc: p.descricao, price: p.preco,
+                    originalPrice: p.precoOriginal, badge: p.badge, imagem: p.imagem || ''
+                }));
+                bebidasFirebase = todos.filter(p => p.categoria === 'Bebidas').map(p => ({
+                    id: p.id, name: p.nome, emoji: p.emoji, desc: p.descricao, price: p.preco, imagem: p.imagem || ''
+                }));
+            }
+            renderProdutos(); renderCombos(); renderBebidas_grid();
+        } catch(e) { console.warn('Erro ao carregar produtos, usando fallback'); }
+    }
+
+    function isLojaAberta() {
+        const agora = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
+        const dia = agora.getDay(), hora = agora.getHours();
+        return dia >= 1 && dia <= 5 && hora >= 8 && hora < 18;
+    }
+
     function mascararTelefone(input) {
         let v = input.value.replace(/\D/g,'');
         if (v.length > 11) v = v.slice(0,11);
@@ -908,29 +914,16 @@
             el.className = 'auth-screen-msg ' + (msg ? (ok ? 'ok' : 'err') : ''); 
         } 
     }
-
-    function togglePasswordVisibilidade(inputId, btn) {
-        const input = document.getElementById(inputId);
-        if (input.type === 'password') {
-            input.type = 'text';
-            btn.textContent = '🙈';
-        } else {
-            input.type = 'password';
-            btn.textContent = '👁️';
-        }
-    }
-    window.togglePasswordVisibilidade = togglePasswordVisibilidade;
-
+    
     function switchAuthScreen(t) {
         const tCad = document.getElementById('toggleCadastro'), tLog = document.getElementById('toggleLogin');
         const fCad = document.getElementById('authScreenCadastro'), fLog = document.getElementById('authScreenLogin');
         const title = document.getElementById('authScreenTitle'), sub = document.getElementById('authScreenSub');
-        
         if (t === 'cadastro') {
             tCad.classList.add('active'); tLog.classList.remove('active');
             fCad.style.display = 'block'; fLog.style.display = 'none';
             if(title) title.textContent = 'Criar conta';
-            if(sub) sub.textContent = 'Preencha seus dados para começar';
+            if(sub) sub.textContent = 'Preencha os dados para criar sua conta';
         } else {
             tLog.classList.add('active'); tCad.classList.remove('active');
             fLog.style.display = 'block'; fCad.style.display = 'none';
@@ -952,195 +945,108 @@
         }
     }
 
-    // ========== SESSÃO PERSISTENTE ==========
-    function salvarSessaoUsuario(email, senha, remember = true) {
-        if (remember) {
-            const sessao = {
-                email: email,
-                senhaHash: btoa(senha),
-                expiraEm: Date.now() + (7 * 24 * 60 * 60 * 1000)
-            };
-            localStorage.setItem('usuario_sessao', JSON.stringify(sessao));
-        } else {
-            localStorage.removeItem('usuario_sessao');
-        }
-    }
-
-    function verificarSessaoUsuario() {
-        const sessaoStr = localStorage.getItem('usuario_sessao');
-        if (!sessaoStr) return false;
+    window.fazerLogin = async function() {
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const senha = document.getElementById('loginSenha').value;
+        
+        if (!email || !senha) { setAuthMsg('⚠️ Preencha e-mail e senha.', false); return; }
+        
+        const btn = document.getElementById('btnLogin');
+        if (btn) { btn.disabled = true; btn.textContent = 'Entrando...'; }
         
         try {
-            const sessao = JSON.parse(sessaoStr);
-            if (Date.now() < sessao.expiraEm) {
-                document.getElementById('loginEmail').value = sessao.email;
-                document.getElementById('loginSenha').value = atob(sessao.senhaHash);
-                return true;
+            const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+            const user = userCredential.user;
+            
+            const q = query(collection(db, 'users'), where('email', '==', email));
+            const snap = await getDocs(q);
+            
+            if (snap.empty) {
+                const novoDoc = await addDoc(collection(db, 'users'), {
+                    uid: user.uid, nome: email.split('@')[0], email, telefone: '',
+                    dataCadastro: new Date().toLocaleDateString('pt-BR'),
+                    criadoEm: serverTimestamp(), cupons: []
+                });
+                usuarioAtual = { email, nome: email.split('@')[0], telefone: '', docId: novoDoc.id, uid: user.uid };
             } else {
-                localStorage.removeItem('usuario_sessao');
-                return false;
+                const d = snap.docs[0].data();
+                usuarioAtual = { email, nome: d.nome, telefone: d.telefone || '', docId: snap.docs[0].id, uid: user.uid };
+                if (d.endereco) enderecoCadastrado = d.endereco;
             }
-        } catch(e) {
-            return false;
+            
+            localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
+            atualizarHeaderLogin();
+            esconderLoginOverlay();
+            carregarCarrinho();
+            carregarProdutosFirebase();
+            showToast(`🍩 Bem-vindo, ${usuarioAtual.nome}!`);
+            setAuthMsg('');
+            
+        } catch(error) {
+            console.error(error);
+            const msgs = {
+                'auth/invalid-credential': '❌ E-mail ou senha incorretos.',
+                'auth/user-not-found': '❌ Usuário não encontrado.',
+                'auth/wrong-password': '❌ Senha incorreta.',
+                'auth/invalid-email': '❌ E-mail inválido.',
+                'auth/too-many-requests': '⚠️ Muitas tentativas. Aguarde.'
+            };
+            setAuthMsg(msgs[error.code] || `❌ Erro: ${error.message}`, false);
         }
-    }
+        finally { if (btn) { btn.disabled = false; btn.textContent = '🔓 Entrar'; } }
+    };
 
-    // ========== CADASTRO ==========
     window.fazerCadastro = async function() {
         const nome = document.getElementById('cadNome').value.trim();
         const email = document.getElementById('cadEmail').value.trim().toLowerCase();
         const telefone = document.getElementById('cadTelefone').value.trim();
         const senha = document.getElementById('cadSenha').value;
-
-        if (!nome || nome.length < 3) {
-            setAuthMsg('❌ Nome deve ter pelo menos 3 caracteres.', false);
-            return;
-        }
-        if (!email.includes('@') || !email.includes('.')) {
-            setAuthMsg('❌ E-mail inválido.', false);
-            return;
-        }
-        if (!senha || senha.length < 6) {
-            setAuthMsg('❌ Senha deve ter pelo menos 6 caracteres.', false);
-            return;
-        }
-
+        
+        if (!nome || nome.length < 3) { setAuthMsg('❌ Nome deve ter pelo menos 3 caracteres.', false); return; }
+        if (!email.includes('@') || !email.includes('.')) { setAuthMsg('❌ E-mail inválido.', false); return; }
+        if (!telefone || telefone.length < 10) { setAuthMsg('❌ WhatsApp inválido.', false); return; }
+        if (!senha || senha.length < 6) { setAuthMsg('❌ Senha deve ter no mínimo 6 caracteres.', false); return; }
+        
         const btn = document.getElementById('btnCadastrar');
-        btn.disabled = true;
-        btn.textContent = 'Criando conta...';
-
+        if (btn) { btn.disabled = true; btn.textContent = 'Criando conta...'; }
+        
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
             const user = userCredential.user;
-
-            await addDoc(collection(db, 'users'), {
-                uid: user.uid,
-                nome: nome,
-                email: email,
-                telefone: telefone,
+            
+            const novoDoc = await addDoc(collection(db, 'users'), {
+                uid: user.uid, nome, email, telefone,
                 dataCadastro: new Date().toLocaleDateString('pt-BR'),
-                criadoEm: serverTimestamp(),
-                cupons: ['BEMVINDO10']
+                criadoEm: serverTimestamp(), cupons: ['BEMVINDO10']
             });
-
-            await addDoc(collection(db, 'logs'), {
-                data: new Date().toLocaleString('pt-BR'),
-                usuario: nome,
-                acao: 'CADASTRO',
-                detalhes: `Novo cliente cadastrado: ${email}`,
-                criadoEm: serverTimestamp()
-            });
-
-            usuarioAtual = { email, nome, telefone, docId: user.uid, uid: user.uid };
+            
+            usuarioAtual = { email, nome, telefone, docId: novoDoc.id, uid: user.uid };
             localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
-            
-            setAuthMsg('✅ Conta criada com sucesso!', true);
-            showToast('🎉 Bem-vindo ao Donut ALR!');
-            
-            setTimeout(() => {
-                atualizarHeaderLogin();
-                esconderLoginOverlay();
-                carregarCarrinho();
-                lancarConfete();
-            }, 1000);
+            atualizarHeaderLogin();
+            esconderLoginOverlay();
+            carregarCarrinho();
+            carregarProdutosFirebase();
+            showToast('🎉 Conta criada! Seja bem-vindo!');
+            lancarConfete();
+            setAuthMsg('');
             
         } catch(error) {
             console.error(error);
-            const erros = {
-                'auth/email-already-in-use': '❌ Este e-mail já está cadastrado.',
+            const msgs = {
+                'auth/email-already-in-use': '❌ Este e-mail já está em uso.',
                 'auth/invalid-email': '❌ E-mail inválido.',
-                'auth/weak-password': '❌ Senha muito fraca. Use pelo menos 6 caracteres.',
-                'auth/operation-not-allowed': '❌ Cadastro desabilitado.'
+                'auth/weak-password': '❌ Senha muito fraca. Use 6+ caracteres.',
+                'auth/operation-not-allowed': '❌ Cadastro temporariamente desativado.'
             };
-            setAuthMsg(erros[error.code] || `❌ Erro: ${error.message}`, false);
-        } finally {
-            btn.disabled = false;
-            btn.textContent = '✨ Criar conta';
+            setAuthMsg(msgs[error.code] || `❌ Erro: ${error.message}`, false);
         }
+        finally { if (btn) { btn.disabled = false; btn.textContent = '✅ Criar conta'; } }
     };
 
-    // ========== LOGIN ==========
-    window.fazerLogin = async function() {
-        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-        const senha = document.getElementById('loginSenha').value;
-        const remember = document.getElementById('rememberLogin')?.checked || false;
-
-        if (!email || !email.includes('@')) {
-            setAuthMsg('⚠️ Digite um e-mail válido.', false);
-            return;
-        }
-        if (!senha) {
-            setAuthMsg('⚠️ Digite sua senha.', false);
-            return;
-        }
-
-        const btn = document.getElementById('btnLogin');
-        btn.disabled = true;
-        btn.textContent = 'Entrando...';
-
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-            const user = userCredential.user;
-
-            const q = query(collection(db, 'users'), where('email', '==', email));
-            const snap = await getDocs(q);
-            
-            if (snap.empty) {
-                setAuthMsg('❌ Usuário não encontrado. Faça cadastro primeiro.', false);
-                await signOut(auth);
-                return;
-            }
-
-            const userData = snap.docs[0].data();
-            usuarioAtual = {
-                email: email,
-                nome: userData.nome,
-                telefone: userData.telefone || '',
-                docId: snap.docs[0].id,
-                uid: user.uid
-            };
-            
-            if (userData.endereco) enderecoCadastrado = userData.endereco;
-            
-            if (remember) {
-                salvarSessaoUsuario(email, senha, true);
-            }
-            
-            localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
-            setAuthMsg('✅ Login realizado!', true);
-            showToast(`🍩 Olá, ${userData.nome}!`);
-            
-            setTimeout(() => {
-                atualizarHeaderLogin();
-                esconderLoginOverlay();
-                carregarCarrinho();
-            }, 500);
-            
-        } catch(error) {
-            console.error(error);
-            const erros = {
-                'auth/invalid-credential': '❌ E-mail ou senha incorretos.',
-                'auth/user-not-found': '❌ Usuário não encontrado.',
-                'auth/wrong-password': '❌ Senha incorreta.',
-                'auth/too-many-requests': '⚠️ Muitas tentativas. Aguarde.',
-                'auth/invalid-email': '❌ E-mail inválido.'
-            };
-            setAuthMsg(erros[error.code] || `❌ Erro: ${error.message}`, false);
-        } finally {
-            btn.disabled = false;
-            btn.textContent = '🔑 Entrar';
-        }
-    };
-
-    // ========== LOGOUT ==========
     window.fazerLogout = async function() {
-        try { 
-            await signOut(auth); 
-            localStorage.removeItem('donut_session');
-            localStorage.removeItem('usuario_sessao');
-        } catch(e) {}
-        
+        try { await signOut(auth); } catch(e) {}
         usuarioAtual = null;
+        localStorage.removeItem('donut_session');
         atualizarHeaderLogin();
         closeModal('perfilModal');
         showToast('👋 Até logo!');
@@ -1148,231 +1054,66 @@
         switchAuthScreen('login');
     };
 
-    // ========== CARREGAR PRODUTOS DO FIREBASE (COM LISTENER EM TEMPO REAL) ==========
-    function iniciarListenerProdutos() {
-        if (produtosUnsubscribe) produtosUnsubscribe();
-        
-        produtosUnsubscribe = onSnapshot(collection(db, 'produtos'), (snapshot) => {
-            // Apenas produtos ativos
-            const todos = snapshot.docs
-                .map(doc => ({ id: doc.id, ...doc.data() }))
-                .filter(p => p.ativo !== false);
-            
-            produtosFirebase = todos
-                .filter(p => p.categoria !== 'Combos' && p.categoria !== 'Bebidas')
-                .map(p => ({
-                    id: p.id, name: p.nome, emoji: p.emoji || '🍩',
-                    imagem: p.imagem || '', desc: p.descricao || '',
-                    price: p.preco || 0,
-                    category: p.categoria?.toLowerCase() || 'donuts',
-                    badge: p.badge, tag: p.tag, estoque: p.estoque ?? 99
-                }));
-            
-            combosFirebase = todos
-                .filter(p => p.categoria === 'Combos')
-                .map(p => ({
-                    id: p.id, name: p.nome, emoji: p.emoji || '🎁',
-                    imagem: p.imagem || '', desc: p.descricao || '',
-                    price: p.preco || 0, originalPrice: p.precoOriginal,
-                    badge: p.badge, category: 'combos', estoque: p.estoque ?? 99
-                }));
-            
-            bebidasFirebase = todos
-                .filter(p => p.categoria === 'Bebidas')
-                .map(p => ({
-                    id: p.id, name: p.nome, emoji: p.emoji || '🥤',
-                    imagem: p.imagem || '', desc: p.descricao || '',
-                    price: p.preco || 0, estoque: p.estoque ?? 99
-                }));
-            
-            renderProdutos();
-            renderCombos();
-            renderBebidas_grid();
-            
-            console.log('✅ Firebase sync:', produtosFirebase.length, 'produtos,', combosFirebase.length, 'combos,', bebidasFirebase.length, 'bebidas');
-        }, (error) => {
-            console.error('❌ Erro ao carregar produtos do Firebase:', error);
-            // Mantém os dados locais como fallback
-            renderProdutos();
-            renderCombos();
-            renderBebidas_grid();
+    function carregarSessao() {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const q = query(collection(db, 'users'), where('email', '==', user.email));
+                    const snap = await getDocs(q);
+                    if (!snap.empty) {
+                        const d = snap.docs[0].data();
+                        usuarioAtual = { email: user.email, nome: d.nome, telefone: d.telefone || '', docId: snap.docs[0].id, uid: user.uid };
+                        if (d.endereco) enderecoCadastrado = d.endereco;
+                    } else {
+                        usuarioAtual = { email: user.email, nome: user.email.split('@')[0], telefone: '', docId: '', uid: user.uid };
+                    }
+                    localStorage.setItem('donut_session', JSON.stringify(usuarioAtual));
+                    atualizarHeaderLogin();
+                    esconderLoginOverlay();
+                    carregarCarrinho();
+                    carregarProdutosFirebase();
+                } catch(e) { console.warn(e); }
+            } else {
+                const cached = localStorage.getItem('donut_session');
+                if (cached) {
+                    try { usuarioAtual = JSON.parse(cached); } catch(e) {}
+                    if (usuarioAtual) {
+                        atualizarHeaderLogin();
+                        esconderLoginOverlay();
+                        carregarCarrinho();
+                        carregarProdutosFirebase();
+                        return;
+                    }
+                }
+                mostrarLoginOverlay();
+            }
         });
     }
 
-    // ========== RENDER PRODUTOS ==========
-    function renderProdutos(skeleton = false) {
-        const grid = document.getElementById("productsGrid");
-        if (!grid) return;
-        if (skeleton) { 
-            grid.innerHTML = '<div style="text-align:center; padding:2rem;">🍩 Carregando cardápio...</div>'; 
-            return; 
-        }
-        let list;
-        if (currentCat === 'combos') list = [...combosFirebase];
-        else if (currentCat === 'bebidas') list = [...bebidasFirebase];
-        else if (currentCat === 'all') list = [...produtosFirebase, ...combosFirebase, ...bebidasFirebase];
-        else list = produtosFirebase.filter(p => p.category === currentCat);
-        if (searchTerm) list = list.filter(p => p.name.toLowerCase().includes(searchTerm) || (p.desc||'').toLowerCase().includes(searchTerm));
-        if (!list.length) { 
-            grid.innerHTML = `<div style="text-align:center;padding:2rem;">😔 Nenhum produto encontrado</div>`; 
-            return; 
-        }
-        grid.innerHTML = list.map(p => {
-            const imgHtml = p.imagem && p.imagem.startsWith('http')
-                ? `<img src="${p.imagem}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;border-radius:0;" onerror="this.style.display='none'">`
-                : '';
-            const esgotado = (p.estoque ?? 99) <= 0;
-            return `<div class="product-card" onclick="abrirModalProduto('${p.id}')">
-                <div class="product-img-wrap" style="position:relative;overflow:hidden;">
-                    ${imgHtml}<span style="font-size:${p.imagem ? '2.5' : '4'}rem;position:relative;z-index:1;">${p.emoji}</span>
-                    ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
-                    ${p.tag ? `<div class="product-tag">${p.tag}</div>` : ''}
-                </div>
-                <div class="product-info">
-                    <div class="product-title">${p.name}</div>
-                    <div class="product-desc">${p.desc || ''}</div>
-                    <div class="product-footer">
-                        <div class="product-price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-                        ${esgotado 
-                            ? '<button class="btn-add" disabled style="opacity:0.5;cursor:not-allowed;font-size:0.8rem;width:auto;padding:0 8px;">Esgotado</button>'
-                            : `<button class="btn-add" onclick="event.stopPropagation(); addToCartById('${p.id}')">+</button>`}
-                    </div>
-                </div>
-            </div>`;
-        }).join('');
-    }
-
-    function abrirModalProduto(id) {
-        const produto = [...produtosFirebase, ...combosFirebase, ...bebidasFirebase].find(p => p.id == id);
-        if (!produto) return;
-        const imgWrap = document.getElementById('modalProductImgWrap');
-        if (produto.imagem && produto.imagem.startsWith('http')) {
-            imgWrap.innerHTML = `<img src="${produto.imagem}" alt="${produto.name}" style="width:100%;max-height:220px;object-fit:cover;border-radius:14px;" onerror="this.outerHTML='<span style=\\'font-size:5rem;\\'>${produto.emoji}</span>'">`;
-        } else {
-            imgWrap.innerHTML = `<span style="font-size:5rem;">${produto.emoji}</span>`;
-        }
-        document.getElementById('modalProductTitle').textContent = produto.name;
-        document.getElementById('modalProductDesc').textContent = produto.desc || '';
-        const action = document.getElementById('modalProductAction');
-        const esgotado = (produto.estoque ?? 99) <= 0;
-        if(action) action.innerHTML = esgotado
-            ? `<button class="btn-primary" style="width:100%;opacity:0.5;cursor:not-allowed;" disabled>🚫 Produto Esgotado</button>`
-            : `<button class="btn-primary" style="width:100%;" onclick="addToCartById('${produto.id}'); closeModal('productModal')">🛒 Adicionar ao Pedido — R$ ${produto.price.toFixed(2).replace('.',',')}</button>`;
-        openModal('productModal');
-    }
-    window.abrirModalProduto = abrirModalProduto;
-
-    function renderCombos() {
-        const grid = document.getElementById('combosGrid'); 
-        if(!grid) return;
-        if(combosFirebase.length === 0) { 
-            grid.innerHTML = '<div style="text-align:center;padding:2rem;color:#999;">Nenhum combo disponível no momento</div>'; 
-            return; 
-        }
-        grid.innerHTML = combosFirebase.map(c => {
-            const imgHtml = c.imagem && c.imagem.startsWith('http')
-                ? `<img src="${c.imagem}" alt="${c.name}" style="width:100%;height:160px;object-fit:cover;border-radius:14px;margin-bottom:0.8rem;" onerror="this.outerHTML='<div style=\\'font-size:2.5rem;margin-bottom:0.5rem;\\'>${c.emoji || '🎁'}</div>'">`
-                : `<div style="font-size:2.5rem;margin-bottom:0.5rem;">${c.emoji || '🎁'}</div>`;
-            return `<div class="combo-card">
-                <div class="combo-badge">${c.badge || '🔥 Oferta'}</div>
-                ${imgHtml}
-                <h3>${c.name}</h3>
-                <p style="color:var(--brown-light);font-size:0.85rem;margin:0.4rem 0 0.8rem;">${c.desc || ''}</p>
-                <div class="combo-price">
-                    ${c.originalPrice ? `<span class="combo-original">R$ ${c.originalPrice.toFixed(2).replace('.',',')}</span>` : ''}
-                    R$ ${(c.price || 0).toFixed(2).replace('.',',')}
-                </div>
-                <button class="btn-primary" style="width:100%;margin-top:0.8rem;" onclick="addToCartById('${c.id}')">🎁 Adicionar Combo</button>
-            </div>`;
-        }).join('');
-    }
-
-    function renderBebidas_grid() {
-        const grid = document.getElementById("drinksGrid"); 
-        if(!grid) return;
-        if(bebidasFirebase.length === 0) { 
-            grid.innerHTML = '<div style="text-align:center;padding:2rem;color:#999;">Nenhuma bebida disponível no momento</div>'; 
-            return; 
-        }
-        grid.innerHTML = bebidasFirebase.map(d => {
-            const imgHtml = d.imagem && d.imagem.startsWith('http')
-                ? `<img src="${d.imagem}" alt="${d.name}" class="drink-thumb" style="object-fit:cover;border-radius:12px;" onerror="this.outerHTML='<div class=\\'drink-thumb\\'>${d.emoji || '🥤'}</div>'">`
-                : `<div class="drink-thumb">${d.emoji || '🥤'}</div>`;
-            return `<div class="drink-card">
-                ${imgHtml}
-                <div class="drink-info">
-                    <div class="drink-name">${d.name}</div>
-                    <div class="drink-desc">${d.desc || ''}</div>
-                    <div class="drink-price">R$ ${(d.price || 0).toFixed(2).replace('.',',')}</div>
-                </div>
-                <button style="background:var(--gradient);border:none;width:34px;height:34px;border-radius:50%;color:#fff;cursor:pointer;flex-shrink:0;" onclick="addToCartById('${d.id}')">+</button>
-            </div>`;
-        }).join('');
-    }
-
-    // ========== CARRINHO ==========
-    function salvarCarrinho() { 
-        try { 
-            localStorage.setItem("donut_carrinho", JSON.stringify(carrinho)); 
-        } catch(e) {} 
-        atualizarBadge(); 
-    }
-    
-    function carregarCarrinho() { 
-        try { 
-            const s = localStorage.getItem("donut_carrinho"); 
-            if (s) carrinho = JSON.parse(s); 
-        } catch(e) { 
-            carrinho = []; 
-        } 
-        atualizarBadge(); 
-    }
-    
-    function atualizarBadge() { 
-        const total = carrinho.reduce((s,i) => s + (i.qtd || 1), 0); 
-        const badge = document.getElementById("cartCount"); 
-        if (badge) badge.textContent = total; 
-        const mb = document.getElementById("mobileCartCount"); 
-        if (mb) { 
-            mb.textContent = total; 
-            mb.style.display = total > 0 ? "flex" : "none"; 
-        } 
-    }
+    function salvarCarrinho() { try { localStorage.setItem("donut_carrinho", JSON.stringify(carrinho)); } catch(e) {} atualizarBadge(); }
+    function carregarCarrinho() { try { const s = localStorage.getItem("donut_carrinho"); if (s) carrinho = JSON.parse(s); } catch(e) { carrinho = []; } atualizarBadge(); }
+    function atualizarBadge() { const total = carrinho.reduce((s,i) => s + (i.qtd || 1), 0); const badge = document.getElementById("cartCount"); if (badge) badge.textContent = total; const mb = document.getElementById("mobileCartCount"); if (mb) { mb.textContent = total; mb.style.display = total > 0 ? "flex" : "none"; } }
 
     window.addToCartById = function(id) {
         const produto = [...produtosFirebase, ...combosFirebase, ...bebidasFirebase].find(p => p.id == id);
         if (!produto) return;
-        if (produto.estoque <= 0) { 
-            showToast(`⚠️ ${produto.name} está esgotado!`); 
-            return; 
-        }
+        if (produto.estoque <= 0) { showToast(`⚠️ ${produto.name} está esgotado!`); return; }
         const exist = carrinho.find(i => i.id == id);
         if (exist) {
-            if (exist.qtd >= (produto.estoque || 99)) { 
-                showToast(`⚠️ Estoque máximo atingido`); 
-                return; 
-            }
+            if (exist.qtd >= (produto.estoque || 99)) { showToast(`⚠️ Estoque máximo atingido`); return; }
             exist.qtd++;
-        } else { 
-            carrinho.push({ id: produto.id, name: produto.name, emoji: produto.emoji, price: produto.price, qtd: 1, desc: produto.desc || '' }); 
-        }
-        salvarCarrinho(); 
-        renderCart(); 
-        showToast(`${produto.emoji} ${produto.name} adicionado!`);
+        } else { carrinho.push({ id: produto.id, name: produto.name, emoji: produto.emoji, price: produto.price, qtd: 1 }); }
+        salvarCarrinho(); renderCart(); showToast(`${produto.emoji} ${produto.name} adicionado!`);
     };
 
     window.changeQty = function(id, delta) { 
         const idx = carrinho.findIndex(i => i.id == id); 
         if(idx === -1) return; 
         const novoQtd = carrinho[idx].qtd + delta; 
-        if(novoQtd > MAX_ITENS_POR_PRODUTO) { 
-            showToast(`⚠️ Máximo ${MAX_ITENS_POR_PRODUTO} unidades`); 
-            return; 
-        } 
+        if(novoQtd > MAX_ITENS_POR_PRODUTO) { showToast(`⚠️ Máximo ${MAX_ITENS_POR_PRODUTO} unidades`); return; } 
         if(novoQtd <= 0) carrinho.splice(idx,1); 
         else carrinho[idx].qtd = novoQtd; 
-        salvarCarrinho(); 
-        renderCart(); 
+        salvarCarrinho(); renderCart(); 
     };
     
     window.limparCarrinho = function() { 
@@ -1403,105 +1144,103 @@
     function renderCart() {
         const body = document.getElementById("cartBody"), summary = document.getElementById("cartSummary");
         if (!body) return;
-        if (!carrinho.length) { 
-            body.innerHTML = `<div class="cart-empty">🛒 Carrinho vazio</div>`; 
-            if(summary) summary.innerHTML = ""; 
-            const cb = document.getElementById("checkoutBtn"); 
-            if(cb) cb.disabled = true; 
-            return; 
-        }
-        body.innerHTML = carrinho.map(i => `<div class="cart-item"><div class="cart-item-emoji">${i.emoji}</div><div class="cart-item-info"><div class="cart-item-name">${i.name}</div><div class="cart-item-price">R$ ${i.price.toFixed(2).replace('.',',')}</div></div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button><span class="qty-num">${i.qtd}</span><button class="qty-btn" onclick="changeQty(${i.id},1)">+</button></div></div>`).join('');
+        if (!carrinho.length) { body.innerHTML = `<div class="cart-empty">🛒 Carrinho vazio</div>`; if(summary) summary.innerHTML = ""; const cb = document.getElementById("checkoutBtn"); if(cb) cb.disabled = true; return; }
+        body.innerHTML = carrinho.map(i => `<div class="cart-item"><span class="cart-item-emoji">${i.emoji}</span><div class="cart-item-info"><div class="cart-item-name">${i.name}</div><div class="cart-item-price">R$ ${i.price.toFixed(2).replace('.',',')}</div></div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('${i.id}',-1)">−</button><span>${i.qtd}</span><button class="qty-btn" onclick="changeQty('${i.id}',1)">+</button></div></div>`).join('');
         const { subtotal, frete, desconto, total } = calcTotais();
-        if(summary) summary.innerHTML = `<div class="cart-summary-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace('.',',')}</span></div><div class="cart-summary-row"><span>Frete (${bairroAtual.nome})</span><span>${frete===0?"Grátis":"R$ "+frete.toFixed(2).replace('.',',')}</span></div>${desconto>0 ? `<div class="cart-summary-row"><span>🎟 Desconto</span><span>-R$ ${desconto.toFixed(2).replace('.',',')}</span></div>` : ''}<div class="cart-summary-row total"><span>Total</span><span>R$ ${total.toFixed(2).replace('.',',')}</span></div>`;
-        const cb = document.getElementById("checkoutBtn"); 
-        if(cb) { 
-            const bloqueado = subtotal < VALOR_MINIMO_PEDIDO; 
-            cb.disabled = bloqueado; 
-            cb.style.opacity = bloqueado ? "0.5" : "1"; 
-        }
+        if(summary) summary.innerHTML = `<div><span>Subtotal:</span><span>R$ ${subtotal.toFixed(2).replace('.',',')}</span></div><div><span>Frete (${bairroAtual.nome}):</span><span>${frete===0?"Grátis":"R$ "+frete.toFixed(2).replace('.',',')}</span></div>${desconto>0 ? `<div><span>🎟 Desconto:</span><span>-R$ ${desconto.toFixed(2).replace('.',',')}</span></div>` : ''}<div><strong>Total:</strong><strong>R$ ${total.toFixed(2).replace('.',',')}</strong></div>`;
+        const cb = document.getElementById("checkoutBtn"); if(cb) { const bloqueado = subtotal < VALOR_MINIMO_PEDIDO || !isLojaAberta(); cb.disabled = bloqueado; cb.style.opacity = bloqueado ? "0.5" : "1"; }
     }
 
     window.aplicarCupom = function() {
         const val = document.getElementById("couponInput").value.trim().toUpperCase();
         const status = document.getElementById("couponStatus");
-        if (!val) { 
-            if(status) status.textContent = ""; 
-            cupomAtivo = null; 
-            renderCart(); 
-            return; 
-        }
+        if (!val) { if(status) status.textContent = ""; cupomAtivo = null; renderCart(); return; }
         const cupom = CUPONS[val];
-        if (!cupom) { 
-            cupomAtivo = null; 
-            if(status) { 
-                status.style.color = 'var(--danger)'; 
-                status.textContent = "❌ Cupom inválido"; 
-            } 
-            renderCart(); 
-            return; 
-        }
+        if (!cupom) { cupomAtivo = null; if(status) { status.style.color = '#e74c3c'; status.textContent = "❌ Cupom inválido"; } renderCart(); return; }
         const subtotal = carrinho.reduce((s,i) => s + i.price * i.qtd, 0);
-        if (subtotal < (cupom.minPedido||0)) { 
-            if(status) { 
-                status.style.color = 'var(--danger)'; 
-                status.textContent = `⚠️ Mínimo R$ ${cupom.minPedido.toFixed(2).replace('.',',')}`; 
-            } 
-            return; 
-        }
+        if (subtotal < (cupom.minPedido||0)) { if(status) { status.style.color = '#e74c3c'; status.textContent = `⚠️ Mínimo R$ ${cupom.minPedido.toFixed(2).replace('.',',')}`; } return; }
         if(cupomAtivo && cupomAtivo !== val) showToast(`🎟 Cupom ${cupomAtivo} substituído por ${val}`);
         cupomAtivo = val;
-        if(status) { 
-            status.style.color = 'var(--success)'; 
-            status.textContent = `✅ ${cupom.desc} aplicado!`; 
-        }
-        renderCart(); 
-        showToast(`🎟 Cupom ${val} aplicado!`);
+        if(status) { status.style.color = '#2ecc71'; status.textContent = `✅ ${cupom.desc} aplicado!`; }
+        renderCart(); showToast(`🎟 Cupom ${val} aplicado!`);
     };
 
-    // ========== PERFIL ==========
+    function renderProdutos(skeleton = false) {
+        const grid = document.getElementById("productsGrid"); if (!grid) return;
+        if (skeleton) { grid.innerHTML = '<div style="text-align:center; padding:2rem;">🍩 Carregando cardápio...</div>'; return; }
+        let list;
+        if (currentCat === 'combos') list = [...combosFirebase];
+        else if (currentCat === 'all') list = [...produtosFirebase, ...combosFirebase];
+        else list = produtosFirebase.filter(p => p.category === currentCat);
+        if (searchTerm) list = list.filter(p => p.name.toLowerCase().includes(searchTerm) || (p.desc||'').toLowerCase().includes(searchTerm));
+        if (!list.length) { grid.innerHTML = `<div style="text-align:center;padding:2rem;">😔 Nenhum produto encontrado</div>`; return; }
+        grid.innerHTML = list.map(p => {
+            const imagemHtml = p.imagem && p.imagem.startsWith('http') 
+                ? `<img src="${p.imagem}" class="product-img" alt="${p.name}" onerror="this.style.display='none'">` 
+                : `<span class="product-emoji">${p.emoji || '🍩'}</span>`;
+            return `<div class="product-card" onclick="abrirModalProduto('${p.id}')">
+                <div class="product-img-wrap">${imagemHtml}${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}${p.tag ? `<div class="product-tag">${p.tag}</div>` : ''}</div>
+                <div class="product-info"><div><strong>${p.name}</strong></div><div class="product-desc">${p.desc || ''}</div><div class="product-footer"><div class="product-price">R$ ${p.price.toFixed(2).replace('.',',')}</div><button class="btn-add" onclick="event.stopPropagation(); addToCartById('${p.id}')">+</button></div></div>
+            </div>`;
+        }).join('');
+    }
+
+    function abrirModalProduto(id) {
+        const produto = [...produtosFirebase, ...combosFirebase].find(p => p.id == id);
+        if (!produto) return;
+        const imgHtml = produto.imagem && produto.imagem.startsWith('http')
+            ? `<img src="${produto.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:28px 28px 0 0" onerror="this.outerHTML='<div style=font-size:5rem;text-align:center>${produto.emoji}</div>'">`
+            : `<div style="font-size:5rem;text-align:center;">${produto.emoji}</div>`;
+        document.getElementById('modalProductImgWrap').innerHTML = imgHtml;
+        document.getElementById('modalProductTitle').textContent = produto.name;
+        document.getElementById('modalProductDesc').textContent = produto.desc || '';
+        const action = document.getElementById('modalProductAction');
+        if(action) action.innerHTML = `<button class="btn-primary" style="width:100%;" onclick="addToCartById('${produto.id}'); closeModal('productModal')">🛒 Adicionar — R$ ${produto.price.toFixed(2).replace('.',',')}</button>`;
+        openModal('productModal');
+    }
+    window.abrirModalProduto = abrirModalProduto;
+
+    function renderCombos() {
+        const grid = document.getElementById('combosGrid'); if(!grid) return;
+        if(combosFirebase.length === 0) { grid.innerHTML = '<div style="text-align:center;padding:1rem;">Carregando combos...</div>'; return; }
+        grid.innerHTML = combosFirebase.map(c => {
+            const imgHtml = c.imagem && c.imagem.startsWith('http')
+                ? `<img src="${c.imagem}" style="width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:0.8rem" onerror="this.outerHTML='<div style=font-size:2.5rem;text-align:center>${c.emoji}</div>'">`
+                : `<div style="font-size:2.5rem;text-align:center">${c.emoji || '🎁'}</div>`;
+            return `<div class="combo-card"><div class="combo-badge">${c.badge || '🔥'}</div>${imgHtml}<h3>${c.name}</h3><p>${c.desc || ''}</p><div class="combo-price">${c.originalPrice ? `<span class="combo-original">R$ ${c.originalPrice.toFixed(2).replace('.',',')}</span>` : ''} R$ ${(c.price || 0).toFixed(2).replace('.',',')}</div><button class="btn-primary" style="width:100%;margin-top:0.8rem;" onclick="addToCartById('${c.id}')">🎁 Adicionar</button></div>`;
+        }).join('');
+    }
+
+    function renderBebidas_grid() {
+        const grid = document.getElementById("drinksGrid"); if(!grid) return;
+        if(bebidasFirebase.length === 0) { grid.innerHTML = '<div style="text-align:center;padding:1rem;">Carregando bebidas...</div>'; return; }
+        grid.innerHTML = bebidasFirebase.map(d => {
+            const imgHtml = d.imagem && d.imagem.startsWith('http')
+                ? `<img src="${d.imagem}" class="drink-img" onerror="this.outerHTML='${d.emoji}'">`
+                : d.emoji;
+            return `<div class="drink-card"><div class="drink-thumb">${imgHtml}</div><div class="drink-info"><div><strong>${d.name}</strong></div><div class="drink-desc">${d.desc || ''}</div><div class="drink-price">R$ ${(d.price || 0).toFixed(2).replace('.',',')}</div></div><button class="btn-add" style="width:34px;height:34px;" onclick="addToCartById('${d.id}')">+</button></div>`;
+        }).join('');
+    }
+
     async function renderPerfil() {
-        const el = document.getElementById('perfilContent'); 
-        if(!el) return;
-        if(!usuarioAtual) { 
-            el.innerHTML = `<div style="text-align:center;padding:2rem"><p>Você não está logado.</p><br><button class="btn-primary" onclick="closeModal('perfilModal');mostrarLoginOverlay()">Fazer Login</button></div>`; 
-            return; 
-        }
-        el.innerHTML = `<div style="text-align:center;padding:1rem;">
-            <div style="font-size:3rem;">🍩</div>
-            <div style="font-weight:800;font-size:1.2rem;margin-top:0.5rem;">${usuarioAtual.nome}</div>
-            <div style="color:var(--brown-light);font-size:0.85rem;">${usuarioAtual.email}</div>
-            <hr style="margin:1rem 0;">
-            <button class="btn-primary" style="width:100%;margin-bottom:0.5rem;" onclick="openModal('surpriseModal');closeModal('perfilModal')">🎁 Caixa Surpresa</button>
-            <button class="btn-primary" style="width:100%;margin-bottom:0.5rem;" onclick="openModal('quizModal');closeModal('perfilModal')">🧠 Quiz do Donut</button>
-            <button class="btn-primary" style="width:100%;margin-bottom:0.5rem;" onclick="openModal('rodaModal');closeModal('perfilModal')">🎡 Roda da Sorte</button>
-            <button style="background:#fee;border:none;padding:0.8rem;border-radius:12px;font-weight:700;cursor:pointer;color:#c0392b;width:100%;" onclick="fazerLogout()">🚪 Sair da Conta</button>
-        </div>`;
+        const el = document.getElementById('perfilContent'); if(!el) return;
+        if(!usuarioAtual) { el.innerHTML = `<div style="text-align:center;padding:2rem"><p>Você não está logado.</p><br><button class="btn-primary" onclick="closeModal('perfilModal');mostrarLoginOverlay()">Fazer Login</button></div>`; return; }
+        el.innerHTML = `<div style="text-align:center;margin-bottom:1rem;"><div style="width:60px;height:60px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto">🍩</div><div style="font-weight:800;margin-top:0.5rem">${usuarioAtual.nome}</div><div style="font-size:0.8rem;color:var(--brown-light)">${usuarioAtual.email}</div></div><button class="btn-primary" style="width:100%;margin-bottom:0.5rem" onclick="openModal('surpriseModal');closeModal('perfilModal')">🎁 Caixa Surpresa</button><button class="btn-primary" style="width:100%;margin-bottom:0.5rem" onclick="openModal('quizModal');closeModal('perfilModal')">🧠 Quiz do Donut</button><button class="btn-primary" style="width:100%;margin-bottom:0.5rem" onclick="openModal('rodaModal');closeModal('perfilModal')">🎡 Roda da Sorte</button><button style="background:#fee;border:none;padding:0.8rem;border-radius:12px;font-weight:700;cursor:pointer;color:#c0392b;width:100%" onclick="fazerLogout()">🚪 Sair da Conta</button>`;
     }
     window.renderPerfil = renderPerfil;
 
-    // ========== CHECKOUT ==========
     function finalizarPedido() {
-        if (!carrinho.length) { 
-            showToast("❌ Carrinho vazio!"); 
-            return; 
-        }
+        if (!carrinho.length) { showToast("❌ Carrinho vazio!"); return; }
+        if (!isLojaAberta()) { showToast("⏰ Loja fechada! Seg–Sex 08h–18h"); return; }
         const { subtotal } = calcTotais();
-        if (subtotal < VALOR_MINIMO_PEDIDO) { 
-            showToast(`❌ Pedido mínimo: R$ ${VALOR_MINIMO_PEDIDO.toFixed(2).replace('.',',')}`); 
-            return; 
-        }
-        if (!usuarioAtual) { 
-            mostrarLoginOverlay(); 
-            return; 
-        }
+        if (subtotal < VALOR_MINIMO_PEDIDO) { showToast(`❌ Pedido mínimo: R$ ${VALOR_MINIMO_PEDIDO.toFixed(2).replace('.',',')}`); return; }
+        if (!usuarioAtual) { mostrarLoginOverlay(); return; }
         document.getElementById('modalEndRua').value = enderecoCadastrado.rua || '';
         document.getElementById('modalEndBairro').value = enderecoCadastrado.bairro || '';
         document.getElementById('modalEndCidade').value = enderecoCadastrado.cidade || '';
         document.getElementById('modalEndNumero').value = enderecoCadastrado.numero || '';
         document.getElementById('modalEndComplemento').value = enderecoCadastrado.complemento || '';
-        document.getElementById('enderecoMsg').textContent = '';
-        closeCart(); 
-        openModal('enderecoModal');
+        closeCart(); openModal('enderecoModal');
     }
 
     window.confirmarEndereco = async function() {
@@ -1510,554 +1249,75 @@
         const bairro = document.getElementById('modalEndBairro').value.trim();
         const cidade = document.getElementById('modalEndCidade').value.trim();
         const complemento = document.getElementById('modalEndComplemento').value.trim();
-        const msgEl = document.getElementById('enderecoMsg');
+        if (!rua || !numero || !bairro) { showToast('⚠️ Preencha rua, número e bairro.'); return; }
         
-        if (!rua || !numero || !bairro) { 
-            msgEl.textContent = '⚠️ Preencha rua, número e bairro.'; 
-            return; 
-        }
+        enderecoCadastrado = { rua, bairro, cidade, numero, complemento };
+        freteAtual = calcularFretePorBairro(bairro);
         
-        const btn = document.getElementById('btnConfirmarEndereco');
-        btn.disabled = true; 
-        btn.textContent = 'Enviando pedido...';
+        let endCompleto = `${rua}, ${numero}`; if(complemento) endCompleto += `, ${complemento}`; endCompleto += ` — ${bairro}, ${cidade || 'Floriano - PI'}`;
+        const { frete, desconto, total, subtotal } = calcTotais();
+        const pagamento = document.querySelector('input[name="payment"]:checked')?.value || "pix";
+        const pagTexto = pagamento === "pix" ? "PIX" : pagamento === "cartao" ? "Cartão" : "Dinheiro";
         
-        try {
-            enderecoCadastrado = { rua, bairro, cidade, numero, complemento };
-            let endCompleto = `${rua}, ${numero}`; 
-            if(complemento) endCompleto += `, ${complemento}`; 
-            endCompleto += ` — ${bairro}, ${cidade || 'Floriano - PI'}`;
-            const { frete, desconto, total, subtotal } = calcTotais();
-            const pedidoId = Date.now();
-            const agora = new Date();
-            const pagamento = document.querySelector('input[name="payment"]:checked')?.value || "pix";
-            const pagTexto = pagamento === "pix" ? "PIX" : pagamento === "cartao" ? "Cartão" : "Dinheiro";
-            
-            let msg = `🍩 *NOVO PEDIDO - Donut ALR*\n🆔 Pedido #${pedidoId}\n👤 Cliente: ${usuarioAtual.nome}\n📱 WhatsApp: ${usuarioAtual.telefone || 'Não informado'}\n\n*ITENS:*\n`;
-            carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price*i.qtd)}\n`; });
-            msg += `\n📦 Subtotal: ${formatBRL(subtotal)}`;
-            msg += `\n📍 Endereço: ${endCompleto}\n🚚 Frete: ${frete===0?"Grátis ✅":formatBRL(frete)}`;
-            if(desconto>0) msg += `\n🎟 Desconto (${cupomAtivo}): -${formatBRL(desconto)}`;
-            msg += `\n💰 *TOTAL: ${formatBRL(total)}*\n💳 Pagamento: ${pagTexto}\n\n_Pedido via site Donut ALR_`;
-            const data = agora.toLocaleDateString('pt-BR') + " " + agora.toLocaleTimeString('pt-BR',{hour:"2-digit",minute:"2-digit"});
-            
-            try { 
-                await addDoc(collection(db, 'pedidos'), { 
-                    cliente: usuarioAtual.nome, 
-                    email: usuarioAtual.email, 
-                    whatsapp: usuarioAtual.telefone || 'Não informado', 
-                    itens: carrinho.map(i => ({ nome: i.name, qtd: i.qtd, preco: i.price })), 
-                    total, frete, endereco: endCompleto, 
-                    pagamento: pagTexto, status: 'pending', data, 
-                    criadoEm: serverTimestamp() 
-                }); 
-            } catch(e) { console.warn(e); }
-            
-            closeModal('enderecoModal');
-            const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
-            window.open(waUrl, '_blank');
-            lancarConfete(); 
-            showToast("🎉 Pedido enviado! Verifique o WhatsApp.");
-            carrinho = []; 
-            cupomAtivo = null;
-            const couponInput = document.getElementById("couponInput"); 
-            if(couponInput) couponInput.value = "";
-            salvarCarrinho(); 
-            renderCart();
-            
-        } catch(e) { 
-            console.error(e); 
-            msgEl.textContent = '❌ Erro ao enviar pedido. Tente novamente.'; 
-        } finally { 
-            btn.disabled = false; 
-            btn.textContent = '✅ Confirmar e Enviar Pedido'; 
-        }
+        let msg = `🍩 *NOVO PEDIDO - Donut ALR*\n👤 Cliente: ${usuarioAtual.nome}\n📱 WhatsApp: ${usuarioAtual.telefone || 'Não informado'}\n\n*ITENS:*\n`;
+        carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price*i.qtd)}\n`; });
+        msg += `\n📍 Endereço: ${endCompleto}\n🚚 Frete: ${frete===0?"Grátis ✅":formatBRL(frete)}`;
+        if(desconto>0) msg += `\n🎟 Desconto (${cupomAtivo}): -${formatBRL(desconto)}`;
+        msg += `\n💰 *TOTAL: ${formatBRL(total)}*\n💳 Pagamento: ${pagTexto}`;
+        
+        closeModal('enderecoModal');
+        window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+        lancarConfete(); showToast("🎉 Pedido enviado!");
+        carrinho = []; cupomAtivo = null;
+        salvarCarrinho(); renderCart();
     };
 
-    // ========== FRETE/CEP ==========
-    async function buscarCEP(cep) { 
-        const c = cep.replace(/\D/g,''); 
-        if(c.length !== 8) return null; 
-        try { 
-            const res = await fetch(`https://viacep.com.br/ws/${c}/json/`); 
-            const data = await res.json(); 
-            return data.erro ? null : data; 
-        } catch(e) { 
-            return null; 
-        } 
-    }
-    
-    function calcularFretePorBairro(bairro) { 
-        const map = { "centro":7.9, "bom jesus":8.9, "catete":8.9, "taboca":9.9, "angico":10.9, "pantanal":12.9, "barao de grajau":14.9, "barão de grajaú":14.9 }; 
-        const key = (bairro||'').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); 
-        for(let k in map) { 
-            if(key.includes(k.normalize("NFD").replace(/[\u0300-\u036f]/g,""))) return map[k]; 
-        } 
-        return 12.9; 
-    }
-    
-    window.buscarCepEndereco = async function() { 
-        const cep = document.getElementById('cepInput').value; 
-        const btn = document.getElementById('buscarCepBtn'); 
-        if(!cep || cep.replace(/\D/g,'').length < 8) { 
-            showToast('⚠️ Digite um CEP válido'); 
-            return; 
-        } 
-        btn.disabled = true; 
-        btn.textContent = '🔍 Buscando...'; 
-        const dados = await buscarCEP(cep); 
-        btn.disabled = false; 
-        btn.textContent = '🔍 Buscar'; 
-        if(!dados) { 
-            showToast('❌ CEP não encontrado!'); 
-            return; 
-        } 
-        document.getElementById('endRua').value = dados.logradouro || ''; 
-        document.getElementById('endBairro').value = dados.bairro || ''; 
-        document.getElementById('endCidade').value = `${dados.localidade} - ${dados.uf}`; 
-        document.getElementById('enderecoFields').style.display = 'grid'; 
-        enderecoCadastrado.rua = dados.logradouro || ''; 
-        enderecoCadastrado.bairro = dados.bairro || ''; 
-        enderecoCadastrado.cidade = dados.localidade || ''; 
-        const frete = calcularFretePorBairro(dados.bairro); 
-        freteCalculado = frete; 
-        bairroAtual = { nome: dados.bairro || 'Centro', frete }; 
-        freteAtual = frete; 
-        document.getElementById('freteInfo').innerHTML = `<strong>📍 ${dados.bairro || 'Região'}, ${dados.localidade}</strong>`; 
-        document.getElementById('freteValorDisplay').innerHTML = frete===0?"🎉 GRÁTIS":`R$ ${frete.toFixed(2).replace('.',',')}`; 
-        document.getElementById('freteResultado').classList.add('show'); 
-        renderCart(); 
-        showToast(`Frete para ${dados.bairro || 'região'}: ${frete===0?"Grátis":"R$ "+frete.toFixed(2)}`); 
-    };
-    
-    window.calcularFrete = function() { 
-        if(!enderecoCadastrado.bairro) { 
-            showToast("⚠️ Busque um CEP primeiro!"); 
-            return; 
-        } 
-        const subtotal = carrinho.reduce((s,i) => s + i.price*i.qtd, 0); 
-        const frete = subtotal >= 80 ? 0 : freteCalculado; 
-        document.getElementById('freteInfo').innerHTML = `<strong>📍 ${enderecoCadastrado.bairro}</strong>`; 
-        document.getElementById('freteValorDisplay').innerHTML = frete===0?"🎉 GRÁTIS":`R$ ${frete.toFixed(2).replace('.',',')}`; 
-        document.getElementById('freteResultado').classList.add('show'); 
-        renderCart(); 
-        showToast(`Frete: ${frete===0?"Grátis":"R$ "+frete.toFixed(2)}`); 
-    };
+    async function buscarCEP(cep) { const c = cep.replace(/\D/g,''); if(c.length !== 8) return null; try { const res = await fetch(`https://viacep.com.br/ws/${c}/json/`); const data = await res.json(); return data.erro ? null : data; } catch(e) { return null; } }
+    function calcularFretePorBairro(bairro) { const map = { "centro":7.9, "bom jesus":8.9, "catete":8.9, "taboca":9.9, "angico":10.9, "pantanal":12.9, "barao de grajau":14.9, "barão de grajaú":14.9 }; const key = (bairro||'').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); for(let k in map) { if(key.includes(k.normalize("NFD").replace(/[\u0300-\u036f]/g,""))) return map[k]; } return 12.9; }
+    window.buscarCepEndereco = async function() { const cep = document.getElementById('cepInput').value; const btn = document.getElementById('buscarCepBtn'); if(!cep || cep.replace(/\D/g,'').length < 8) { showToast('⚠️ Digite um CEP válido'); return; } btn.disabled = true; btn.textContent = '🔍 Buscando...'; const dados = await buscarCEP(cep); btn.disabled = false; btn.textContent = '🔍 Buscar'; if(!dados) { showToast('❌ CEP não encontrado!'); return; } document.getElementById('endRua').value = dados.logradouro || ''; document.getElementById('endBairro').value = dados.bairro || ''; document.getElementById('endCidade').value = `${dados.localidade} - ${dados.uf}`; document.getElementById('enderecoFields').style.display = 'grid'; const frete = calcularFretePorBairro(dados.bairro); document.getElementById('freteValorDisplay').innerHTML = frete===0?"🎉 GRÁTIS":`R$ ${frete.toFixed(2).replace('.',',')}`; document.getElementById('freteResultado').classList.add('show'); showToast(`Frete: ${frete===0?"Grátis":"R$ "+frete.toFixed(2)}`); };
+    window.calcularFrete = function() { if(!document.getElementById('endBairro').value) { showToast("⚠️ Busque um CEP primeiro!"); return; } const frete = calcularFretePorBairro(document.getElementById('endBairro').value); document.getElementById('freteValorDisplay').innerHTML = frete===0?"🎉 GRÁTIS":`R$ ${frete.toFixed(2).replace('.',',')}`; document.getElementById('freteResultado').classList.add('show'); };
 
-    // ========== GAMES ==========
     const SURPRESAS = [{ cupom:'SURPRESA5', desc:'R$5 OFF' },{ cupom:'SURPRESA10', desc:'10% OFF' },{ cupom:'FRETEGRATIS', desc:'Frete grátis' },{ cupom:'DONUT20', desc:'20% OFF' }];
+    function abrirCaixaSurpresa() { const hoje = new Date().toDateString(); if(localStorage.getItem('donut_surpresa_dia') === hoje) { showToast('⏰ Você já abriu hoje!'); return; } const sorteio = SURPRESAS[Math.floor(Math.random() * SURPRESAS.length)]; document.getElementById('surpriseResult').innerHTML = `<div>🎉 Você ganhou!</div><div class="surprise-cupom">${sorteio.cupom}</div><div>${sorteio.desc}</div>`; document.getElementById('surpriseSub').textContent = ''; const surpriseBtn = document.getElementById('surpriseBtn'); if(surpriseBtn) { surpriseBtn.textContent = '🎟 Usar Cupom'; surpriseBtn.onclick = () => { const inp = document.getElementById('couponInput'); if(inp) inp.value = sorteio.cupom; closeModal('surpriseModal'); openCart(); setTimeout(() => aplicarCupom(), 350); }; } localStorage.setItem('donut_surpresa_dia', hoje); lancarConfete(); }
+    const PERGUNTAS = [{ q:"Qual o principal ingrediente do glacê de donut?", opts:["Açúcar","Farinha","Ovo","Leite"], certa:0 },{ q:"O donut foi popularizado em qual país?", opts:["Brasil","França","EUA","Japão"], certa:2 },{ q:"O que torna o Donut ALR especial?", opts:["Ingredientes","Feito com amor","Entrega rápida","Todas"], certa:3 }];
+    let quizQ = 0, quizAcertos = 0;
+    function iniciarQuiz() { quizQ=0; quizAcertos=0; renderQuizQ(); }
+    function renderQuizQ() { const el = document.getElementById('quizContent'); if(quizQ >= PERGUNTAS.length) { const ganhou = quizAcertos/PERGUNTAS.length >= 0.6; el.innerHTML = `<div>${quizAcertos}/${PERGUNTAS.length}</div>${ganhou ? `<div>🎉 Você ganhou DONUT15!</div><button onclick="usarCupomPerfil('DONUT15');closeModal('quizModal')">Usar</button>` : `<button onclick="iniciarQuiz()">Tentar novamente</button>`}`; return; } const p = PERGUNTAS[quizQ]; el.innerHTML = `<div>${p.q}</div>${p.opts.map((o,i)=>`<button class="quiz-opt" onclick="responderQuiz(${i})">${o}</button>`).join('')}<div id="quizFeedback"></div>`; }
+    function responderQuiz(idx) { const p = PERGUNTAS[quizQ]; const fb = document.getElementById('quizFeedback'); if(idx===p.certa) { quizAcertos++; fb.innerHTML='✅ Correto!'; } else { fb.innerHTML=`❌ Certa: "${p.opts[p.certa]}"`; } setTimeout(() => { quizQ++; renderQuizQ(); }, 1000); }
+    window.responderQuiz = responderQuiz; window.iniciarQuiz = iniciarQuiz;
     
-    function abrirCaixaSurpresa() { 
-        const hoje = new Date().toDateString(); 
-        if(localStorage.getItem('donut_surpresa_dia') === hoje) { 
-            showToast('⏰ Você já abriu hoje! Volte amanhã.'); 
-            return; 
-        } 
-        const sorteio = SURPRESAS[Math.floor(Math.random() * SURPRESAS.length)]; 
-        const resultDiv = document.getElementById('surpriseResult'); 
-        if(resultDiv) { 
-            resultDiv.innerHTML = `<div style="margin:0.5rem 0;">🎉 Você ganhou!</div><div class="surprise-cupom">${sorteio.cupom}</div><div style="color:var(--brown-light);font-size:0.88rem;">${sorteio.desc}</div>`; 
-            resultDiv.classList.add('show'); 
-        } 
-        const surpriseBtn = document.getElementById('surpriseBtn'); 
-        if(surpriseBtn) { 
-            surpriseBtn.textContent = '🎟 Usar Cupom Agora'; 
-            surpriseBtn.onclick = () => { 
-                const inp = document.getElementById('couponInput'); 
-                if(inp) inp.value = sorteio.cupom; 
-                closeModal('surpriseModal'); 
-                openCart(); 
-                setTimeout(() => aplicarCupom(), 350); 
-            }; 
-        } 
-        localStorage.setItem('donut_surpresa_dia', hoje); 
-        lancarConfete(); 
-    }
-
-    const PERGUNTAS = [{ q:"Qual o principal ingrediente do glacê de donut?", opts:["Açúcar","Farinha","Ovo","Leite"], certa:0 },{ q:"O donut foi popularizado em qual país?", opts:["Brasil","França","EUA","Japão"], certa:2 },{ q:"O que torna o Donut ALR especial?", opts:["Ingredientes selecionados","Feito com amor","Entrega rápida","Todas as anteriores"], certa:3 }];
-    let quizQ = 0, quizAcertos = 0, quizRespondida = false;
-    
-    function iniciarQuiz() { 
-        quizQ=0; 
-        quizAcertos=0; 
-        renderQuizQ(); 
-    }
-    
-    function renderQuizQ() { 
-        const el = document.getElementById('quizContent'); 
-        if(!el) return; 
-        if(quizQ >= PERGUNTAS.length) { 
-            const ganhou = quizAcertos/PERGUNTAS.length >= 0.6; 
-            el.innerHTML = `<div style="text-align:center;"><div class="quiz-score">${quizAcertos}/${PERGUNTAS.length}</div>${ganhou ? `<p style="color:var(--success);font-weight:700;margin-bottom:0.5rem;">🎉 Parabéns! Você ganhou:</p><div class="quiz-cupom-code">DONUT15</div><button class="auth-submit" style="margin-top:1rem;" onclick="usarCupomPerfil('DONUT15');closeModal('quizModal')">Usar Cupom</button>` : `<p style="color:var(--brown-light);">Continue tentando!</p><button class="btn-primary" style="margin-top:1rem;" onclick="iniciarQuiz()">Tentar novamente</button>`}</div>`; 
-            return; 
-        } 
-        const p = PERGUNTAS[quizQ]; 
-        el.innerHTML = `<div style="margin-bottom:0.8rem;"><div style="height:6px;background:var(--gray-2);border-radius:99px;"><div style="width:${(quizQ/PERGUNTAS.length)*100}%;height:100%;background:var(--gradient);border-radius:99px;transition:width 0.3s;"></div></div><div style="font-size:0.75rem;color:var(--brown-light);margin-top:0.3rem;">${quizQ+1} de ${PERGUNTAS.length}</div></div><div class="quiz-question">${p.q}</div><div>${p.opts.map((o,i)=>`<button class="quiz-opt" onclick="responderQuiz(${i})">${o}</button>`).join('')}</div><div id="quizFeedback" style="font-weight:700;text-align:center;padding:0.5rem;min-height:1.5em;"></div>`; 
-        quizRespondida = false; 
-    }
-    
-    function responderQuiz(idx) { 
-        if(quizRespondida) return; 
-        quizRespondida = true; 
-        const p = PERGUNTAS[quizQ]; 
-        const opts = document.querySelectorAll('.quiz-opt'); 
-        opts.forEach((b,i) => { 
-            if(i===p.certa) b.classList.add('certa'); 
-            else if(i===idx) b.classList.add('errada'); 
-            b.disabled=true; 
-        }); 
-        const fb = document.getElementById('quizFeedback'); 
-        if(idx===p.certa) { 
-            quizAcertos++; 
-            if(fb){fb.textContent='✅ Correto!'; fb.style.color='green';} 
-        } else { 
-            if(fb){fb.textContent=`❌ Certa: "${p.opts[p.certa]}"`; fb.style.color='red';} 
-        } 
-        setTimeout(() => { quizQ++; renderQuizQ(); }, 1200); 
-    }
-    
-    function usarCupomPerfil(codigo) { 
-        const inp = document.getElementById('couponInput'); 
-        if(inp) inp.value = codigo; 
-        closeModal('perfilModal'); 
-        openCart(); 
-        setTimeout(() => aplicarCupom(), 350); 
-    }
-
     const RODA_FATIAS = [{ label:'10% OFF', cupom:'SORTE10', cor:'#ff6b9d' },{ label:'Frete Grátis', cupom:'FRETEGRATIS', cor:'#2ecc71' },{ label:'15% OFF', cupom:'SORTE15', cor:'#9b59b6' },{ label:'R$5 OFF', cupom:'ALR5', cor:'#f39c12' },{ label:'Tente novamente', cupom:'', cor:'#e0e0e0' },{ label:'20% OFF', cupom:'SORTE20', cor:'#e74c3c' }];
-    let rodaGirando = false, rodaAngle = 0;
-    
-    function desenharRoda(angle) { 
-        const canvas = document.getElementById('rodaCanvas'); 
-        if(!canvas) return; 
-        const ctx = canvas.getContext('2d'), cx=130, cy=130, r=120, n=RODA_FATIAS.length, slice=(2*Math.PI)/n; 
-        ctx.clearRect(0,0,260,260); 
-        RODA_FATIAS.forEach((f,i) => { 
-            const start=angle+i*slice, end=start+slice; 
-            ctx.beginPath(); 
-            ctx.moveTo(cx,cy); 
-            ctx.arc(cx,cy,r,start,end); 
-            ctx.closePath(); 
-            ctx.fillStyle=f.cor; 
-            ctx.fill(); 
-            ctx.strokeStyle='#fff'; 
-            ctx.lineWidth=2; 
-            ctx.stroke(); 
-            ctx.save(); 
-            ctx.translate(cx,cy); 
-            ctx.rotate(start+slice/2); 
-            ctx.textAlign='right'; 
-            ctx.fillStyle='#fff'; 
-            ctx.font='bold 11px sans-serif'; 
-            ctx.fillText(f.label,r-10,4); 
-            ctx.restore(); 
-        }); 
-        ctx.beginPath(); 
-        ctx.arc(cx,cy,18,0,2*Math.PI); 
-        ctx.fillStyle='#fff'; 
-        ctx.fill(); 
-        ctx.fillStyle='#ff4081'; 
-        ctx.font='bold 14px sans-serif'; 
-        ctx.textAlign='center'; 
-        ctx.fillText('🍩',cx,cy+5); 
-    }
-    
-    function girarRoda() { 
-        const hoje = new Date().toDateString(); 
-        if(localStorage.getItem('donut_roda_dia')===hoje) { 
-            showToast('⏰ Você já girou hoje!'); 
-            return; 
-        } 
-        if(rodaGirando) return; 
-        rodaGirando=true; 
-        const btnGirar = document.getElementById('btnGirar'); 
-        if(btnGirar) btnGirar.disabled=true; 
-        const n=RODA_FATIAS.length, giros=5+Math.random()*5, fatiaAlvo=Math.floor(Math.random()*n); 
-        const slice=(2*Math.PI)/n, alvoAngle=2*Math.PI*giros-(fatiaAlvo*slice+slice/2); 
-        const inicio=rodaAngle, duracao=4000, startTime=performance.now(); 
-        function animar(now) { 
-            const t=Math.min((now-startTime)/duracao,1), ease=1-Math.pow(1-t,4); 
-            rodaAngle=inicio+alvoAngle*ease; 
-            desenharRoda(rodaAngle); 
-            if(t<1) { 
-                requestAnimationFrame(animar); 
-                return; 
-            } 
-            rodaGirando=false; 
-            const premio=RODA_FATIAS[fatiaAlvo]; 
-            const resultDiv = document.getElementById('rodaResult'); 
-            if(resultDiv) { 
-                resultDiv.innerHTML = premio.cupom ? `<div class="roda-premio">🎉 ${premio.label}</div><div style="margin-top:0.5rem;">Cupom: <strong>${premio.cupom}</strong> <button class="btn-primary" style="padding:0.3rem 0.8rem;" onclick="usarCupomPerfil('${premio.cupom}');closeModal('rodaModal')">Usar</button></div>` : `<div style="color:var(--brown-light);">😅 ${premio.label}</div>`; 
-                resultDiv.classList.add('show'); 
-            } 
-            if(premio.cupom) lancarConfete(); 
-            localStorage.setItem('donut_roda_dia', hoje); 
-            if(btnGirar) btnGirar.disabled=false; 
-        } 
-        requestAnimationFrame(animar); 
-    }
+    let rodaAngle = 0, rodaGirando = false;
+    function desenharRoda(angle) { const canvas = document.getElementById('rodaCanvas'); if(!canvas) return; const ctx = canvas.getContext('2d'), cx=130, cy=130, r=120, n=RODA_FATIAS.length, slice=(2*Math.PI)/n; ctx.clearRect(0,0,260,260); RODA_FATIAS.forEach((f,i) => { const start=angle+i*slice, end=start+slice; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath(); ctx.fillStyle=f.cor; ctx.fill(); ctx.strokeStyle='#fff'; ctx.stroke(); ctx.save(); ctx.translate(cx,cy); ctx.rotate(start+slice/2); ctx.textAlign='right'; ctx.fillStyle='#fff'; ctx.font='bold 11px sans-serif'; ctx.fillText(f.label,r-10,4); ctx.restore(); }); ctx.beginPath(); ctx.arc(cx,cy,18,0,2*Math.PI); ctx.fillStyle='#fff'; ctx.fill(); ctx.fillStyle='#ff4081'; ctx.font='bold 14px sans-serif'; ctx.textAlign='center'; ctx.fillText('🍩',cx,cy+5); }
+    function girarRoda() { const hoje = new Date().toDateString(); if(localStorage.getItem('donut_roda_dia')===hoje) { showToast('⏰ Você já girou hoje!'); return; } if(rodaGirando) return; rodaGirando=true; const btnGirar = document.getElementById('btnGirar'); if(btnGirar) btnGirar.disabled=true; const n=RODA_FATIAS.length, fatiaAlvo=Math.floor(Math.random()*n); const slice=(2*Math.PI)/n, alvoAngle=2*Math.PI*5 - (fatiaAlvo*slice+slice/2); const startTime=performance.now(), inicio=rodaAngle; function animar(now) { const t=Math.min((now-startTime)/3000,1); rodaAngle=inicio+alvoAngle*easeOutCubic(t); desenharRoda(rodaAngle); if(t<1) { requestAnimationFrame(animar); return; } rodaGirando=false; const premio=RODA_FATIAS[fatiaAlvo]; document.getElementById('rodaResult').innerHTML = premio.cupom ? `<div>🎉 ${premio.label}</div><button onclick="usarCupomPerfil('${premio.cupom}');closeModal('rodaModal')">Usar Cupom</button>` : `<div>😅 ${premio.label}</div>`; if(premio.cupom) lancarConfete(); localStorage.setItem('donut_roda_dia', hoje); if(btnGirar) btnGirar.disabled=false; } function easeOutCubic(t){ return 1 - Math.pow(1 - t, 4); } requestAnimationFrame(animar); }
+    window.girarRoda = girarRoda;
+    function usarCupomPerfil(codigo) { const inp = document.getElementById('couponInput'); if(inp) inp.value = codigo; closeModal('rodaModal'); openCart(); setTimeout(() => aplicarCupom(), 350); }
+    window.usarCupomPerfil = usarCupomPerfil;
 
-    function lancarConfete() { 
-        const canvas=document.getElementById("confettiCanvas"); 
-        if(!canvas) return; 
-        const ctx=canvas.getContext("2d"); 
-        canvas.width=window.innerWidth; 
-        canvas.height=window.innerHeight; 
-        canvas.style.display="block"; 
-        const cores=["#ff6b9d","#ff4081","#ffd4e8","#eed6f8","#fff3b0","#c8f7e0"]; 
-        const ps=Array.from({length:100},()=>({ x:Math.random()*canvas.width, y:-Math.random()*300, r:3+Math.random()*5, cor:cores[Math.floor(Math.random()*cores.length)], vx:(Math.random()-0.5)*3, vy:2+Math.random()*3, rot:Math.random()*360, rspd:(Math.random()-0.5)*5 })); 
-        let frame; 
-        (function animar() { 
-            ctx.clearRect(0,0,canvas.width,canvas.height); 
-            let vivas=0; 
-            ps.forEach(p=>{ 
-                if(p.y<canvas.height+50){ 
-                    vivas++; 
-                    p.x+=p.vx; 
-                    p.y+=p.vy; 
-                    p.rot+=p.rspd; 
-                    p.vy+=0.1; 
-                    ctx.save(); 
-                    ctx.translate(p.x,p.y); 
-                    ctx.rotate(p.rot*Math.PI/180); 
-                    ctx.fillStyle=p.cor; 
-                    ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); 
-                    ctx.restore(); 
-                } 
-            }); 
-            if(vivas>0) frame=requestAnimationFrame(animar); 
-            else{canvas.style.display="none"; ctx.clearRect(0,0,canvas.width,canvas.height);} 
-        })(); 
-        setTimeout(()=>{cancelAnimationFrame(frame);canvas.style.display="none";},4000); 
-    }
+    function lancarConfete() { const canvas=document.getElementById("confettiCanvas"); if(!canvas) return; canvas.width=window.innerWidth; canvas.height=window.innerHeight; canvas.style.display="block"; const ctx=canvas.getContext("2d"); const cores=["#ff6b9d","#ff4081","#ffd4e8","#eed6f8","#fff3b0","#c8f7e0"]; const ps=Array.from({length:100},()=>({ x:Math.random()*canvas.width, y:-Math.random()*300, r:3+Math.random()*5, cor:cores[Math.floor(Math.random()*cores.length)], vx:(Math.random()-0.5)*3, vy:2+Math.random()*3, rot:Math.random()*360, rspd:(Math.random()-0.5)*5 })); let frame; (function animar() { ctx.clearRect(0,0,canvas.width,canvas.height); let vivas=0; ps.forEach(p=>{ if(p.y<canvas.height+50){ vivas++; p.x+=p.vx; p.y+=p.vy; p.rot+=p.rspd; p.vy+=0.1; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.fillStyle=p.cor; ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); ctx.restore(); } }); if(vivas>0) frame=requestAnimationFrame(animar); else{canvas.style.display="none"; ctx.clearRect(0,0,canvas.width,canvas.height);} })(); setTimeout(()=>{cancelAnimationFrame(frame);canvas.style.display="none";},4000); }
+    window.lancarConfete = lancarConfete;
 
-    // ========== MODAIS ==========
-    function openModal(id) { 
-        const m = document.getElementById(id); 
-        if(m) m.classList.add('open'); 
-        if(id==='rodaModal') setTimeout(()=>desenharRoda(rodaAngle),100); 
-        if(id==='quizModal') iniciarQuiz(); 
-        if(id==='surpriseModal') { 
-            const result = document.getElementById('surpriseResult'); 
-            const surpriseBtn = document.getElementById('surpriseBtn'); 
-            const hoje = new Date().toDateString(); 
-            if(localStorage.getItem('donut_surpresa_dia') !== hoje) { 
-                if(result) { 
-                    result.innerHTML = ''; 
-                    result.classList.remove('show'); 
-                } 
-                if(surpriseBtn) { 
-                    surpriseBtn.textContent = '🎁 Abrir Caixa'; 
-                    surpriseBtn.onclick = abrirCaixaSurpresa; 
-                } 
-            } 
-        } 
-    }
-    
-    function closeModal(id) { 
-        const m = document.getElementById(id); 
-        if(m) m.classList.remove('open'); 
-    }
-    
-    function openCart() { 
-        document.getElementById("cartSidebar").classList.add("open"); 
-        document.getElementById("overlay").classList.add("show"); 
-        renderCart(); 
-    }
-    
-    function closeCart() { 
-        document.getElementById("cartSidebar").classList.remove("open"); 
-        document.getElementById("overlay").classList.remove("show"); 
-    }
+    function openModal(id) { const m = document.getElementById(id); if(m) m.classList.add('open'); if(id==='rodaModal') setTimeout(()=>desenharRoda(rodaAngle),100); if(id==='quizModal') iniciarQuiz(); if(id==='surpriseModal') { if(localStorage.getItem('donut_surpresa_dia') !== new Date().toDateString()) { document.getElementById('surpriseResult').innerHTML = ''; document.getElementById('surpriseSub').textContent = 'Clique para ganhar um cupom especial'; const btn = document.getElementById('surpriseBtn'); if(btn) { btn.textContent = '🎁 Abrir Caixa'; btn.onclick = abrirCaixaSurpresa; } } } }
+    function closeModal(id) { const m = document.getElementById(id); if(m) m.classList.remove('open'); }
+    window.openModal = openModal; window.closeModal = closeModal;
+    function openCart() { document.getElementById("cartSidebar").classList.add("open"); document.getElementById("overlay").classList.add("show"); renderCart(); }
+    function closeCart() { document.getElementById("cartSidebar").classList.remove("open"); document.getElementById("overlay").classList.remove("show"); }
+    window.openCart = openCart; window.closeCart = closeCart;
 
-    // ========== ENCOMENDAS ==========
-    function getMinEncomendaDate() {
-        const agora = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
-        let diasUteis = 0;
-        const candidato = new Date(agora);
-        while(diasUteis < 2) {
-            candidato.setDate(candidato.getDate() + 1);
-            const d = candidato.getDay();
-            if(d !== 0 && d !== 6) diasUteis++;
-        }
-        return candidato;
-    }
+    window.abrirEncomenda = function() { if(!usuarioAtual){ mostrarLoginOverlay(); showToast('⚠️ Faça login primeiro.'); return; } closeCart(); openModal('encomendaModal'); };
+    window.confirmarEncomenda = function() { if(!usuarioAtual) return; if(!carrinho.length){ showToast('⚠️ Adicione itens ao carrinho'); return; } const data = document.getElementById('encomendaData').value; const horario = document.getElementById('encomendaHorario').value; const obs = document.getElementById('encomendaObs').value; const total = calcTotais().total; let msg = `📅 *ENCOMENDA - Donut ALR*\n👤 ${usuarioAtual.nome}\n📱 ${usuarioAtual.telefone}\n\n*ITENS:*\n`; carrinho.forEach(i=>msg+=`• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price*i.qtd)}\n`); msg+=`\n📅 Entrega: ${data}\n⏰ Horário: ${horario}\n💰 Total: ${formatBRL(total)}`; if(obs) msg+=`\n📝 Obs: ${obs}`; window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank'); lancarConfete(); closeModal('encomendaModal'); showToast('Encomenda enviada!'); };
 
-    window.abrirEncomenda = function() {
-        if (!usuarioAtual) { 
-            mostrarLoginOverlay(); 
-            showToast('⚠️ Faça login para realizar uma encomenda.'); 
-            return; 
-        }
-        const minDate = getMinEncomendaDate();
-        const maxDate = new Date();
-        maxDate.setDate(maxDate.getDate() + 60);
-        const toISO = d => d.toISOString().split('T')[0];
-        const dataInput = document.getElementById('encomendaData');
-        if(dataInput) {
-            dataInput.min = toISO(minDate);
-            dataInput.max = toISO(maxDate);
-            dataInput.value = toISO(minDate);
-        }
-        atualizarResumoEncomenda();
-        closeCart();
-        openModal('encomendaModal');
-    };
-
-    function atualizarResumoEncomenda() {
-        const resumoEl = document.getElementById('encomendaResumo');
-        if(!resumoEl) return;
-        const dataVal = document.getElementById('encomendaData')?.value;
-        const horario = document.getElementById('encomendaHorario')?.value;
-        const { subtotal, frete, desconto, total } = calcTotais();
-        const itensTexto = carrinho.length ? carrinho.map(i => `${i.emoji} ${i.name} x${i.qtd}`).join(', ') : 'Nenhum item no carrinho';
-        const dataFormatada = dataVal ? new Date(dataVal + 'T12:00:00').toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' }) : '—';
-        resumoEl.innerHTML = `<div style="font-weight:700;color:var(--brown);margin-bottom:0.5rem;">📋 Resumo da Encomenda</div>
-            <div style="color:var(--brown-mid);line-height:1.7;font-size:0.83rem;">
-                <div>🛒 Itens: <span style="color:var(--text);">${itensTexto || 'Adicione itens ao carrinho'}</span></div>
-                <div>📅 Entrega: <span style="color:var(--text);font-weight:700;">${dataFormatada}</span></div>
-                <div>⏰ Horário: <span style="color:var(--text);">${horario || '—'}</span></div>
-                <div>💰 Total estimado: <span style="color:var(--pink);font-weight:800;">${formatBRL(total)}</span></div>
-            </div>`;
-    }
-
-    window.confirmarEncomenda = async function() {
-        if (!usuarioAtual) { mostrarLoginOverlay(); return; }
-        const dataVal = document.getElementById('encomendaData')?.value;
-        const horario = document.getElementById('encomendaHorario')?.value;
-        const obs = document.getElementById('encomendaObs')?.value.trim();
-        const msgEl = document.getElementById('encomendaDataMsg');
-        if(!dataVal) { if(msgEl) msgEl.textContent = '⚠️ Selecione uma data de entrega.'; return; }
-        const dataEscolhida = new Date(dataVal + 'T12:00:00');
-        const minDate = getMinEncomendaDate();
-        minDate.setHours(0,0,0,0);
-        dataEscolhida.setHours(0,0,0,0);
-        if(dataEscolhida < minDate) { if(msgEl) msgEl.textContent = '⚠️ Encomendas precisam de pelo menos 2 dias úteis de antecedência.'; return; }
-        const diaSemana = dataEscolhida.getDay();
-        if(diaSemana === 0 || diaSemana === 6) { if(msgEl) msgEl.textContent = '⚠️ Não entregamos aos finais de semana. Escolha um dia útil.'; return; }
-        if(msgEl) msgEl.textContent = '';
-        if(!carrinho.length) { showToast('⚠️ Adicione itens ao carrinho antes de encomendear!'); return; }
-        const btn = document.getElementById('btnConfirmarEncomenda');
-        btn.disabled = true; btn.textContent = 'Enviando...';
-        try {
-            const { frete, desconto, total } = calcTotais();
-            const dataFormatada = dataEscolhida.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
-            const pedidoId = 'ENC' + Date.now();
-            let msg = `📅 *ENCOMENDA - Donut ALR*\n🆔 Encomenda #${pedidoId}\n👤 Cliente: ${usuarioAtual.nome}\n📱 WhatsApp: ${usuarioAtual.telefone || 'Não informado'}\n\n*ITENS:*\n`;
-            carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price * i.qtd)}\n`; });
-            msg += `\n📅 Data de Entrega: ${dataFormatada}\n⏰ Horário: ${horario}\n💰 Total estimado: ${formatBRL(total)}`;
-            if(obs) msg += `\n📝 Obs: ${obs}`;
-            msg += `\n\n_Encomenda via site Donut ALR · Aguardando confirmação da loja._`;
-            const agora = new Date();
-            const dataRegistro = agora.toLocaleDateString('pt-BR') + " " + agora.toLocaleTimeString('pt-BR',{hour:"2-digit",minute:"2-digit"});
-            try {
-                await addDoc(collection(db, 'pedidos'), {
-                    cliente: usuarioAtual.nome, email: usuarioAtual.email,
-                    whatsapp: usuarioAtual.telefone || 'Não informado',
-                    itens: carrinho.map(i => ({ nome: i.name, qtd: i.qtd, preco: i.price })),
-                    total, endereco: 'A confirmar', pagamento: 'A confirmar',
-                    status: 'encomenda', tipoEncomenda: true,
-                    dataEntrega: dataVal, horarioEntrega: horario,
-                    observacoes: obs || '', data: dataRegistro,
-                    criadoEm: serverTimestamp()
-                });
-            } catch(e) { console.warn(e); }
-            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-            lancarConfete();
-            showToast('📅 Encomenda enviada! Aguarde confirmação da loja.');
-            closeModal('encomendaModal');
-        } catch(e) { console.error(e); if(msgEl) msgEl.textContent = '❌ Erro ao enviar encomenda. Tente novamente.'; }
-        finally { btn.disabled = false; btn.textContent = '📅 Confirmar Encomenda'; }
-    };
-
-    // ========== INICIALIZAÇÃO ==========
-    function isLojaAberta() {
-        const agora = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
-        const dia = agora.getDay(), hora = agora.getHours();
-        return dia >= 1 && dia <= 5 && hora >= 8 && hora < 18;
-    }
-
-    function atualizarStatusHorario() { 
-        const agora=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"})); 
-        const dia=agora.getDay(), hora=agora.getHours(); 
-        const aberto=dia>=1&&dia<=5&&hora>=8&&hora<18; 
-        const statusEl=document.getElementById("horarioStatus"); 
-        const dot=document.getElementById("statusDot"); 
-        const banner=document.getElementById("statusBanner"); 
-        if(statusEl) statusEl.textContent=aberto?"Aberto agora · Seg–Sex 08–18h":"Fechado · Voltamos Seg–Sex 08–18h"; 
-        if(dot) dot.classList.toggle("fechado",!aberto); 
-        if(banner) banner.style.background = aberto ? 'var(--mint-dark)' : '#e74c3c'; 
-    }
-
-    function setTheme(theme) { 
-        document.documentElement.setAttribute("data-theme",theme); 
-        const btn=document.getElementById("darkToggle"); 
-        if(btn) btn.textContent=theme==="dark"?"☀️":"🌙"; 
-        localStorage.setItem("donut_theme",theme); 
-    }
-    
-    function toggleDark() { 
-        setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark"); 
-    }
-    
-    function initDarkMode() { 
-        setTheme(localStorage.getItem("donut_theme")||"light"); 
-    }
-
-    function startOfferTimer() { 
-        let time = 2*3600; 
-        const interval = setInterval(() => { 
-            if(time<=0){ 
-                const el=document.getElementById('offerTimer'); 
-                if(el) el.textContent='ENCERRADA'; 
-                clearInterval(interval); 
-                return; 
-            } 
-            const h=String(Math.floor(time/3600)).padStart(2,'0'); 
-            const m=String(Math.floor((time%3600)/60)).padStart(2,'0'); 
-            const s=String(time%60).padStart(2,'0'); 
-            const el=document.getElementById('offerTimer'); 
-            if(el) el.textContent=`${h}:${m}:${s}`; 
-            time--; 
-        },1000); 
-    }
-
-    function initPaymentSelection() { 
-        document.querySelectorAll('.payment-option').forEach(opt => { 
-            opt.addEventListener('click', function() { 
-                const radio = this.querySelector('input[type="radio"]'); 
-                if(radio) { 
-                    radio.checked=true; 
-                    document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected')); 
-                    this.classList.add('selected'); 
-                } 
-            }); 
-        }); 
-    }
+    function atualizarStatusHorario() { const agora=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"})); const dia=agora.getDay(), hora=agora.getHours(); const aberto=dia>=1&&dia<=5&&hora>=8&&hora<18; document.getElementById("horarioStatus").textContent=aberto?"Aberto! · Seg–Sex 08:00–18:00h":"Fechado! · Seg–Sex 08:00–18:00h"; document.getElementById("statusDot").classList.toggle("fechado",!aberto); document.getElementById("statusBanner").style.background = aberto ? '#2ecc71' : '#e74c3c'; }
+    function setTheme(theme) { document.documentElement.setAttribute("data-theme",theme); document.getElementById("darkToggle").textContent=theme==="dark"?"☀️":"🌙"; localStorage.setItem("donut_theme",theme); }
+    function toggleDark() { setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark"); }
+    function initDarkMode() { setTheme(localStorage.getItem("donut_theme")||"light"); }
+    function startOfferTimer() { let time=2*3600; setInterval(()=>{ if(time<=0){ document.getElementById('offerTimer').textContent='ENCERRADA'; return; } const h=String(Math.floor(time/3600)).padStart(2,'0'); const m=String(Math.floor((time%3600)/60)).padStart(2,'0'); const s=String(time%60).padStart(2,'0'); document.getElementById('offerTimer').textContent=`${h}:${m}:${s}`; time--; },1000); }
 
     document.addEventListener("DOMContentLoaded", function() {
-        const loader = document.getElementById('pageLoader');
-        setTimeout(() => { if(loader) loader.classList.add('done'); }, 1100);
-
-        const prog = document.getElementById('scrollProgress');
-        window.addEventListener('scroll', () => {
-            if(!prog) return;
-            const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-            prog.style.width = Math.min(scrolled, 100) + '%';
-        }, { passive:true });
-
-        initDarkMode(); 
-        carregarSessao(); 
-        carregarCarrinho(); 
-        atualizarStatusHorario(); 
-        setInterval(atualizarStatusHorario, 60000); 
-        startOfferTimer(); 
-        initPaymentSelection(); 
-        
-        // CARREGA PRODUTOS DO FIREBASE EM TEMPO REAL
-        iniciarListenerProdutos();
-        
-        renderProdutos(true);
-        
+        setTimeout(()=>{ const loader=document.getElementById('pageLoader'); if(loader) loader.classList.add('done'); },800);
+        const prog=document.getElementById('scrollProgress'); window.addEventListener('scroll',()=>{ prog.style.width = Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%'; });
+        const revealObs=new IntersectionObserver((e)=>e.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:0.12}); document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-zoom, .section-title').forEach(el=>revealObs.observe(el));
+        initDarkMode(); carregarSessao(); carregarCarrinho(); atualizarStatusHorario(); setInterval(atualizarStatusHorario,60000); startOfferTimer(); renderProdutos(true); carregarProdutosFirebase();
         document.getElementById("cartBtn")?.addEventListener('click', openCart);
         document.getElementById("closeCartBtn")?.addEventListener('click', closeCart);
         document.getElementById("overlay")?.addEventListener('click', closeCart);
@@ -2065,47 +1325,11 @@
         document.getElementById("buscarCepBtn")?.addEventListener('click', buscarCepEndereco);
         document.getElementById("calcFreteBtn")?.addEventListener('click', calcularFrete);
         document.getElementById("darkToggle")?.addEventListener('click', toggleDark);
-        document.getElementById("cepInput")?.addEventListener('keydown', e => { if(e.key==='Enter') buscarCepEndereco(); });
-        
-        ['productModal','perfilModal','surpriseModal','quizModal','rodaModal','enderecoModal','avaliacaoModal','encomendaModal'].forEach(id => { 
-            const m = document.getElementById(id); 
-            if(m) m.addEventListener('click', function(e) { if(e.target === m) m.classList.remove('open'); }); 
-        });
-        
-        document.getElementById("endNumero")?.addEventListener('input', e => { enderecoCadastrado.numero = e.target.value; });
-        document.getElementById("endComplemento")?.addEventListener('input', e => { enderecoCadastrado.complemento = e.target.value; });
-        
-        const searchInput = document.getElementById("searchInput"); 
-        if(searchInput) { 
-            searchInput.addEventListener("input", function(e) { 
-                searchTerm = e.target.value.toLowerCase().trim(); 
-                renderProdutos(); 
-            }); 
-        }
-        
-        document.querySelectorAll(".tab-btn").forEach(btn => { 
-            btn.addEventListener("click", function() { 
-                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active")); 
-                this.classList.add("active"); 
-                currentCat = this.dataset.cat; 
-                renderProdutos(); 
-            }); 
-        });
-        
-        document.getElementById("couponInput")?.addEventListener("keydown", e => { if(e.key==="Enter") aplicarCupom(); });
-        document.getElementById('surpriseBtn')?.addEventListener('click', abrirCaixaSurpresa);
-        
-        const cepInput = document.getElementById("cepInput"); 
-        if(cepInput) { 
-            cepInput.addEventListener('input', function(e) { 
-                const isDeleting = e.inputType && e.inputType.startsWith('delete'); 
-                let v = this.value.replace(/\D/g,''); 
-                if(v.length>8) v=v.slice(0,8); 
-                if(!isDeleting && v.length>5) v=v.slice(0,5)+'-'+v.slice(5); 
-                this.value=v; 
-            }); 
-        }
-        
+        document.getElementById("searchInput")?.addEventListener('input', e=>{ searchTerm=e.target.value.toLowerCase().trim(); renderProdutos(); });
+        document.querySelectorAll(".tab-btn").forEach(btn=>{ btn.addEventListener("click",function(){ document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove('active')); this.classList.add('active'); currentCat=this.dataset.cat; renderProdutos(); }); });
+        document.getElementById("couponInput")?.addEventListener('keydown',e=>{if(e.key==='Enter')aplicarCupom();});
+        document.getElementById('surpriseBtn')?.addEventListener('click',abrirCaixaSurpresa);
+        document.getElementById("cepInput")?.addEventListener('input',function(e){let v=this.value.replace(/\D/g,'');if(v.length>8)v=v.slice(0,8);if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5);this.value=v;});
         window.navTo = navTo;
     });
 </script>

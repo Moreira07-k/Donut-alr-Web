@@ -3,435 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donut ALR - Painel Administrativo</title>
+    <title>Donut ALR - Painel Administrativo 🍩</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        img, video { max-width: 100%; height: auto; }
+        
         :root {
-            --primary: #ff6b9d;
-            --primary-dark: #e8436e;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --dark: #2d1020;
-            --light: #fff6f9;
-            --gray: #f0f0f0;
-            --shadow: 0 2px 10px rgba(0,0,0,0.1);
-            --shadow-sm: 0 2px 5px rgba(0,0,0,0.08);
+            --pink: #FF6BA8;
+            --pink-dark: #E8436E;
+            --pink-light: #FFB3D4;
+            --pink-pale: #FFE0EE;
+            --rose: #FF4081;
+            --peach: #FFD4EB;
+            --lavender: #EDD6F8;
+            --mint: #C8F7E0;
+            --mint-dark: #2ECF8A;
+            --yellow: #FFF3B0;
+            --bg: #FFF5F9;
+            --card: #FFFFFF;
+            --brown: #4A1E30;
+            --brown-mid: #7A4060;
+            --brown-light: #B07090;
+            --gray: #F7F0F4;
+            --gray-2: #EEE0EA;
+            --text: #2D1020;
+            --grad-main: linear-gradient(135deg, #FF6BA8 0%, #E8436E 100%);
+            --grad-candy: linear-gradient(135deg, #FF9DC6 0%, #FF6BA8 50%, #C84B8A 100%);
+            --shadow: 0 4px 20px rgba(200,70,120,0.12);
+            --shadow-md: 0 8px 30px rgba(200,70,120,0.18);
+            --shadow-lg: 0 20px 50px rgba(200,70,120,0.24);
+            --radius: 20px;
+            --radius-lg: 28px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; background: var(--light); }
-        
-        /* Header */
-        .header {
-            background: white; padding: 0.85rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 16px rgba(200,80,120,0.1);
-            position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 0.5rem;
-            border-bottom: 2px solid rgba(255,107,157,0.12);
+
+        [data-theme="dark"] {
+            --bg: #1a0f14;
+            --card: #2d1a24;
+            --peach: #3e1e2e;
+            --lavender: #2a1a30;
+            --gray: #2a1922;
+            --gray-2: #402a36;
+            --brown: #f5c6da;
+            --brown-mid: #d4a5bc;
+            --brown-light: #b07f9a;
+            --text: #f5e6ee;
+            --pink-pale: #3a1e2c;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.4);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.5);
         }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 800; color: var(--primary); font-family: 'Syne', sans-serif; }
-        .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg,#ff6b9d,#ff4081); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-        .master-indicator { display: inline-flex; align-items: center; gap: 0.3rem; background: linear-gradient(135deg,#ff6b9d,#ff4081); color: #fff; padding: 0.2rem 0.6rem; border-radius: 99px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; margin-left: 0.5rem; }
-        .sync-badge { background: var(--success); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.7rem; margin-left: 0.5rem; transition: opacity 0.2s; }
-        .nav-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-        .nav-tab { padding: 0.5rem 0.9rem; border: none; background: var(--gray); cursor: pointer; border-radius: 8px; font-weight: 600; transition: all 0.2s; font-family: inherit; font-size: 0.85rem; }
-        .nav-tab:hover, .nav-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(255,107,157,0.3); }
-        .container { padding: 2rem; max-width: 1400px; margin: 0 auto; }
-        
-        /* Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
-        .stat-card { background: white; padding: 1.4rem 1.5rem; border-radius: 18px; text-align: center; box-shadow: 0 2px 12px rgba(200,80,120,0.08); transition: transform 0.2s, box-shadow 0.2s; border: 1.5px solid rgba(255,107,157,0.08); }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(200,80,120,0.16); }
-        .stat-number { font-size: 1.9rem; font-weight: 800; color: var(--primary); font-family: 'Syne', sans-serif; }
-        .stat-label { color: #888; margin-top: 0.4rem; font-size: 0.82rem; font-weight: 600; }
-        
-        /* Tabelas */
-        .table-container { background: white; border-radius: 16px; overflow-x: auto; box-shadow: var(--shadow-sm); margin-bottom: 1rem; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: var(--gray); font-weight: 600; position: sticky; top: 0; }
-        tr:hover { background: rgba(255,107,157,0.05); }
-        
-        /* Tabs */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        /* Botões */
-        .btn { padding: 0.4rem 0.8rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-success { background: var(--success); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-sm { padding: 0.2rem 0.5rem; font-size: 0.75rem; }
-        
-        /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .modal.active { display: flex; }
-        .modal-content { background: white; padding: 2rem; border-radius: 20px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark); }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
-        
-        /* Status Badges */
-        .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
-        .status-pending { background: #ffeaa7; color: #d63031; }
-        .status-completed { background: #badc58; color: #6ab04c; }
-        .status-active { background: #c8f7e0; color: #00b894; }
-        .status-inactive { background: #fde8e8; color: #e74c3c; }
-        
-        /* Login Overlay Melhorado */
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        /* Scrollbar customizada */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--gray); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--pink-dark); }
+
+        /* Login Overlay */
         .login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(ellipse at 20% 50%, #3a0a1e 0%, #1a0510 50%, #0d0308 100%);
+            background: radial-gradient(ellipse at 30% 40%, #3D0E22 0%, #1A0510 60%, #0D0308 100%);
             display: flex; justify-content: center; align-items: center; z-index: 10000;
-        }
-        .login-overlay::before {
-            content: '🍩'; position: absolute; font-size: 18rem; opacity: 0.04;
-            top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
-            pointer-events: none; user-select: none;
         }
         .login-overlay.hidden { display: none; }
         .hidden { display: none !important; }
-        
+
         .login-box {
-            background: rgba(255,255,255,0.98);
-            padding: 2.5rem 2rem; border-radius: 28px;
-            width: 90%; max-width: 400px; text-align: center;
-            animation: fadeInUp 0.5s ease;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,107,157,0.15);
-            position: relative;
+            background: var(--card); padding: 2.5rem; border-radius: var(--radius-lg);
+            width: 90%; max-width: 420px; text-align: center;
+            animation: fadeInUp 0.6s ease; box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255,107,168,0.2);
         }
-        .login-box::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-            background: linear-gradient(90deg, #ff6b9d, #ff4081, #ff6b9d);
-            background-size: 200% 100%; border-radius: 28px 28px 0 0;
-            animation: gradientBar 2s linear infinite;
-        }
-        @keyframes gradientBar { 0%{background-position:0% 0} 100%{background-position:200% 0} }
-        @keyframes fadeInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .master-badge {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            background: linear-gradient(135deg, #ff6b9d, #ff4081);
-            color: #fff; padding: 0.25rem 0.8rem; border-radius: 99px;
-            font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em;
-            text-transform: uppercase; margin-bottom: 1rem;
-            box-shadow: 0 4px 12px rgba(255,64,129,0.35);
-        }
-        .login-box h2 { color: #2d1020; margin-bottom: 0.25rem; font-family: 'Syne', sans-serif; font-size: 1.6rem; }
-        .login-box p.sub { color: #b07090; font-size: 0.82rem; margin-bottom: 1.5rem; }
-        
-        /* Password wrapper para visualizar senha */
+        .login-box .logo-emoji { font-size: 4rem; margin-bottom: 0.5rem; display: block; }
+        .login-box h2 { color: var(--brown); font-family: 'Baloo 2', sans-serif; font-size: 1.8rem; }
+        .login-box .sub { color: var(--brown-light); margin-bottom: 1.5rem; }
+
         .password-wrapper {
-            position: relative;
-            width: 100%;
-            margin-bottom: 0.85rem;
+            position: relative; width: 100%; margin-bottom: 1rem;
         }
         .password-wrapper input {
-            width: 100%; padding: 0.85rem 1rem;
-            border: 1.5px solid #eee0e8; border-radius: 12px;
-            font-size: 0.95rem; font-family: inherit;
-            background: #fff6f9; color: #2d1020;
-            transition: border-color 0.2s;
-            padding-right: 45px;
+            width: 100%; padding: 0.9rem 1.1rem;
+            border: 2px solid var(--gray-2); border-radius: 14px;
+            font-size: 0.95rem; background: var(--bg); color: var(--text);
+            transition: var(--transition);
         }
         .password-wrapper input:focus {
-            outline: none; border-color: #ff6b9d;
+            outline: none; border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(255,107,168,0.15);
         }
         .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 5px;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-            color: #b07090;
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer; font-size: 1.1rem;
+            color: var(--brown-mid); padding: 5px;
         }
-        .toggle-password:hover {
-            background: rgba(0,0,0,0.05);
+        .login-box button.main-login-btn {
+            width: 100%; padding: 0.9rem; background: var(--grad-main);
+            color: #fff; border: none; border-radius: 14px;
+            font-weight: 800; cursor: pointer; font-size: 1rem;
+            transition: var(--transition); margin-top: 0.5rem;
         }
-        
-        .login-box button {
-            width: 100%; padding: 0.9rem; margin-top: 0.2rem;
-            background: linear-gradient(135deg, #ff6b9d, #ff4081);
-            color: white; border: none; border-radius: 12px;
-            font-weight: 800; cursor: pointer; font-size: 0.97rem;
-            font-family: inherit; box-shadow: 0 6px 20px rgba(255,64,129,0.35);
-            transition: transform 0.15s, box-shadow 0.15s;
+        .login-box button.main-login-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+        /* Header */
+        .header {
+            background: var(--card); padding: 0.8rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: var(--shadow); backdrop-filter: blur(10px);
+            flex-wrap: wrap; gap: 0.8rem;
         }
-        .login-box button:hover:not(:disabled) { transform: translateY(-2px); }
-        .login-box button:disabled { opacity: 0.6; cursor: not-allowed; }
-        
-        /* Paginação */
-        .pagination { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; padding: 1rem; flex-wrap: wrap; }
-        .page-btn { padding: 0.3rem 0.8rem; border: 1px solid var(--gray); background: white; border-radius: 6px; cursor: pointer; min-height: 36px; min-width: 36px; }
-        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        
-        /* Chart */
-        .chart-container { background: white; border-radius: 16px; padding: 1rem; margin-bottom: 2rem; max-width: 100%; }
-        canvas { max-height: 300px; width: 100% !important; }
-        
-        /* Filtros */
-        .filters-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
-        .filter-select { padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
-        .btn-export { background: var(--success); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        
-        /* Toast */
-        #toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 9999; pointer-events: none; }
-        
-        /* Animação fadeInOut */
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 1.3rem; font-weight: 900; color: var(--pink);
+            font-family: 'Baloo 2', sans-serif;
         }
-        
-        /* Responsivo */
+        .logo-icon {
+            width: 42px; height: 42px; background: var(--grad-main);
+            border-radius: 14px; display: flex; align-items: center;
+            justify-content: center; font-size: 1.5rem;
+        }
+        .master-badge {
+            background: var(--grad-main); color: #fff;
+            padding: 0.2rem 0.8rem; border-radius: 99px;
+            font-size: 0.7rem; font-weight: 800; margin-left: 0.5rem;
+        }
+        .nav-tabs {
+            display: flex; gap: 0.5rem; flex-wrap: wrap;
+        }
+        .nav-tab {
+            padding: 0.5rem 1.2rem; border: none; background: var(--gray);
+            cursor: pointer; border-radius: 12px; font-weight: 700;
+            transition: var(--transition); color: var(--brown-mid);
+            font-size: 0.85rem;
+        }
+        .nav-tab:hover { background: var(--peach); color: var(--pink); transform: translateY(-2px); }
+        .nav-tab.active {
+            background: var(--grad-main); color: #fff;
+            box-shadow: 0 4px 12px rgba(255,107,168,0.35);
+        }
+        .nav-tab.logout { background: #FF5C72; color: #fff; }
+        .nav-tab.logout:hover { background: #e74c3c; }
+
+        .container { padding: 1.8rem; max-width: 1420px; margin: 0 auto; }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem; margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--card); padding: 1.3rem; border-radius: var(--radius);
+            text-align: center; box-shadow: var(--shadow);
+            transition: var(--transition); border: 1px solid rgba(255,107,168,0.1);
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .stat-number {
+            font-size: 2rem; font-weight: 900; color: var(--pink);
+            font-family: 'Baloo 2', sans-serif;
+        }
+        .stat-label { color: var(--brown-mid); margin-top: 0.3rem; font-weight: 700; }
+
+        /* Tables */
+        .table-container {
+            background: var(--card); border-radius: var(--radius);
+            overflow-x: auto; margin-bottom: 1.2rem;
+            box-shadow: var(--shadow); border: 1px solid rgba(255,107,168,0.08);
+        }
+        .table-header {
+            padding: 1rem 1.2rem; border-bottom: 1px solid var(--gray-2);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 0.8rem;
+        }
+        .table-header h3 { font-family: 'Baloo 2', sans-serif; color: var(--brown); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.9rem 1rem; text-align: left; border-bottom: 1px solid var(--gray-2); }
+        th { background: var(--grad-pastel); font-weight: 800; color: var(--brown); font-family: 'Baloo 2', sans-serif; }
+        tr:hover { background: rgba(255,107,168,0.04); }
+
+        /* Buttons */
+        .btn {
+            padding: 0.45rem 1rem; border: none; border-radius: 10px;
+            cursor: pointer; font-weight: 700; transition: var(--transition);
+            font-size: 0.85rem;
+        }
+        .btn-primary { background: var(--grad-main); color: #fff; }
+        .btn-success { background: var(--mint-dark); color: #fff; }
+        .btn-danger { background: #FF5C72; color: #fff; }
+        .btn-warning { background: #FFB347; color: #fff; }
+        .btn-sm { padding: 0.25rem 0.7rem; font-size: 0.75rem; }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+        /* Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+            justify-content: center; align-items: center; z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+        .modal.active { display: flex; animation: fadeIn 0.3s ease; }
+        .modal-content {
+            background: var(--card); padding: 2rem; border-radius: var(--radius-lg);
+            width: 90%; max-width: 520px; max-height: 85vh; overflow-y: auto;
+            box-shadow: var(--shadow-lg); animation: slideUp 0.3s ease;
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--peach);
+        }
+        .modal-header h3 { font-family: 'Baloo 2', sans-serif; color: var(--brown); }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label {
+            display: block; margin-bottom: 0.4rem; font-weight: 700;
+            color: var(--brown); font-size: 0.85rem;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.7rem 1rem;
+            border: 2px solid var(--gray-2); border-radius: 12px;
+            background: var(--bg); color: var(--text);
+            transition: var(--transition);
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(255,107,168,0.12);
+        }
+
+        /* Image Preview */
+        .image-preview-container { display: none; margin-bottom: 1rem; text-align: center; }
+        .image-preview-img { max-width: 100%; max-height: 150px; border-radius: 12px; object-fit: cover; }
+        .product-thumb-img { width: 45px; height: 45px; object-fit: cover; border-radius: 10px; margin-right: 10px; vertical-align: middle; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        .filters-bar { display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .filter-select {
+            padding: 0.5rem 1rem; border-radius: 10px;
+            border: 2px solid var(--gray-2); background: var(--card);
+            color: var(--text); font-weight: 600;
+        }
+        .status-badge {
+            display: inline-block; padding: 0.2rem 0.7rem; border-radius: 20px;
+            font-size: 0.7rem; font-weight: 800;
+        }
+        .status-active { background: var(--mint); color: #00875A; }
+        .status-inactive { background: #FFE0E0; color: #FF5C72; }
+        .status-pending { background: var(--yellow); color: #B8860B; }
+        .status-completed { background: var(--mint); color: #00875A; }
+
+        .pagination { display: flex; justify-content: center; gap: 0.4rem; margin-top: 1rem; flex-wrap: wrap; }
+        .page-btn {
+            padding: 0.3rem 0.8rem; border: 2px solid var(--gray-2);
+            background: var(--card); border-radius: 8px; cursor: pointer;
+            font-weight: 700; transition: var(--transition);
+        }
+        .page-btn:hover { border-color: var(--pink); background: var(--pink-pale); }
+        .page-btn.active { background: var(--grad-main); color: #fff; border-color: transparent; }
+
+        #toast-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            z-index: 9999; display: flex; flex-direction: column; gap: 8px;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--brown); color: #fff; padding: 10px 20px;
+            border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+            animation: toastFade 2.5s ease forwards; box-shadow: var(--shadow);
+        }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes toastFade { 0% { opacity: 0; transform: translateY(10px); } 15% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; transform: translateY(-10px); } }
+
         @media (max-width: 768px) {
-            .container { padding: 0.75rem; }
-            .header { padding: 0.75rem 1rem; gap: 0.75rem; flex-direction: column; align-items: flex-start; }
-            .nav-tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
-            .nav-tab { white-space: nowrap; flex-shrink: 0; min-height: 44px; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-            .stat-number { font-size: 1.4rem; }
-            .table-container { overflow-x: auto; }
-            table { min-width: 480px; }
-            th, td { padding: 0.6rem 0.5rem; font-size: 0.78rem; }
-            .filters-bar { flex-direction: column; align-items: stretch; }
-            .login-box { padding: 1.5rem; width: 92%; }
-            .password-wrapper input { padding: 0.75rem 1rem; padding-right: 45px; }
+            .container { padding: 1rem; }
+            .header { padding: 0.8rem 1rem; flex-direction: column; align-items: stretch; }
+            .nav-tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; }
+            .nav-tab { white-space: nowrap; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+            .stat-number { font-size: 1.5rem; }
+            th, td { padding: 0.6rem; font-size: 0.8rem; }
         }
-        
-        /* Checkbox estilo */
-        .remember-checkbox {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin: 0.8rem 0;
-            font-size: 0.75rem;
-            color: #999;
-            cursor: pointer;
+
+        /* Admin Card */
+        .admin-card {
+            background: var(--card); border-radius: var(--radius);
+            padding: 1rem; display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 0.8rem;
+            border: 1px solid var(--gray-2); transition: var(--transition);
         }
-        .remember-checkbox input {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            margin: 0;
+        .admin-card:hover { transform: translateX(4px); border-color: var(--pink-light); }
+        .admin-info h4 { color: var(--brown); margin-bottom: 0.2rem; }
+        .admin-info p { font-size: 0.8rem; color: var(--brown-light); }
+        .admin-badge {
+            padding: 0.2rem 0.6rem; border-radius: 99px; font-size: 0.7rem;
+            font-weight: 700; background: var(--grad-main); color: #fff;
+        }
+        .admin-badge.moderador { background: #FFB347; }
+        .invite-card {
+            background: linear-gradient(135deg, var(--peach), var(--lavender));
+            border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- TELA DE LOGIN COM E-MAIL E SENHA (FIREBASE AUTH) -->
 <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
-        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🍩</div>
-        <div class="master-badge">👑 Master Admin</div>
+        <span class="logo-emoji">🍩</span>
         <h2>Donut ALR Admin</h2>
         <p class="sub">Acesso restrito · Área administrativa</p>
-        
         <div class="password-wrapper">
-            <input type="email" id="adminEmail" placeholder="E-mail de administrador" autocomplete="email">
+            <input type="email" id="adminEmail" placeholder="E-mail de administrador" value="moreiralptctf@gmail.com">
         </div>
         <div class="password-wrapper">
-            <input type="password" id="adminPass" placeholder="Senha" autocomplete="current-password">
-            <button type="button" class="toggle-password" onclick="toggleAdminPassword()">👁️</button>
+            <input type="password" id="adminPass" placeholder="Senha" value="Moreira17">
+            <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
         </div>
-        
-        <label class="remember-checkbox">
-            <input type="checkbox" id="rememberAdmin" checked> Manter conectado por 7 dias
-        </label>
-        
-        <button onclick="loginAdmin()" id="btnLoginAdmin">🔓 Entrar no Painel</button>
-        <p id="loginAdminMsg" style="margin-top:0.8rem; font-size:0.78rem; color:#e74c3c; min-height:1.2em; text-align:center;"></p>
-        <p style="margin-top:1rem; font-size:0.7rem; color:#999;">🔒 Login seguro via Firebase Authentication</p>
+        <button onclick="loginAdmin()" id="btnLoginAdmin" class="main-login-btn">🔓 Entrar no Painel</button>
+        <p id="loginAdminMsg" style="margin-top:0.8rem; font-size:0.75rem; color:#e74c3c;"></p>
     </div>
 </div>
 
-<!-- PAINEL ADMIN (oculto até login) -->
 <div id="adminPanel" class="hidden">
     <div class="header">
         <div class="logo">
             <div class="logo-icon">🍩</div>
-            <span>Donut ALR</span>
-            <span class="master-indicator" id="masterBadge">👑 Master</span>
-            <span class="sync-badge" id="syncStatus">🔄 Firebase</span>
+            <span>Donut ALR Admin</span>
+            <span class="master-badge" id="masterBadge">👑 Master</span>
         </div>
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
             <button class="nav-tab" onclick="switchTab('products')">🍩 Produtos</button>
             <button class="nav-tab" onclick="switchTab('orders')">📦 Pedidos</button>
             <button class="nav-tab" onclick="switchTab('encomendas')">📅 Encomendas</button>
-            <button class="nav-tab" onclick="switchTab('users')">👥 Usuários</button>
-            <button class="nav-tab" onclick="switchTab('avaliacoes')">⭐ Avaliações</button>
-            <button class="nav-tab" onclick="switchTab('logs')">📋 Logs</button>
-            <button class="nav-tab" id="tabAdmins" onclick="switchTab('admins')" style="background:linear-gradient(135deg,#ff6b9d,#ff4081);color:white;">👑 Admins</button>
-            <button class="nav-tab" style="background:var(--danger);color:white;" onclick="logout()">🚪 Sair</button>
+            <button class="nav-tab" onclick="switchTab('users')">👥 Clientes</button>
+            <button class="nav-tab" onclick="switchTab('admins')">👑 Administradores</button>
+            <button class="nav-tab logout" onclick="logout()">🚪 Sair</button>
         </div>
     </div>
 
     <div class="container">
         <div id="dashboardTab" class="tab-content active">
-            <div class="stats-grid" id="statsGrid"><div class="stat-card"><div class="stat-number">-</div><div class="stat-label">Carregando...</div></div></div>
-            <div class="chart-container"><h3>📈 Faturamento Mensal</h3><canvas id="monthlyChart"></canvas></div>
-            <div class="table-container"><h3 style="padding: 1rem;">📈 Últimos Pedidos</h3><div id="recentOrders" class="loading">Carregando pedidos...</div></div>
+            <div class="stats-grid" id="statsGrid"></div>
+            <div class="table-container">
+                <div class="table-header"><h3>📈 Últimos Pedidos</h3></div>
+                <div id="recentOrders"></div>
+            </div>
         </div>
 
         <div id="productsTab" class="tab-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-                <h2>🍩 Gestão de Produtos</h2>
-                <button class="btn btn-primary" onclick="openProductModal()">+ Novo Produto</button>
-            </div>
             <div class="table-container">
+                <div class="table-header">
+                    <h3>🍩 Gestão de Produtos</h3>
+                    <button class="btn btn-primary" onclick="openProductModal()">+ Novo Produto</button>
+                </div>
                 <table>
-                    <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody id="productsTable"><tr><td colspan="6" class="loading">Carregando produtos...</td></tr></tbody>
+                    <thead><tr><th>Imagem</th><th>Produto</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="productsTable"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="ordersTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">📦 Pedidos Recebidos</h2>
-            <div class="filters-bar">
-                <select id="orderStatusFilter" class="filter-select" onchange="filterOrders()">
-                    <option value="all">📋 Todos</option>
-                    <option value="pending">⏳ Pendentes</option>
-                    <option value="completed">✅ Concluídos</option>
-                </select>
-                <button class="btn-export" onclick="exportOrdersToCSV()">📎 Exportar CSV</button>
-            </div>
             <div class="table-container">
-                <table>
-                    <thead><tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
-                    <tbody id="ordersTable"><tr><td colspan="7" class="loading">Carregando pedidos...</td></tr></tbody>
-                </table>
+                <div class="table-header"><h3>📦 Pedidos Recebidos</h3></div>
+                <div class="filters-bar">
+                    <select id="orderStatusFilter" class="filter-select" onchange="filterOrders()">
+                        <option value="all">📋 Todos</option>
+                        <option value="pending">⏳ Pendentes</option>
+                        <option value="completed">✅ Concluídos</option>
+                    </select>
+                    <button class="btn btn-success" onclick="exportOrdersToCSV()">📎 Exportar CSV</button>
+                    <button class="btn btn-danger" onclick="zerarTodosPedidos()">🗑️ Zerar Todos</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead><tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
+                        <tbody id="ordersTable"></tbody>
+                    </table>
+                </div>
                 <div id="ordersPagination" class="pagination"></div>
             </div>
         </div>
 
-        <div id="usersTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">👥 Clientes Cadastrados</h2>
-            <div class="table-container">
-                <table>
-                    <thead><tr><th>#</th><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Cadastro</th><th>Ações</th></tr></thead>
-                    <tbody id="usersTable"><tr><td colspan="6" class="loading">Carregando clientes...</td></tr></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="avaliacoesTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">⭐ Avaliações dos Clientes</h2>
-            <div class="table-container">
-                <table>
-                    <thead><tr><th>Data</th><th>Cliente</th><th>Estrelas</th><th>Pedido ID</th></tr></thead>
-                    <tbody id="avaliacoesTable"><tr><td colspan="4" class="loading">Carregando avaliações...</td></tr></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="logsTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">📋 Logs do Sistema</h2>
-            <div class="table-container">
-                <table>
-                    <thead><tr><th>Data/Hora</th><th>Usuário</th><th>Ação</th><th>Detalhes</th></tr></thead>
-                    <tbody id="logsTable"><tr><td colspan="4" class="loading">Carregando logs...</td></tr></tbody>
-                </table>
-            </div>
-        </div>
-
         <div id="encomendasTab" class="tab-content">
-            <h2 style="margin-bottom: 1rem;">📅 Encomendas</h2>
-            <div class="filters-bar">
-                <select id="encomendaStatusFilter" class="filter-select" onchange="filterEncomendas()">
-                    <option value="all">📋 Todas</option>
-                    <option value="encomenda">⏳ Pendentes</option>
-                    <option value="encomenda_confirmada">✅ Confirmadas</option>
-                    <option value="encomenda_cancelada">❌ Canceladas</option>
-                </select>
-                <button class="btn-export" onclick="exportEncomendasToCSV()">📎 Exportar CSV</button>
-            </div>
             <div class="table-container">
-                <table>
-                    <thead><tr><th>ID</th><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Data Entrega</th><th>Horário</th><th>Obs</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody id="encomendasTable"><tr><td colspan="9" class="loading">Carregando encomendas...</td></tr></tbody>
-                </table>
-                <div id="encomendas_pagination" class="pagination"></div>
-            </div>
-        </div>
-
-        <!-- ABA ADMINS -->
-        <div id="adminsTab" class="tab-content">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
-                <div>
-                    <h2 style="margin-bottom:0.25rem;">👑 Gerenciar Administradores</h2>
-                    <p style="color:#999; font-size:0.85rem;">Convide pessoas de confiança para acessar este painel como administradores.</p>
-                </div>
-            </div>
-
-            <!-- Card convite -->
-            <div style="background:white; border-radius:20px; padding:1.8rem; box-shadow:0 2px 12px rgba(200,80,120,0.08); border:1.5px solid rgba(255,107,157,0.12); margin-bottom:1.5rem;">
-                <h3 style="font-family:'Syne',sans-serif; color:#4a2030; margin-bottom:0.25rem;">✉️ Convidar novo administrador</h3>
-                <p style="color:#999; font-size:0.82rem; margin-bottom:1.2rem;">O convidado receberá um e-mail com link para definir sua senha e acessar o painel.</p>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; margin-bottom:0.85rem;" id="inviteFormGrid">
-                    <div class="form-group" style="margin:0;">
-                        <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">👤 Nome do administrador</label>
-                        <input type="text" id="inviteNome" placeholder="Ex: Maria Silva" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
-                    </div>
-                    <div class="form-group" style="margin:0;">
-                        <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">📧 E-mail</label>
-                        <input type="email" id="inviteEmail" placeholder="admin@exemplo.com" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
-                    </div>
-                    <div class="form-group" style="margin:0;">
-                        <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">🔑 Senha temporária</label>
-                        <input type="text" id="inviteSenha" placeholder="Mín. 6 caracteres" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
-                    </div>
-                    <div class="form-group" style="margin:0;">
-                        <label style="font-size:0.82rem; font-weight:700; color:#4a2030; display:block; margin-bottom:0.4rem;">🎖️ Nível de acesso</label>
-                        <select id="inviteNivel" style="width:100%; padding:0.75rem; border:1.5px solid #eee0e8; border-radius:10px; font-family:inherit; font-size:0.9rem; background:#fff6f9; color:#2d1020;">
-                            <option value="admin">Admin (acesso padrão)</option>
-                            <option value="moderador">Moderador (só pedidos)</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
-                    <button onclick="convidarAdmin()" id="btnConvidarAdmin"
-                        style="background:linear-gradient(135deg,#ff6b9d,#ff4081); color:#fff; border:none; padding:0.8rem 1.8rem; border-radius:12px; font-weight:800; cursor:pointer; font-family:inherit; font-size:0.9rem; box-shadow:0 4px 14px rgba(255,64,129,0.3);">
-                        ✉️ Enviar convite
-                    </button>
-                    <span id="inviteMsg" style="font-size:0.83rem; font-weight:600; min-height:1.2em;"></span>
-                </div>
-                <div style="background:#fff6f9; border:1.5px solid #ffd4e8; border-radius:12px; padding:0.9rem 1rem; margin-top:1.2rem; font-size:0.8rem; color:#7a4055; line-height:1.6;">
-                    <strong>ℹ️ Como funciona:</strong> O sistema registra o novo admin no Firebase Authentication com a senha temporária que você definiu. Em seguida, registra na coleção <code>admins</code> do Firestore.
-                </div>
-            </div>
-
-            <!-- Lista de admins cadastrados -->
-            <div style="background:white; border-radius:20px; box-shadow:0 2px 12px rgba(200,80,120,0.08); border:1.5px solid rgba(255,107,157,0.12); overflow:hidden;">
-                <div style="padding:1.2rem 1.5rem; border-bottom:1px solid #f5eef2; display:flex; justify-content:space-between; align-items:center;">
-                    <h3 style="font-family:'Syne',sans-serif; color:#4a2030;">👥 Administradores cadastrados</h3>
-                    <button onclick="loadAdmins()" style="background:#f5eef2; border:none; padding:0.4rem 0.9rem; border-radius:8px; cursor:pointer; font-size:0.8rem; font-weight:700; color:#b07090;">🔄 Atualizar</button>
-                </div>
-                <div class="table-container" style="box-shadow:none; margin:0; border-radius:0;">
+                <div class="table-header"><h3>📅 Encomendas Agendadas</h3></div>
+                <div style="overflow-x: auto;">
                     <table>
-                        <thead><tr><th>Nome</th><th>E-mail</th><th>Nível</th><th>Adicionado em</th><th>Adicionado por</th><th>Ações</th></tr></thead>
-                        <tbody id="adminsTable"><tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Carregando...</td></tr></tbody>
+                        <thead><tr><th>Cliente</th><th>WhatsApp</th><th>Total</th><th>Data Entrega</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody id="encomendasTable"></tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <div id="usersTab" class="tab-content">
+            <div class="table-container">
+                <div class="table-header"><h3>👥 Clientes Cadastrados</h3></div>
+                <table>
+                    <thead><tr><th>#</th><th>Nome</th><th>WhatsApp</th><th>Email</th><th>Ações</th></tr></thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="adminsTab" class="tab-content">
+            <div class="invite-card">
+                <h3 style="color: var(--brown); margin-bottom: 0.5rem;">✉️ Convidar Administrador</h3>
+                <p style="color: var(--brown-mid); font-size: 0.8rem; margin-bottom: 1rem;">Adicione novos administradores para ajudar na gestão</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <input type="text" id="inviteNome" placeholder="👤 Nome completo" class="auth-input" style="padding: 0.7rem; border-radius: 10px; border: 2px solid var(--gray-2); background: var(--bg);">
+                    <input type="email" id="inviteEmail" placeholder="📧 E-mail" class="auth-input" style="padding: 0.7rem; border-radius: 10px; border: 2px solid var(--gray-2); background: var(--bg);">
+                    <input type="password" id="inviteSenha" placeholder="🔒 Senha (mín. 6)" class="auth-input" style="padding: 0.7rem; border-radius: 10px; border: 2px solid var(--gray-2); background: var(--bg);">
+                    <select id="inviteNivel" style="padding: 0.7rem; border-radius: 10px; border: 2px solid var(--gray-2); background: var(--bg);">
+                        <option value="admin">🛡️ Admin (acesso total)</option>
+                        <option value="moderador">🔸 Moderador (apenas pedidos)</option>
+                    </select>
+                </div>
+                <button onclick="convidarAdmin()" class="btn btn-primary" style="margin-top: 1rem; width: 100%;">✉️ Enviar Convite</button>
+                <p id="inviteMsg" style="margin-top: 0.5rem; font-size: 0.8rem;"></p>
+            </div>
+            <div class="table-container">
+                <div class="table-header"><h3>👑 Administradores Ativos</h3></div>
+                <div id="adminsList"></div>
             </div>
         </div>
     </div>
@@ -441,12 +448,15 @@
 
 <div id="productModal" class="modal">
     <div class="modal-content">
-        <div class="modal-header"><h3 id="productModalTitle">Novo Produto</h3><button class="btn btn-danger btn-sm" onclick="closeProductModal()">✕</button></div>
+        <div class="modal-header">
+            <h3 id="productModalTitle">Novo Produto</h3>
+            <button class="btn btn-danger btn-sm" onclick="closeProductModal()">✕</button>
+        </div>
         <form id="productForm" onsubmit="event.preventDefault(); saveProduct()">
             <input type="hidden" id="productId">
             <div class="form-group"><label>🍩 Nome</label><input type="text" id="productName" required></div>
             <div class="form-group"><label>📂 Categoria</label>
-                <select id="productCategory" required onchange="toggleComboFields()">
+                <select id="productCategory" required>
                     <option value="Donuts">🍩 Donuts</option>
                     <option value="Cupcakes">🧁 Cupcakes</option>
                     <option value="Bolos">🎂 Bolos</option>
@@ -454,25 +464,22 @@
                     <option value="Combos">🎁 Combos</option>
                 </select>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
                 <div class="form-group"><label>💰 Preço (R$)</label><input type="number" step="0.01" id="productPrice" required></div>
-                <div class="form-group" id="precoOriginalGroup" style="display:none;"><label>💸 Preço Original (R$)</label><input type="number" step="0.01" id="productPrecoOriginal" placeholder="Ex: 68.90"></div>
+                <div class="form-group" id="precoOriginalGroup" style="display: none;"><label>💸 Preço Original</label><input type="number" step="0.01" id="productPrecoOriginal"></div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
                 <div class="form-group"><label>📦 Estoque</label><input type="number" id="productEstoque" value="99" min="0"></div>
                 <div class="form-group"><label>😊 Emoji</label><input type="text" id="productEmoji" placeholder="🍩" maxlength="2"></div>
             </div>
-            <div class="form-group"><label>🖼️ URL da Imagem (opcional)</label><input type="url" id="productImagem" placeholder="https://exemplo.com/foto-donut.jpg" oninput="previewProductImage(this.value)"></div>
-            <div id="imagePreviewContainer" style="display:none;margin-bottom:1rem;"><img id="imagePreview" src="" alt="Preview" style="width:100%;max-height:160px;object-fit:cover;border-radius:12px;border:1px solid #eee;"></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
-                <div class="form-group"><label>🏷️ Badge (ex: ⭐, 🔥, Novo)</label><input type="text" id="productBadge" placeholder="Ex: ⭐ Top" maxlength="20"></div>
-                <div class="form-group"><label>🔖 Tag (ex: Mais pedido, Premium)</label><input type="text" id="productTag" placeholder="Ex: Mais pedido" maxlength="20"></div>
-            </div>
-            <div class="form-group"><label>📝 Descrição</label><textarea id="productDesc" rows="2" placeholder="Ex: Donut com cobertura de Nutella..."></textarea></div>
-            <div class="form-group"><label>📌 Status</label><select id="productStatus"><option value="true">✅ Ativo</option><option value="false">❌ Inativo</option></select></div>
+            <div class="form-group"><label>🖼️ URL da Imagem</label><input type="url" id="productImagem" placeholder="https://..." oninput="previewProductImage(this.value)"></div>
+            <div class="image-preview-container" id="imagePreviewContainer"><img class="image-preview-img" id="imagePreview" src="" alt="Preview"></div>
+            <div class="form-group"><label>🏷️ Badge</label><input type="text" id="productBadge" placeholder="⭐ Top"></div>
+            <div class="form-group"><label>📝 Descrição</label><textarea id="productDesc" rows="2"></textarea></div>
+            <div class="form-group"><label>Status</label><select id="productStatus"><option value="true">✅ Ativo</option><option value="false">❌ Inativo</option></select></div>
             <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
                 <button type="button" class="btn" onclick="closeProductModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">💾 Salvar Produto</button>
+                <button type="submit" class="btn btn-primary">💾 Salvar</button>
             </div>
         </form>
     </div>
@@ -480,7 +487,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, writeBatch, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -496,92 +503,39 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // ========== MASTER ADMIN (ofuscado) ==========
-    function _getMasterEmail() { 
-        return atob('bW9yZWlyYWxwdGN0Zg==') + atob('QGdtYWlsLmNvbQ=='); 
-    }
-    const ADMIN_EMAILS = [_getMasterEmail()];
-
-    let unsubscribeOrders = null;
-    let unsubscribeUsers = null;
+    const MASTER_EMAIL = "moreiralptctf@gmail.com";
+    let currentUser = null;
     let allOrders = [];
     let currentOrderPage = 1;
-    let ordersPerPage = 15;
+    let ordersPerPage = 10;
     let currentOrderFilter = 'all';
-    let soundEnabled = true;
-    let lastOrderCount = 0;
     let monthlyChart = null;
-    let currentUser = null;
 
-    // ========== VISUALIZAR SENHA ==========
-    window.toggleAdminPassword = function() {
-        const passInput = document.getElementById('adminPass');
-        const btn = event.target;
-        if (passInput.type === 'password') {
-            passInput.type = 'text';
-            btn.textContent = '🙈';
-        } else {
-            passInput.type = 'password';
-            btn.textContent = '👁️';
-        }
+    // Dark mode persistente
+    const savedTheme = localStorage.getItem('admin_theme');
+    if (savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+    window.togglePassword = function() {
+        const pass = document.getElementById('adminPass');
+        pass.type = pass.type === 'password' ? 'text' : 'password';
     };
 
-    // ========== SESSÃO PERSISTENTE (LOGIN AUTOMÁTICO) ==========
-    function salvarSessaoAdmin(email, senha, remember = true) {
-        if (remember) {
-            const sessao = {
-                email: email,
-                senhaHash: btoa(senha),
-                expiraEm: Date.now() + (7 * 24 * 60 * 60 * 1000)
-            };
-            localStorage.setItem('admin_sessao', JSON.stringify(sessao));
-        } else {
-            localStorage.removeItem('admin_sessao');
-        }
-    }
-
-    function verificarSessaoAdmin() {
-        const sessaoStr = localStorage.getItem('admin_sessao');
-        if (!sessaoStr) return false;
-        
-        try {
-            const sessao = JSON.parse(sessaoStr);
-            if (Date.now() < sessao.expiraEm) {
-                document.getElementById('adminEmail').value = sessao.email;
-                document.getElementById('adminPass').value = atob(sessao.senhaHash);
-                return true;
-            } else {
-                localStorage.removeItem('admin_sessao');
-                return false;
-            }
-        } catch(e) {
-            return false;
-        }
-    }
-
-    // ========== FUNÇÃO DE LOGIN (E-MAIL + SENHA) ==========
+    // Login
     window.loginAdmin = async function() {
         const email = document.getElementById('adminEmail').value.trim().toLowerCase();
         const pass = document.getElementById('adminPass').value;
-        const remember = document.getElementById('rememberAdmin')?.checked || false;
-        const btn = document.getElementById('btnLoginAdmin');
         const msg = document.getElementById('loginAdminMsg');
         
-        if (!email || !pass) { 
-            msg.textContent = '⚠️ Preencha e-mail e senha.'; 
-            return; 
-        }
+        if (!email || !pass) { msg.textContent = '⚠️ Preencha e-mail e senha.'; return; }
         
-        btn.disabled = true; 
-        btn.textContent = 'Entrando...'; 
-        msg.textContent = '';
+        const btn = document.getElementById('btnLoginAdmin');
+        btn.disabled = true; btn.textContent = 'Entrando...';
         
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, pass);
             const user = userCredential.user;
             
-            let isAuthorized = ADMIN_EMAILS.includes(user.email);
-            
+            let isAuthorized = (user.email === MASTER_EMAIL);
             if (!isAuthorized) {
                 const q = query(collection(db, 'admins'), where('email', '==', user.email));
                 const snap = await getDocs(q);
@@ -590,21 +544,16 @@
             
             if (!isAuthorized) {
                 await signOut(auth);
-                msg.textContent = '🚫 Você não tem permissão de administrador.';
-                btn.disabled = false;
-                btn.textContent = '🔓 Entrar no Painel';
+                msg.textContent = '🚫 Você não tem permissão.';
+                btn.disabled = false; btn.textContent = '🔓 Entrar no Painel';
                 return;
-            }
-            
-            if (remember) {
-                salvarSessaoAdmin(email, pass, true);
             }
             
             currentUser = user;
             document.getElementById('loginOverlay').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden');
             
-            if (ADMIN_EMAILS.includes(user.email)) {
+            if (user.email === MASTER_EMAIL) {
                 document.getElementById('masterBadge').innerHTML = '👑 Master';
             } else {
                 document.getElementById('masterBadge').innerHTML = '🛡️ Admin';
@@ -614,162 +563,84 @@
             showToast(`✅ Bem-vindo, ${user.email.split('@')[0]}!`);
             
         } catch(error) {
-            const errorMessages = {
-                'auth/invalid-credential': '❌ E-mail ou senha incorretos.',
-                'auth/user-not-found': '❌ E-mail não cadastrado.',
-                'auth/wrong-password': '❌ Senha incorreta.',
-                'auth/too-many-requests': '⚠️ Muitas tentativas. Aguarde.',
-                'auth/invalid-email': '❌ E-mail inválido.'
-            };
-            msg.textContent = errorMessages[error.code] || `❌ Erro: ${error.message}`;
+            msg.textContent = '❌ E-mail ou senha incorretos.';
         } finally {
-            btn.disabled = false;
-            btn.textContent = '🔓 Entrar no Painel';
+            btn.disabled = false; btn.textContent = '🔓 Entrar no Painel';
         }
     };
 
-    // ========== LOGOUT ==========
     window.logout = async function() {
-        if (unsubscribeOrders) unsubscribeOrders();
-        if (unsubscribeUsers) unsubscribeUsers();
-        try { 
-            await signOut(auth); 
-            currentUser = null;
-            localStorage.removeItem('admin_sessao');
-        } catch(e) { console.warn(e); }
-        
+        await signOut(auth);
         document.getElementById('loginOverlay').classList.remove('hidden');
         document.getElementById('adminPanel').classList.add('hidden');
-        document.getElementById('adminEmail').value = '';
-        document.getElementById('adminPass').value = '';
-        document.getElementById('loginAdminMsg').textContent = '';
-        showToast('👋 Você saiu do painel administrativo');
+        showToast('👋 Saiu do painel');
     };
 
-    // ========== VERIFICAÇÃO DE AUTENTICAÇÃO ==========
-    function checkAuth() {
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                let isAuthorized = ADMIN_EMAILS.includes(user.email);
-                if (!isAuthorized) {
-                    try {
-                        const q = query(collection(db, 'admins'), where('email', '==', user.email));
-                        const snap = await getDocs(q);
-                        isAuthorized = !snap.empty;
-                    } catch(e) { console.error(e); }
-                }
-                
-                if (isAuthorized) {
-                    currentUser = user;
-                    document.getElementById('loginOverlay').classList.add('hidden');
-                    document.getElementById('adminPanel').classList.remove('hidden');
-                    
-                    if (ADMIN_EMAILS.includes(user.email)) {
-                        document.getElementById('masterBadge').innerHTML = '👑 Master';
-                    } else {
-                        document.getElementById('masterBadge').innerHTML = '🛡️ Admin';
-                    }
-                    
-                    iniciarPainel();
-                } else {
-                    await signOut(auth);
-                    document.getElementById('loginOverlay').classList.remove('hidden');
-                    document.getElementById('adminPanel').classList.add('hidden');
-                    document.getElementById('loginAdminMsg').textContent = '🚫 Você não tem permissão de administrador.';
-                }
-            } else {
-                document.getElementById('loginOverlay').classList.remove('hidden');
-                document.getElementById('adminPanel').classList.add('hidden');
-            }
-        });
+    function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = msg;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
     }
 
-    // ========== TOAST ==========
-    function showToast(msg) { 
-        const container = document.getElementById('toast-container'); 
-        if(!container) return; 
-        const toast = document.createElement('div'); 
-        toast.textContent = msg; 
-        toast.style.cssText = `background:#333;color:white;padding:10px 20px;border-radius:50px;font-size:14px;animation:fadeInOut 2.5s ease;pointer-events:none;white-space:nowrap;`; 
-        container.appendChild(toast); 
-        setTimeout(() => { if(container.contains(toast)) container.removeChild(toast); }, 2500); 
-    }
-
-    // ========== LOGS ==========
-    async function addLog(usuario, acao, detalhes) {
-        try { 
-            await addDoc(collection(db, 'logs'), { 
-                data: new Date().toLocaleString('pt-BR'), 
-                usuario, acao, detalhes, 
-                criadoEm: serverTimestamp() 
-            }); 
-        } catch(e) { console.error(e); }
-    }
-
-    // ========== DASHBOARD ==========
     async function loadDashboard() {
-        try {
-            const [produtosSnap, pedidosSnap, usersSnap] = await Promise.all([
-                getDocs(collection(db, 'produtos')), 
-                getDocs(collection(db, 'pedidos')), 
-                getDocs(collection(db, 'users'))
-            ]);
-            const pedidos = pedidosSnap.docs.map(d => d.data());
-            const totalVendas = pedidos.reduce((sum, p) => sum + (Number(p.total) || 0), 0);
-            const pendentes = pedidos.filter(p => p.status !== 'completed' && p.status !== 'encomenda' && p.status !== 'encomenda_confirmada' && p.status !== 'encomenda_cancelada').length;
-            const encomendas = pedidos.filter(p => p.tipoEncomenda === true || p.status === 'encomenda').length;
-            
-            document.getElementById('statsGrid').innerHTML = `
-                <div class="stat-card"><div class="stat-number">${produtosSnap.size}</div><div class="stat-label">📦 Produtos</div></div>
-                <div class="stat-card"><div class="stat-number">${pedidosSnap.size}</div><div class="stat-label">📋 Pedidos</div></div>
-                <div class="stat-card"><div class="stat-number">${usersSnap.size}</div><div class="stat-label">👥 Clientes</div></div>
-                <div class="stat-card"><div class="stat-number">R$ ${totalVendas.toFixed(2).replace('.', ',')}</div><div class="stat-label">💰 Faturamento</div></div>
-                <div class="stat-card"><div class="stat-number">${pendentes}</div><div class="stat-label">⏳ Pendentes</div></div>
-                <div class="stat-card" style="border: 2px solid #c8a4f7;"><div class="stat-number" style="color:#8b5cf6;">${encomendas}</div><div class="stat-label">📅 Encomendas</div></div>`;
-            
-            const monthlyData = {};
-            pedidos.forEach(p => { 
-                if(p.data) { 
-                    const mes = p.data.split('/')[1] + '/' + p.data.split('/')[2]; 
-                    monthlyData[mes] = (monthlyData[mes] || 0) + (Number(p.total) || 0); 
-                } 
-            });
-            const meses = Object.keys(monthlyData).sort();
-            const valores = meses.map(m => monthlyData[m]);
-            if(monthlyChart) monthlyChart.destroy();
-            const ctx = document.getElementById('monthlyChart').getContext('2d');
-            monthlyChart = new Chart(ctx, { 
-                type: 'bar', 
-                data: { labels: meses, datasets: [{ label: 'Faturamento (R$)', data: valores, backgroundColor: '#ff6b9d' }] }, 
-                options: { responsive: true, maintainAspectRatio: true } 
-            });
-            
-            const recentes = pedidosSnap.docs.slice(-5).reverse().map(d => ({ id: d.id, ...d.data() }));
-            document.getElementById('recentOrders').innerHTML = `<table style="width:100%"><thead><tr><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></td></thead><tbody>${recentes.map(p => `<tr><td>${p.cliente || '-'}</td><td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td><td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Concluído' : 'Pendente'}</span></td><td>${p.data || '-'}</td></tr>`).join('')}${recentes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum pedido ainda</td></tr>' : ''}</tbody></tr>`;
-        } catch(e) { console.error(e); }
+        const produtosSnap = await getDocs(collection(db, 'produtos'));
+        const pedidosSnap = await getDocs(collection(db, 'pedidos'));
+        const usersSnap = await getDocs(collection(db, 'users'));
+        
+        const totalVendas = pedidosSnap.docs.reduce((s, d) => s + (Number(d.data().total) || 0), 0);
+        const pendentes = pedidosSnap.docs.filter(d => d.data().status !== 'completed' && !d.data().tipoEncomenda).length;
+        
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card"><div class="stat-number">${produtosSnap.size}</div><div class="stat-label">📦 Produtos</div></div>
+            <div class="stat-card"><div class="stat-number">${pedidosSnap.size}</div><div class="stat-label">📋 Pedidos</div></div>
+            <div class="stat-card"><div class="stat-number">${usersSnap.size}</div><div class="stat-label">👥 Clientes</div></div>
+            <div class="stat-card"><div class="stat-number">R$ ${totalVendas.toFixed(2).replace('.', ',')}</div><div class="stat-label">💰 Faturamento</div></div>
+            <div class="stat-card"><div class="stat-number">${pendentes}</div><div class="stat-label">⏳ Pendentes</div></div>
+        `;
+        
+        const recentes = pedidosSnap.docs.slice(-5).reverse();
+        document.getElementById('recentOrders').innerHTML = `
+            <table style="width:100%">
+                <thead><tr><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th></tr></thead>
+                <tbody>${recentes.map(d => `<tr><td>${d.data().cliente || '-'}</td>}R$ ${(Number(d.data().total) || 0).toFixed(2).replace('.', ',')}</td>}<span class="status-badge ${d.data().status === 'completed' ? 'status-completed' : 'status-pending'}">${d.data().status === 'completed' ? '✅ Concluído' : '⏳ Pendente'}</span></td><td>${d.data().data || '-'}</td></tr>`).join('')}</tbody>
+            </table>
+        `;
     }
 
-    // ========== PRODUTOS ==========
     async function loadProducts() {
-        try {
-            const snap = await getDocs(collection(db, 'produtos'));
-            const produtos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            document.getElementById('productsTable').innerHTML = produtos.length === 0 ? '<tr><td colspan="6" style="text-align:center;padding:2rem;">Nenhum produto cadastrado</td></tr>' :
-                produtos.map(p => {
-                    const thumb = p.imagem && p.imagem.startsWith('http')
-                        ? `<img src="${p.imagem}" alt="${p.nome}" style="width:36px;height:36px;object-fit:cover;border-radius:8px;vertical-align:middle;margin-right:6px;">`
-                        : `<strong style="margin-right:4px;">${p.emoji || '🍩'}</strong>`;
-                    return `<tr>
-                        <td>${thumb}${p.nome}</td>
-                        <td>${p.categoria || '-'}</td>
-                        <td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td>
-                        <td>${p.estoque ?? '-'}</td>
-                        <td><span class="status-badge ${p.ativo !== false ? 'status-active' : 'status-inactive'}">${p.ativo !== false ? 'Ativo' : 'Inativo'}</span></td>
-                        <td><button class="btn btn-warning btn-sm" onclick="editProduct('${p.id}')">✏️</button> <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}', '${p.nome}')">🗑️</button> <button class="btn btn-sm" onclick="toggleProductStatus('${p.id}', ${p.ativo !== false})">${p.ativo !== false ? '🔴' : '🟢'}</button></td>
-                    </tr>`;
-                }).join('');
-        } catch(e) { console.error(e); }
+        const snap = await getDocs(collection(db, 'produtos'));
+        const produtos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        document.getElementById('productsTable').innerHTML = produtos.map(p => `
+            <tr>
+                <td>${p.imagem ? `<img src="${p.imagem}" class="product-thumb-img" onerror="this.style.display='none'">` : `<span style="font-size:1.3rem">${p.emoji || '🍩'}</span>`}</td>
+                <td><strong>${p.nome}</strong><br><small style="color:var(--brown-light)">${p.descricao?.substring(0, 35) || ''}</small></td>
+                <td>${p.categoria}</td>
+                <td>R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</td>
+                <td>${p.estoque ?? 0}</td>
+                <td><span class="status-badge ${p.ativo !== false ? 'status-active' : 'status-inactive'}">${p.ativo !== false ? 'Ativo' : 'Inativo'}</span></td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="editProduct('${p.id}')">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}', '${p.nome}')">🗑️</button>
+                    <button class="btn btn-sm" onclick="toggleProductStatus('${p.id}', ${p.ativo !== false})">${p.ativo !== false ? '🔴' : '🟢'}</button>
+                </td>
+            </tr>
+        `).join('');
     }
+
+    window.previewProductImage = function(url) {
+        const container = document.getElementById('imagePreviewContainer');
+        const img = document.getElementById('imagePreview');
+        if (url && (url.startsWith('http') || url.startsWith('https'))) {
+            img.src = url;
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    };
 
     window.openProductModal = function(product = null) {
         document.getElementById('productModalTitle').innerHTML = product ? '✏️ Editar Produto' : '➕ Novo Produto';
@@ -782,451 +653,314 @@
         document.getElementById('productEmoji').value = product?.emoji || '🍩';
         document.getElementById('productImagem').value = product?.imagem || '';
         document.getElementById('productBadge').value = product?.badge || '';
-        document.getElementById('productTag').value = product?.tag || '';
         document.getElementById('productDesc').value = product?.descricao || '';
         document.getElementById('productStatus').value = product?.ativo !== false ? 'true' : 'false';
-        // Preview image
-        const imgPreview = product?.imagem && product.imagem.startsWith('http');
-        document.getElementById('imagePreviewContainer').style.display = imgPreview ? 'block' : 'none';
-        if(imgPreview) document.getElementById('imagePreview').src = product.imagem;
-        // Toggle combo fields
-        toggleComboFields();
+        previewProductImage(product?.imagem || '');
         document.getElementById('productModal').classList.add('active');
     };
 
-    window.toggleComboFields = function() {
-        const cat = document.getElementById('productCategory').value;
-        const group = document.getElementById('precoOriginalGroup');
-        if(group) group.style.display = cat === 'Combos' ? 'block' : 'none';
-    };
-
-    window.previewProductImage = function(url) {
-        const container = document.getElementById('imagePreviewContainer');
-        const img = document.getElementById('imagePreview');
-        if(url && url.startsWith('http')) {
-            img.src = url;
-            container.style.display = 'block';
-        } else {
-            container.style.display = 'none';
-        }
-    };
-
-    window.closeProductModal = function() { 
-        document.getElementById('productModal').classList.remove('active'); 
-        document.getElementById('productForm').reset(); 
-        document.getElementById('productId').value = ''; 
+    window.closeProductModal = function() {
+        document.getElementById('productModal').classList.remove('active');
+        document.getElementById('productForm').reset();
+        document.getElementById('imagePreviewContainer').style.display = 'none';
     };
 
     window.saveProduct = async function() {
         const id = document.getElementById('productId').value;
-        const categoria = document.getElementById('productCategory').value;
-        const precoOriginalVal = document.getElementById('productPrecoOriginal').value;
         const product = {
             nome: document.getElementById('productName').value.trim(),
-            categoria: categoria,
+            categoria: document.getElementById('productCategory').value,
             preco: parseFloat(document.getElementById('productPrice').value),
             estoque: parseInt(document.getElementById('productEstoque').value) || 0,
             emoji: document.getElementById('productEmoji').value || '🍩',
             imagem: document.getElementById('productImagem').value.trim(),
-            badge: document.getElementById('productBadge').value.trim() || null,
-            tag: document.getElementById('productTag').value.trim() || null,
+            badge: document.getElementById('productBadge').value.trim(),
             descricao: document.getElementById('productDesc').value.trim(),
-            ativo: document.getElementById('productStatus').value === 'true'
+            ativo: document.getElementById('productStatus').value === 'true',
+            updatedAt: new Date().toISOString()
         };
-        if(categoria === 'Combos' && precoOriginalVal) {
-            product.precoOriginal = parseFloat(precoOriginalVal);
+        
+        if (product.categoria === 'Combos' && document.getElementById('productPrecoOriginal').value) {
+            product.precoOriginal = parseFloat(document.getElementById('productPrecoOriginal').value);
         }
-        // Remove nulls para não poluir o Firestore
-        Object.keys(product).forEach(k => { if(product[k] === null || product[k] === '') delete product[k]; });
+        
+        Object.keys(product).forEach(k => { if (!product[k]) delete product[k]; });
+        
         try {
-            if(id) { 
-                await updateDoc(doc(db, 'produtos', id), product); 
-                addLog(currentUser?.email || 'admin', 'editar_produto', `Editou: ${product.nome}`); 
-                showToast(`✅ Produto "${product.nome}" atualizado!`); 
-            } else { 
-                await addDoc(collection(db, 'produtos'), product); 
-                addLog(currentUser?.email || 'admin', 'criar_produto', `Criou: ${product.nome}`); 
-                showToast(`✅ Produto "${product.nome}" criado!`); 
+            if (id) {
+                await updateDoc(doc(db, 'produtos', id), product);
+                showToast(`✅ Produto "${product.nome}" atualizado!`);
+            } else {
+                await addDoc(collection(db, 'produtos'), product);
+                showToast(`✅ Produto "${product.nome}" criado!`);
             }
-            closeProductModal(); 
-            loadProducts(); 
+            closeProductModal();
+            loadProducts();
             loadDashboard();
-        } catch(e) { console.error(e); showToast('❌ Erro ao salvar produto'); }
+        } catch(e) { showToast('❌ Erro ao salvar produto'); }
     };
 
-    window.editProduct = async function(id) { 
-        const snap = await getDocs(collection(db, 'produtos')); 
-        const produto = snap.docs.find(d => d.id === id); 
-        if(produto) openProductModal({ id: produto.id, ...produto.data() }); 
-    };
-    
-    window.deleteProduct = async function(id, nome) { 
-        if(confirm(`Tem certeza que deseja excluir "${nome}"?`)) { 
-            try { 
-                await deleteDoc(doc(db, 'produtos', id)); 
-                addLog(currentUser?.email || 'admin', 'excluir_produto', `Excluiu: ${nome}`); 
-                loadProducts(); 
-                loadDashboard(); 
-                showToast(`🗑️ Produto "${nome}" excluído!`); 
-            } catch(e) { console.error(e); showToast('❌ Erro ao excluir produto'); } 
-        } 
-    };
-    
-    window.toggleProductStatus = async function(id, currentStatus) { 
-        try { 
-            await updateDoc(doc(db, 'produtos', id), { ativo: !currentStatus }); 
-            addLog(currentUser?.email || 'admin', 'toggle_produto', `${!currentStatus ? 'Ativou' : 'Desativou'} produto ID: ${id}`); 
-            loadProducts(); 
-            loadDashboard(); 
-            showToast(`✅ Status alterado!`); 
-        } catch(e) { console.error(e); showToast('❌ Erro ao alterar status'); } 
+    window.editProduct = async function(id) {
+        const snap = await getDocs(collection(db, 'produtos'));
+        const produto = snap.docs.find(d => d.id === id);
+        if (produto) openProductModal({ id: produto.id, ...produto.data() });
     };
 
-    // ========== PEDIDOS ==========
-    function iniciarListenerPedidos() { 
-        if(unsubscribeOrders) unsubscribeOrders(); 
-        unsubscribeOrders = onSnapshot(collection(db, 'pedidos'), () => { loadOrders(); }); 
+    window.deleteProduct = async function(id, nome) {
+        if (confirm(`Tem certeza que deseja excluir "${nome}"?`)) {
+            await deleteDoc(doc(db, 'produtos', id));
+            loadProducts(); loadDashboard();
+            showToast(`🗑️ Produto "${nome}" excluído!`);
+        }
+    };
+
+    window.toggleProductStatus = async function(id, currentStatus) {
+        await updateDoc(doc(db, 'produtos', id), { ativo: !currentStatus });
+        loadProducts();
+        showToast(`✅ Status alterado!`);
+    };
+
+    async function loadOrders() {
+        const snap = await getDocs(collection(db, 'pedidos'));
+        allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+            .filter(o => !o.tipoEncomenda)
+            .sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+        filterOrders();
     }
 
-    async function loadOrders() { 
-        try { 
-            const snap = await getDocs(collection(db, 'pedidos')); 
-            allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.data || '').localeCompare(a.data || '')); 
-            filterOrders(); 
-        } catch(e) { console.error(e); } 
-    }
-    
-    window.filterOrders = function() { 
-        currentOrderFilter = document.getElementById('orderStatusFilter').value; 
-        currentOrderPage = 1; 
-        renderOrdersPage(); 
+    window.filterOrders = function() {
+        currentOrderFilter = document.getElementById('orderStatusFilter').value;
+        currentOrderPage = 1;
+        renderOrdersPage();
     };
-    
-    function renderOrdersPage() { 
-        let filtered = [...allOrders]; 
-        if(currentOrderFilter !== 'all') filtered = filtered.filter(o => o.status === currentOrderFilter); 
-        const totalPages = Math.ceil(filtered.length / ordersPerPage); 
-        const start = (currentOrderPage - 1) * ordersPerPage; 
-        const paginated = filtered.slice(start, start + ordersPerPage); 
-        document.getElementById('ordersTable').innerHTML = paginated.length === 0 ? '<tr><td colspan="7" style="text-align:center;padding:2rem;">Nenhum pedido encontrado</td></tr>' : 
-            paginated.map(p => `<tr>
-                <td><small>${p.id.slice(0,8)}...</small></td>
+
+    function renderOrdersPage() {
+        let filtered = [...allOrders];
+        if (currentOrderFilter !== 'all') filtered = filtered.filter(o => o.status === currentOrderFilter);
+        
+        const totalPages = Math.ceil(filtered.length / ordersPerPage);
+        const start = (currentOrderPage - 1) * ordersPerPage;
+        const paginated = filtered.slice(start, start + ordersPerPage);
+        
+        document.getElementById('ordersTable').innerHTML = paginated.map(p => `
+            <tr>
+                <td><small>${p.id.slice(0, 8)}...</small></td>
                 <td><strong>${p.cliente || '-'}</strong></td>
                 <td>${p.whatsapp || '-'}</td>
                 <td>R$ ${(Number(p.total) || 0).toFixed(2).replace('.', ',')}</td>
                 <td><span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? '✅ Concluído' : '⏳ Pendente'}</span></td>
                 <td>${p.data || '-'}</td>
-                <td><button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${p.id}')">👁️</button> ${p.status !== 'completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder('${p.id}')">✅</button>` : ''}</td>
-            </tr>`).join(''); 
-        document.getElementById('ordersPagination').innerHTML = Array.from({ length: totalPages }, (_, i) => `<button class="page-btn ${i+1 === currentOrderPage ? 'active' : ''}" onclick="goToOrderPage(${i+1})">${i+1}</button>`).join(''); 
+                <td><button class="btn btn-success btn-sm" onclick="completeOrder('${p.id}')">✅</button> <button class="btn btn-primary btn-sm" onclick="viewOrder('${p.id}')">👁️</button></td>
+            </tr>
+        `).join('');
+        
+        document.getElementById('ordersPagination').innerHTML = Array.from({ length: totalPages }, (_, i) => 
+            `<button class="page-btn ${i+1 === currentOrderPage ? 'active' : ''}" onclick="goToOrderPage(${i+1})">${i+1}</button>`
+        ).join('');
     }
-    
+
     window.goToOrderPage = function(page) { currentOrderPage = page; renderOrdersPage(); };
-    window.completeOrder = async function(id) { 
-        try { 
-            await updateDoc(doc(db, 'pedidos', id), { status: 'completed' }); 
-            addLog(currentUser?.email || 'admin', 'concluir_pedido', `Pedido ${id} concluído`); 
-            loadOrders(); 
-            loadDashboard(); 
-            showToast(`✅ Pedido concluído!`); 
-        } catch(e) { console.error(e); showToast('❌ Erro ao concluir pedido'); } 
+    window.completeOrder = async function(id) {
+        await updateDoc(doc(db, 'pedidos', id), { status: 'completed' });
+        loadOrders(); loadDashboard();
+        showToast('✅ Pedido concluído!');
     };
-    window.viewOrderDetails = async function(id) { 
-        const snap = await getDocs(collection(db, 'pedidos')); 
-        const pedido = snap.docs.find(d => d.id === id)?.data(); 
-        if(pedido) alert(JSON.stringify(pedido, null, 2)); 
-    };
-    window.exportOrdersToCSV = function() { 
-        let filtered = [...allOrders]; 
-        if(currentOrderFilter !== 'all') filtered = filtered.filter(o => o.status === currentOrderFilter); 
-        const headers = ['ID', 'Cliente', 'WhatsApp', 'Total', 'Status', 'Data', 'Endereço', 'Pagamento']; 
-        const rows = filtered.map(o => [o.id, o.cliente, o.whatsapp, o.total, o.status, o.data, o.endereco, o.pagamento]); 
-        const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n'); 
-        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' }); 
-        const link = document.createElement('a'); 
-        link.href = URL.createObjectURL(blob); 
-        link.download = `pedidos_${new Date().toISOString().slice(0,19)}.csv`; 
-        link.click(); 
-        URL.revokeObjectURL(link.href); 
-        showToast('📎 Pedidos exportados com sucesso!'); 
+    window.viewOrder = async function(id) {
+        const snap = await getDocs(collection(db, 'pedidos'));
+        const pedido = snap.docs.find(d => d.id === id)?.data();
+        alert(JSON.stringify(pedido, null, 2));
     };
 
-    // ========== USUÁRIOS ==========
-    function iniciarListenerUsers() { if(unsubscribeUsers) unsubscribeUsers(); unsubscribeUsers = onSnapshot(collection(db, 'users'), () => loadUsers()); }
-    
+    window.zerarTodosPedidos = async function() {
+        if (!confirm('⚠️ ATENÇÃO: Isso irá DELETAR TODOS OS PEDIDOS! Deseja continuar?')) return;
+        const snap = await getDocs(collection(db, 'pedidos'));
+        const batch = writeBatch(db);
+        snap.docs.forEach(doc => batch.delete(doc.ref));
+        await batch.commit();
+        showToast('🗑️ Todos os pedidos foram removidos!');
+        loadOrders(); loadDashboard();
+    };
+
+    window.exportOrdersToCSV = function() {
+        let filtered = [...allOrders];
+        if (currentOrderFilter !== 'all') filtered = filtered.filter(o => o.status === currentOrderFilter);
+        const headers = ['ID', 'Cliente', 'WhatsApp', 'Total', 'Status', 'Data'];
+        const rows = filtered.map(o => [o.id, o.cliente, o.whatsapp, o.total, o.status, o.data]);
+        const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `pedidos_${new Date().toISOString().slice(0, 19)}.csv`;
+        link.click();
+        showToast('📎 Pedidos exportados!');
+    };
+
     async function loadUsers() {
-        try {
-            const snap = await getDocs(collection(db, 'users'));
-            const users = snap.docs.map((d, idx) => ({ docId: d.id, idx: idx+1, ...d.data() }));
-            document.getElementById('usersTable').innerHTML = users.length === 0
-                ? '<tr><td colspan="6" style="text-align:center;padding:2rem;">Nenhum cliente cadastrado</td></tr>'
-                : users.map(u => `<tr>
-                    <td>${u.idx}</td>
-                    <td><strong>${u.nome || '-'}</strong></td>
-                    <td>${u.telefone || '-'}</td>
-                    <td>${u.email || '-'}</td>
-                    <td>${u.dataCadastro || '-'}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.docId}','${(u.nome||'').replace(/'/g,"\\'")}','${(u.email||'').replace(/'/g,"\\'")}')">🗑️ Apagar</button></td>
-                </tr>`).join('');
-        } catch(e) { console.error(e); }
-    }
-    
-    window.deleteUser = async function(docId, nome, email) {
-        if (!confirm(`⚠️ Apagar o usuário "${nome}" (${email})?\n\nEsta ação não pode ser desfeita!`)) return;
-        try {
-            await deleteDoc(doc(db, 'users', docId));
-            await addLog(currentUser?.email || 'admin', 'apagar_usuario', `Usuário apagado: ${nome} (${email})`);
-            loadUsers();
-            loadDashboard();
-            showToast(`🗑️ Usuário "${nome}" apagado com sucesso!`);
-        } catch(e) { console.error(e); showToast('❌ Erro ao apagar usuário.'); }
-    };
-    
-    async function loadAvaliacoes() { 
-        try { 
-            const snap = await getDocs(collection(db, 'avaliacoes')); 
-            const avaliacoes = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); 
-            document.getElementById('avaliacoesTable').innerHTML = avaliacoes.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhuma avaliação ainda</td></tr>' : 
-                avaliacoes.map(a => `<tr>
-                    <td>${a.data || '-'}</td>
-                    <td>${a.usuario || '-'}</td>
-                    <td>${'⭐'.repeat(a.estrelas || 0)}</td>
-                    <td>${a.pedidoId || '-'}</td>
-                </tr>`).join(''); 
-        } catch(e) { console.error(e); } 
-    }
-    
-    async function loadLogs() { 
-        try { 
-            const snap = await getDocs(collection(db, 'logs')); 
-            const logs = snap.docs.map(d => d.data()).sort((a,b) => (b.data || '').localeCompare(a.data || '')); 
-            document.getElementById('logsTable').innerHTML = logs.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:2rem;">Nenhum log registrado</td></tr>' : 
-                logs.map(l => `<tr>
-                    <td>${l.data || '-'}</td>
-                    <td>${l.usuario || '-'}</td>
-                    <td>${l.acao || '-'}</td>
-                    <td>${l.detalhes || '-'}</td>
-                </tr>`).join(''); 
-        } catch(e) { console.error(e); } 
+        const snap = await getDocs(collection(db, 'users'));
+        const users = snap.docs.map((d, idx) => ({ id: d.id, idx: idx + 1, ...d.data() }));
+        document.getElementById('usersTable').innerHTML = users.map(u => `
+            <tr>
+                <td>${u.idx}</td>
+                <td><strong>${u.nome || '-'}</strong></td>
+                <td>${u.telefone || '-'}</td>
+                <td>${u.email || '-'}</td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">🗑️</button></td>
+            </tr>
+        `).join('');
     }
 
-    // ========== ENCOMENDAS ==========
-    let allEncomendas = [];
-    let currentEncomendaFilter = 'all';
+    window.deleteUser = async function(id) {
+        if (confirm('Remover este usuário?')) {
+            await deleteDoc(doc(db, 'users', id));
+            loadUsers();
+            showToast('Usuário removido');
+        }
+    };
 
     async function loadEncomendas() {
-        try {
-            const snap = await getDocs(collection(db, 'pedidos'));
-            allEncomendas = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-                .filter(p => p.tipoEncomenda === true || p.status === 'encomenda' || p.status === 'encomenda_confirmada' || p.status === 'encomenda_cancelada')
-                .sort((a, b) => (b.dataEntrega || '').localeCompare(a.dataEntrega || ''));
-            filterEncomendas();
-        } catch(e) { console.error(e); }
-    }
-
-    window.filterEncomendas = function() {
-        currentEncomendaFilter = document.getElementById('encomendaStatusFilter').value;
-        renderEncomendasTable();
-    };
-
-    function renderEncomendasTable() {
-        let filtered = [...allEncomendas];
-        if(currentEncomendaFilter !== 'all') filtered = filtered.filter(e => e.status === currentEncomendaFilter);
-        const tbody = document.getElementById('encomendasTable');
-        if(!tbody) return;
-        if(!filtered.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;">Nenhuma encomenda encontrada</td></tr>'; return; }
-        tbody.innerHTML = filtered.map(e => {
-            const statusClass = e.status === 'encomenda_confirmada' ? 'status-completed' : e.status === 'encomenda_cancelada' ? 'status-inactive' : 'status-pending';
-            const statusLabel = e.status === 'encomenda_confirmada' ? '✅ Confirmada' : e.status === 'encomenda_cancelada' ? '❌ Cancelada' : '⏳ Pendente';
-            const dataEntrega = e.dataEntrega ? new Date(e.dataEntrega + 'T12:00:00').toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric',weekday:'short'}) : '-';
-            const acoes = e.status === 'encomenda' ? `<button class="btn btn-success btn-sm" onclick="confirmarEncomendaAdmin('${e.id}')">✅</button> <button class="btn btn-danger btn-sm" onclick="cancelarEncomendaAdmin('${e.id}')">❌</button>` : `<button class="btn btn-primary btn-sm" onclick="viewOrderDetails('${e.id}')">👁️</button>`;
-            return `<tr>
-                <td><small>${e.id.slice(0,8)}...</small></td>
+        const snap = await getDocs(collection(db, 'pedidos'));
+        const encomendas = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.tipoEncomenda === true);
+        document.getElementById('encomendasTable').innerHTML = encomendas.map(e => `
+            <tr>
                 <td><strong>${e.cliente || '-'}</strong></td>
                 <td>${e.whatsapp || '-'}</td>
-                <td>R$ ${(Number(e.total)||0).toFixed(2).replace('.',',')}</td>
-                <td><strong>${dataEntrega}</strong></td>
-                <td>${e.horarioEntrega || '-'}</td>
-                <td style="max-width:120px;font-size:0.8rem;">${e.observacoes || '-'}</td>
-                <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
-                <td>${acoes}</td>
-            </tr>`;
-        }).join('');
+                <td>R$ ${(Number(e.total) || 0).toFixed(2).replace('.', ',')}</td>
+                <td>${e.dataEntrega || '-'}</td>
+                <td><span class="status-badge ${e.status === 'encomenda_confirmada' ? 'status-completed' : 'status-pending'}">${e.status === 'encomenda_confirmada' ? '✅ Confirmada' : '⏳ Pendente'}</span></td>
+                <td><button class="btn btn-success btn-sm" onclick="confirmarEncomenda('${e.id}')">✅ Confirmar</button></td>
+            </tr>
+        `).join('');
     }
 
-    window.confirmarEncomendaAdmin = async function(id) {
-        try {
-            await updateDoc(doc(db, 'pedidos', id), { status: 'encomenda_confirmada' });
-            addLog(currentUser?.email || 'admin', 'confirmar_encomenda', `Encomenda ${id} confirmada`);
-            loadEncomendas();
-            loadDashboard();
-            showToast('✅ Encomenda confirmada!');
-        } catch(e) { console.error(e); showToast('❌ Erro ao confirmar encomenda'); }
+    window.confirmarEncomenda = async function(id) {
+        await updateDoc(doc(db, 'pedidos', id), { status: 'encomenda_confirmada' });
+        loadEncomendas();
+        showToast('Encomenda confirmada!');
     };
 
-    window.cancelarEncomendaAdmin = async function(id) {
-        if(!confirm('Cancelar esta encomenda?')) return;
-        try {
-            await updateDoc(doc(db, 'pedidos', id), { status: 'encomenda_cancelada' });
-            addLog(currentUser?.email || 'admin', 'cancelar_encomenda', `Encomenda ${id} cancelada`);
-            loadEncomendas();
-            showToast('❌ Encomenda cancelada.');
-        } catch(e) { console.error(e); showToast('❌ Erro ao cancelar encomenda'); }
-    };
-
-    window.exportEncomendasToCSV = function() {
-        const headers = ['ID','Cliente','WhatsApp','Total','Data Entrega','Horário','Observações','Status'];
-        const rows = allEncomendas.map(e => [e.id, e.cliente, e.whatsapp, e.total, e.dataEntrega, e.horarioEntrega, e.observacoes, e.status]);
-        const csv = [headers,...rows].map(row => row.map(cell => `"${String(cell||'').replace(/"/g,'""')}"`).join(',')).join('\n');
-        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `encomendas_${new Date().toISOString().slice(0,10)}.csv`; link.click(); URL.revokeObjectURL(link.href);
-        showToast('📎 Encomendas exportadas!');
-    };
-
-    // ========== ADMINS ==========
+    // ========== ADMINS MANAGEMENT ==========
     async function loadAdmins() {
-        const tbody = document.getElementById('adminsTable');
-        if (!tbody) return;
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Carregando...</td></tr>';
-        try {
-            const snap = await getDocs(collection(db, 'admins'));
-            const admins = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            const master = { id: '__master__', nome: 'Moreira (Master)', email: _getMasterEmail(), nivel: 'master', adicionadoEm: 'Fundador', adicionadoPor: 'Sistema' };
-            const todos = [master, ...admins.filter(a => a.email !== _getMasterEmail())];
-            if (!todos.length) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#999;">Nenhum admin extra cadastrado</td></tr>';
-                return;
-            }
-            tbody.innerHTML = todos.map(a => {
-                const nivelBadge = a.nivel === 'master'
-                    ? '<span style="background:linear-gradient(135deg,#ff6b9d,#ff4081);color:#fff;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:800;">👑 Master</span>'
-                    : a.nivel === 'moderador'
-                    ? '<span style="background:#ffeaa7;color:#d63031;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:700;">🔸 Moderador</span>'
-                    : '<span style="background:#c8f7e0;color:#00b894;padding:0.2rem 0.6rem;border-radius:99px;font-size:0.7rem;font-weight:700;">🛡️ Admin</span>';
-                const acoes = a.nivel === 'master'
-                    ? '<span style="color:#ccc;font-size:0.78rem;">Protegido</span>'
-                    : `<button class="btn btn-danger btn-sm" onclick="removerAdmin('${a.id}','${a.email}','${a.nome}')">🗑️ Remover</button>`;
-                return `<tr>
-                    <td><strong>${a.nome || '-'}</strong></td>
-                    <td>${a.email || '-'}</td>
-                    <td>${nivelBadge}</td>
-                    <td style="font-size:0.8rem;">${a.adicionadoEm || '-'}</td>
-                    <td style="font-size:0.8rem;">${a.adicionadoPor || '-'}</td>
-                    <td>${acoes}</td>
-                </tr>`;
-            }).join('');
-        } catch(e) {
-            console.error(e);
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#e74c3c;">Erro ao carregar admins</td></tr>';
-        }
+        const snap = await getDocs(collection(db, 'admins'));
+        const admins = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const master = { id: '__master__', nome: 'Master Admin', email: MASTER_EMAIL, nivel: 'master' };
+        const allAdmins = [master, ...admins.filter(a => a.email !== MASTER_EMAIL)];
+        
+        document.getElementById('adminsList').innerHTML = `
+            <div style="padding: 0.5rem;">
+                ${allAdmins.map(admin => `
+                    <div class="admin-card">
+                        <div class="admin-info">
+                            <h4>${admin.nome || admin.email.split('@')[0]}</h4>
+                            <p>${admin.email}</p>
+                        </div>
+                        <div>
+                            <span class="admin-badge ${admin.nivel === 'moderador' ? 'moderador' : ''}">${admin.nivel === 'master' ? '👑 Master' : admin.nivel === 'moderador' ? '🔸 Moderador' : '🛡️ Admin'}</span>
+                            ${admin.id !== '__master__' ? `<button class="btn btn-danger btn-sm" style="margin-left: 0.5rem;" onclick="removerAdmin('${admin.id}')">🗑️</button>` : ''}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
     }
 
     window.convidarAdmin = async function() {
-        const nome   = document.getElementById('inviteNome').value.trim();
-        const email  = document.getElementById('inviteEmail').value.trim().toLowerCase();
-        const senha  = document.getElementById('inviteSenha').value.trim();
-        const nivel  = document.getElementById('inviteNivel').value;
-        const btn    = document.getElementById('btnConvidarAdmin');
-        const msgEl  = document.getElementById('inviteMsg');
-
-        msgEl.style.color = '#e74c3c'; msgEl.textContent = '';
-
-        if (!nome || nome.length < 2) { msgEl.textContent = '⚠️ Informe o nome do administrador.'; return; }
-        if (!email.includes('@') || !email.includes('.')) { msgEl.textContent = '⚠️ E-mail inválido.'; return; }
-        if (!senha || senha.length < 6) { msgEl.textContent = '⚠️ Senha deve ter no mínimo 6 caracteres.'; return; }
-        if (email === _getMasterEmail()) { msgEl.textContent = '⚠️ Este e-mail já é o Master Admin.'; return; }
-
-        try {
-            const q = query(collection(db, 'admins'), where('email', '==', email));
-            const existe = await getDocs(q);
-            if (!existe.empty) { msgEl.textContent = '⚠️ Este e-mail já está cadastrado como admin.'; return; }
-        } catch(e) {}
-
-        btn.disabled = true; btn.textContent = '⏳ Registrando...'; msgEl.textContent = '';
-
+        const nome = document.getElementById('inviteNome').value.trim();
+        const email = document.getElementById('inviteEmail').value.trim().toLowerCase();
+        const senha = document.getElementById('inviteSenha').value.trim();
+        const nivel = document.getElementById('inviteNivel').value;
+        const msgEl = document.getElementById('inviteMsg');
+        
+        if (!nome || !email || !senha) {
+            msgEl.innerHTML = '<span style="color: #e74c3c;">⚠️ Preencha todos os campos!</span>';
+            return;
+        }
+        if (senha.length < 6) {
+            msgEl.innerHTML = '<span style="color: #e74c3c;">⚠️ Senha deve ter no mínimo 6 caracteres!</span>';
+            return;
+        }
+        
+        msgEl.innerHTML = '<span style="color: #f39c12;">⏳ Registrando...</span>';
+        
         try {
             await createUserWithEmailAndPassword(auth, email, senha);
-            const agora = new Date().toLocaleString('pt-BR');
             await addDoc(collection(db, 'admins'), {
                 nome, email, nivel,
-                adicionadoEm: agora,
-                adicionadoPor: currentUser?.email || 'Master Admin',
-                criadoEm: serverTimestamp()
+                adicionadoEm: new Date().toLocaleString('pt-BR'),
+                adicionadoPor: currentUser?.email || MASTER_EMAIL,
+                criadoEm: new Date().toISOString()
             });
-            await sendPasswordResetEmail(auth, email);
-            await addLog(currentUser?.email || 'master', 'convidar_admin', `Novo admin convidado: ${nome} (${email}) · nível: ${nivel}`);
-            msgEl.style.color = '#2ecc71';
-            msgEl.textContent = `✅ Admin "${nome}" registrado! E-mail de redefinição enviado para ${email}.`;
+            msgEl.innerHTML = '<span style="color: #2ecc71;">✅ Admin convidado com sucesso!</span>';
             document.getElementById('inviteNome').value = '';
             document.getElementById('inviteEmail').value = '';
             document.getElementById('inviteSenha').value = '';
             loadAdmins();
+            setTimeout(() => msgEl.innerHTML = '', 3000);
         } catch(error) {
-            const erros = {
-                'auth/email-already-in-use': '⚠️ Este e-mail já existe no Firebase Auth.',
-                'auth/invalid-email': '❌ E-mail inválido.',
-                'auth/weak-password': '❌ Senha fraca. Use ao menos 6 caracteres.',
-                'auth/operation-not-allowed': '❌ Criação de usuários desabilitada.'
-            };
-            msgEl.style.color = '#e74c3c';
-            msgEl.textContent = erros[error.code] || `❌ Erro: ${error.message}`;
-            console.error(error);
-        } finally {
-            btn.disabled = false; btn.textContent = '✉️ Enviar convite';
+            msgEl.innerHTML = `<span style="color: #e74c3c;">❌ ${error.message}</span>`;
         }
     };
 
-    window.removerAdmin = async function(docId, email, nome) {
-        if (!confirm(`⚠️ Remover o admin "${nome}" (${email})?\n\nEle perderá o acesso ao painel imediatamente.`)) return;
-        try {
-            await deleteDoc(doc(db, 'admins', docId));
-            await addLog(currentUser?.email || 'master', 'remover_admin', `Admin removido: ${nome} (${email})`);
-            showToast(`🗑️ Admin "${nome}" removido com sucesso.`);
+    window.removerAdmin = async function(id) {
+        if (confirm('Remover este administrador?')) {
+            await deleteDoc(doc(db, 'admins', id));
             loadAdmins();
-        } catch(e) {
-            console.error(e);
-            showToast('❌ Erro ao remover admin.');
+            showToast('Admin removido!');
         }
     };
 
-    // ========== SWITCH TABS ==========
     window.switchTab = function(tab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-tab').forEach(el => {
-            el.classList.remove('active');
-            if(el.id === 'tabAdmins') { el.style.background = 'linear-gradient(135deg,#ff6b9d,#ff4081)'; el.style.color = 'white'; }
-        });
+        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
         document.getElementById(`${tab}Tab`).classList.add('active');
-        if(event && event.target) event.target.classList.add('active');
-        if(tab === 'dashboard') loadDashboard();
-        else if(tab === 'products') loadProducts();
-        else if(tab === 'orders') loadOrders();
-        else if(tab === 'users') loadUsers();
-        else if(tab === 'avaliacoes') loadAvaliacoes();
-        else if(tab === 'logs') loadLogs();
-        else if(tab === 'encomendas') loadEncomendas();
-        else if(tab === 'admins') loadAdmins();
+        if (event?.target) event.target.classList.add('active');
+        
+        if (tab === 'dashboard') loadDashboard();
+        else if (tab === 'products') loadProducts();
+        else if (tab === 'orders') loadOrders();
+        else if (tab === 'users') loadUsers();
+        else if (tab === 'encomendas') loadEncomendas();
+        else if (tab === 'admins') loadAdmins();
     };
 
-    function iniciarPainel() { 
-        loadDashboard(); 
-        loadProducts(); 
-        loadOrders(); 
-        loadUsers(); 
-        loadAvaliacoes(); 
-        loadLogs(); 
-        loadEncomendas(); 
-        loadAdmins(); 
-        iniciarListenerPedidos(); 
-        iniciarListenerUsers(); 
+    function iniciarPainel() {
+        loadDashboard(); loadProducts(); loadOrders(); loadUsers(); loadEncomendas(); loadAdmins();
+        onSnapshot(collection(db, 'pedidos'), () => loadOrders());
+        onSnapshot(collection(db, 'users'), () => loadUsers());
     }
 
-    // ========== TENTAR LOGIN AUTOMÁTICO ==========
-    if (verificarSessaoAdmin()) {
-        setTimeout(() => loginAdmin(), 100);
+    function checkAuth() {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                let isAuthorized = (user.email === MASTER_EMAIL);
+                if (!isAuthorized) {
+                    const q = query(collection(db, 'admins'), where('email', '==', user.email));
+                    const snap = await getDocs(q);
+                    isAuthorized = !snap.empty;
+                }
+                if (isAuthorized) {
+                    currentUser = user;
+                    document.getElementById('loginOverlay').classList.add('hidden');
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                    if (user.email === MASTER_EMAIL) document.getElementById('masterBadge').innerHTML = '👑 Master';
+                    else document.getElementById('masterBadge').innerHTML = '🛡️ Admin';
+                    iniciarPainel();
+                }
+            } else {
+                const cached = localStorage.getItem('admin_sessao');
+                if (cached) {
+                    try {
+                        const s = JSON.parse(cached);
+                        if (Date.now() < s.expira) {
+                            document.getElementById('adminEmail').value = s.email;
+                            document.getElementById('adminPass').value = atob(s.senhaHash);
+                            loginAdmin();
+                        }
+                    } catch(e) {}
+                }
+            }
+        });
     }
-
-    // ========== INICIALIZAR ==========
+    
     checkAuth();
 </script>
 </body>
