@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Painel Administrativo - Donut ALR">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#FF6BA8">
     <title>Donut ALR - Painel Administrativo 🍩</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -39,33 +42,41 @@
         }
 
         [data-theme="dark"] {
-            --bg: #1a0f14;
-            --card: #2d1a24;
-            --peach: #3e1e2e;
-            --lavender: #2a1a30;
-            --gray: #2a1922;
-            --gray-2: #402a36;
-            --brown: #f5c6da;
-            --brown-mid: #d4a5bc;
-            --brown-light: #b07f9a;
-            --text: #f5e6ee;
-            --pink-pale: #3a1e2c;
-            --shadow: 0 4px 20px rgba(0,0,0,0.3);
-            --shadow-md: 0 8px 30px rgba(0,0,0,0.4);
-            --shadow-lg: 0 20px 50px rgba(0,0,0,0.5);
+            --bg: #0e080d;
+            --card: #1a0e18;
+            --peach: #281020;
+            --lavender: #1c1028;
+            --gray: #180c16;
+            --gray-2: #2a1822;
+            --brown: #fad0e8;
+            --brown-mid: #e0b0cc;
+            --brown-light: #c090a8;
+            --text: #faeeff;
+            --pink-pale: #2a1020;
+            --shadow: 0 4px 20px rgba(0,0,0,0.5);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.6);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.7);
         }
+        [data-theme="dark"] .sidebar { background: #110910; border-right-color: rgba(255,107,168,0.12); }
+        [data-theme="dark"] .nav-item { color: #d0a0c0; }
+        [data-theme="dark"] .stat-card, [data-theme="dark"] .card { background: var(--card); border-color: rgba(255,107,168,0.1); }
+        [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea { background: #1e0e1c; border-color: #3a1832; color: var(--text); }
+        [data-theme="dark"] input:focus, [data-theme="dark"] select:focus { border-color: var(--pink); }
+        [data-theme="dark"] table th { background: #1e1025; }
+        [data-theme="dark"] table tr:hover td { background: #1a0e20; }
+        [data-theme="dark"] .modal-content { background: #1e1022; }
 
         body {
             font-family: 'Nunito', sans-serif;
             background: var(--bg);
             color: var(--text);
-            transition: var(--transition);
+            transition: background 0.3s, color 0.3s;
         }
 
         /* Scrollbar customizada */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar { width: 7px; height: 7px; }
         ::-webkit-scrollbar-track { background: var(--gray); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--pink),var(--pink-dark)); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--pink-dark); }
 
         /* Login Overlay */

@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Donut ALR - Os melhores donuts artesanais, cupcakes e bebidas de Floriano-PI. Delivery rápido, combos especiais e muito amor!">
+    <meta name="theme-color" content="#ff6b9d">
+    <meta property="og:title" content="Donut ALR | Delivery de Doces em Floriano">
+    <meta property="og:description" content="Donuts artesanais, cupcakes decorados e bebidas especiais. Entrega em toda Floriano-PI!">
+    <meta name="robots" content="index, follow">
     <title>Donut ALR | Delivery de Doces em Floriano 🍩</title>
     <style>
         :root {
@@ -33,13 +38,27 @@
             --danger: #f44336;
         }
         [data-theme="dark"] {
-            --bg: #1a0d14; --card: #2a1520; --peach: #3a1a2a; --gray: #2a1520;
-            --gray-2: #3a2030; --brown: #f5c6d8; --brown-mid: #d4a0b8; --brown-light: #a07088;
-            --text: #f5e6ee;
+            --bg: #120810; --card: #1e1020; --peach: #2a1025; --gray: #1a0e1a;
+            --gray-2: #2e1828; --brown: #f8d0e5; --brown-mid: #e0b0cc; --brown-light: #c090a8;
+            --text: #f8eeff; --lavender: #1e1030; --yellow: #1a1508; --mint: #0a1a12;
+            --pink-light: #c0507a; --shadow-sm: 0 2px 8px rgba(0,0,0,0.4);
+            --shadow-md: 0 8px 28px rgba(0,0,0,0.5); --shadow-lg: 0 20px 60px rgba(0,0,0,0.6);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text); transition: background 0.3s; }
+        ::-webkit-scrollbar { width:7px; }
+        ::-webkit-scrollbar-track { background:var(--gray); }
+        ::-webkit-scrollbar-thumb { background:var(--pink-light); border-radius:99px; }
+        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text); transition: background 0.3s, color 0.3s; }
         a { text-decoration:none; }
+        [data-theme="dark"] .product-card,
+        [data-theme="dark"] .combo-card,
+        [data-theme="dark"] .drink-card,
+        [data-theme="dark"] .hero-card,
+        [data-theme="dark"] .modal-box { background: var(--card); border-color: rgba(255,107,157,0.12); }
+        [data-theme="dark"] .cart-sidebar { background: #1e1020; }
+        [data-theme="dark"] .site-header { background: rgba(18,8,16,0.97); }
+        [data-theme="dark"] .mobile-nav { background: #1e1020; border-color: #2e1828; }
+        [data-theme="dark"] .modal-overlay .modal-box { background: #1e1020; }
 
         .login-required-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -104,6 +123,10 @@
             display: flex; flex-direction: column; justify-content: center;
             overflow-y: auto;
         }
+        [data-theme="dark"] .auth-screen-right { background: #1e1020; }
+        [data-theme="dark"] .auth-screen-title { color: #f8d0e5; }
+        [data-theme="dark"] .auth-field { background: #2a1528; border-color: #3e2038; color: #f8eeff; }
+        [data-theme="dark"] .auth-field:focus { background: #2e1830; }
         [data-theme="dark"] .auth-screen-right { background: #2a1520; }
         .auth-screen-title {
             font-family: "Syne", sans-serif; font-size: 1.55rem; font-weight: 800;
@@ -130,6 +153,12 @@
             background: #fff6f9; margin-bottom: 0.85rem;
             font-size: 0.9rem; transition: border-color 0.2s, box-shadow 0.2s;
             color: #2d1020; font-family: inherit;
+        }
+        [data-theme="dark"] .auth-screen-right .auth-field {
+            background: #2a1028; border-color: #3e1832; color: #f8eeff;
+        }
+        [data-theme="dark"] .auth-screen-right .auth-field:focus {
+            background: #2e1434; border-color: #ff6b9d;
         }
         .auth-screen-right .auth-field:focus {
             outline: none; border-color: #ff6b9d;
@@ -160,7 +189,8 @@
         .status-dot { width:8px; height:8px; background:#aeffd8; border-radius:50%; animation:pulse 1.5s infinite; }
         .status-dot.fechado { background:#ff6b6b; animation:none; }
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.8)} }
-        .site-header { position:sticky; top:0; z-index:700; background:rgba(255,246,249,0.97); backdrop-filter:blur(20px); border-bottom:1.5px solid rgba(255,180,210,0.3); }
+        .site-header { position:sticky; top:0; z-index:700; background:rgba(255,246,249,0.97); backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%); border-bottom:1.5px solid rgba(255,180,210,0.3); }
+        [data-theme="dark"] .site-header { background:rgba(18,8,16,0.97); border-bottom-color:rgba(255,107,157,0.15); }
         .navbar { max-width:1300px; margin:0 auto; padding:0 1.5rem; height:68px; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
         .logo-area { display:flex; align-items:center; gap:12px; }
         .logo-blob { width:46px; height:46px; background:var(--gradient); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; }
@@ -399,8 +429,11 @@
         .modal-overlay.open .modal-box { animation:popIn 0.35s cubic-bezier(.22,1,.36,1); }
         .toast { transition:opacity 0.25s, transform 0.25s; transform:translateX(-50%) translateY(12px); }
         .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-        .wa-fab { animation:heartBeat 2.4s ease-in-out infinite; }
+        .wa-fab { animation:heartBeat 2.4s ease-in-out infinite; position:relative; }
         .wa-fab:hover { animation:none; transform:scale(1.15); }
+        .wa-fab::before { content:'Falar conosco'; position:absolute; right:calc(100% + 10px); top:50%; transform:translateY(-50%); background:#fff; color:#2d1020; border-radius:8px; padding:0.35rem 0.75rem; font-size:0.75rem; font-weight:700; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity 0.2s; box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+        .wa-fab:hover::before { opacity:1; }
+        [data-theme="dark"] .wa-fab::before { background:#2a1520; color:#f8eeff; }
         .combo-card { transition:transform 0.25s, box-shadow 0.25s; }
         .combo-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-md); }
         .drink-card { transition:transform 0.22s, box-shadow 0.22s; }
@@ -559,6 +592,9 @@
       <button class="tab-btn" data-cat="combos">🎁 Combos</button>
     </div>
     <div class="products-grid" id="productsGrid"></div>
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="cardapio.html" style="display:inline-flex;align-items:center;gap:0.6rem;background:var(--gradient);color:#fff;padding:0.85rem 2rem;border-radius:99px;font-weight:800;font-size:0.95rem;text-decoration:none;box-shadow:0 6px 20px rgba(255,64,129,0.35);transition:transform 0.18s,box-shadow 0.18s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 28px rgba(255,64,129,0.45)'" onmouseout="this.style.transform='';this.style.boxShadow='0 6px 20px rgba(255,64,129,0.35)'">🍩 Ver Cardápio Completo</a>
+    </div>
   </section>
 
   <section class="section reveal" id="combosSection">
@@ -705,7 +741,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<a href="https://wa.me/5589994112913" target="_blank" class="wa-fab">💬</a>
+<a href="https://wa.me/5589994112913" target="_blank" rel="noopener noreferrer" class="wa-fab" aria-label="Chat no WhatsApp">💬</a>
 <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
 
 <script type="module">
@@ -884,6 +920,7 @@
     window.mascararTelefone = mascararTelefone;
 
     function formatBRL(value) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value); }
+    function sanitize(str) { if(!str) return ''; const d = document.createElement('div'); d.textContent = String(str); return d.innerHTML; }
     
     function showToast(msg) { 
         const t = document.getElementById("toast"); 
@@ -1311,7 +1348,24 @@
     function setTheme(theme) { document.documentElement.setAttribute("data-theme",theme); document.getElementById("darkToggle").textContent=theme==="dark"?"☀️":"🌙"; localStorage.setItem("donut_theme",theme); }
     function toggleDark() { setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark"); }
     function initDarkMode() { setTheme(localStorage.getItem("donut_theme")||"light"); }
-    function startOfferTimer() { let time=2*3600; setInterval(()=>{ if(time<=0){ document.getElementById('offerTimer').textContent='ENCERRADA'; return; } const h=String(Math.floor(time/3600)).padStart(2,'0'); const m=String(Math.floor((time%3600)/60)).padStart(2,'0'); const s=String(time%60).padStart(2,'0'); document.getElementById('offerTimer').textContent=`${h}:${m}:${s}`; time--; },1000); }
+    function startOfferTimer() {
+        // Timer que redefine à meia-noite
+        function getSecondsToMidnight() {
+            const now = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"}));
+            const midnight = new Date(now); midnight.setHours(24,0,0,0);
+            return Math.floor((midnight - now) / 1000);
+        }
+        let time = getSecondsToMidnight();
+        const el = document.getElementById('offerTimer');
+        if (!el) return;
+        setInterval(()=>{
+            if(time<=0){ time = getSecondsToMidnight(); }
+            const h=String(Math.floor(time/3600)).padStart(2,'0');
+            const m=String(Math.floor((time%3600)/60)).padStart(2,'0');
+            const s=String(time%60).padStart(2,'0');
+            el.textContent=`${h}:${m}:${s}`; time--;
+        },1000);
+    }
 
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(()=>{ const loader=document.getElementById('pageLoader'); if(loader) loader.classList.add('done'); },800);
