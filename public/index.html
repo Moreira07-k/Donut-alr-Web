@@ -455,7 +455,7 @@
 </head>
 <body>
 
-<div id="pageLoader"><div class="loader-donut">🍩</div><div class="loader-bar"><div class="loader-fill"></div></div><div style="color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;opacity:0.85;">Donut ALR · Carregando...</div></div>
+<div id="pageLoader"><div class="loader-donut">🍩</div><div class="loader-bar"><div class="loader-fill"></div></div><div style="color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;opacity:0.85;">Quinn Bakery· Carregando...</div></div>
 <div id="scrollProgress"></div>
 
 <div class="login-required-overlay" id="loginRequiredOverlay">
@@ -1303,7 +1303,7 @@
         const pagamento = document.querySelector('input[name="payment"]:checked')?.value || "pix";
         const pagTexto = pagamento === "pix" ? "PIX" : pagamento === "cartao" ? "Cartão" : "Dinheiro";
         
-        let msg = `🍩 *NOVO PEDIDO - Donut ALR*\n👤 Cliente: ${usuarioAtual.nome}\n📱 WhatsApp: ${usuarioAtual.telefone || 'Não informado'}\n\n*ITENS:*\n`;
+        let msg = `🍩 *NOVO PEDIDO - Quinn Bakery*\n👤 Cliente: ${usuarioAtual.nome}\n📱 WhatsApp: ${usuarioAtual.telefone || 'Não informado'}\n\n*ITENS:*\n`;
         carrinho.forEach(i => { msg += `• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price*i.qtd)}\n`; });
         msg += `\n📍 Endereço: ${endCompleto}\n🚚 Frete: ${frete===0?"Grátis ✅":formatBRL(frete)}`;
         if(desconto>0) msg += `\n🎟 Desconto (${cupomAtivo}): -${formatBRL(desconto)}`;
@@ -1324,7 +1324,7 @@
 
     const SURPRESAS = [{ cupom:'SURPRESA5', desc:'R$5 OFF' },{ cupom:'SURPRESA10', desc:'10% OFF' },{ cupom:'FRETEGRATIS', desc:'Frete grátis' },{ cupom:'DONUT20', desc:'20% OFF' }];
     function abrirCaixaSurpresa() { const hoje = new Date().toDateString(); if(localStorage.getItem('donut_surpresa_dia') === hoje) { showToast('⏰ Você já abriu hoje!'); return; } const sorteio = SURPRESAS[Math.floor(Math.random() * SURPRESAS.length)]; document.getElementById('surpriseResult').innerHTML = `<div>🎉 Você ganhou!</div><div class="surprise-cupom">${sorteio.cupom}</div><div>${sorteio.desc}</div>`; document.getElementById('surpriseSub').textContent = ''; const surpriseBtn = document.getElementById('surpriseBtn'); if(surpriseBtn) { surpriseBtn.textContent = '🎟 Usar Cupom'; surpriseBtn.onclick = () => { const inp = document.getElementById('couponInput'); if(inp) inp.value = sorteio.cupom; closeModal('surpriseModal'); openCart(); setTimeout(() => aplicarCupom(), 350); }; } localStorage.setItem('donut_surpresa_dia', hoje); lancarConfete(); }
-    const PERGUNTAS = [{ q:"Qual o principal ingrediente do glacê de donut?", opts:["Açúcar","Farinha","Ovo","Leite"], certa:0 },{ q:"O donut foi popularizado em qual país?", opts:["Brasil","França","EUA","Japão"], certa:2 },{ q:"O que torna o Donut ALR especial?", opts:["Ingredientes","Feito com amor","Entrega rápida","Todas"], certa:3 }];
+    const PERGUNTAS = [{ q:"Qual o principal ingrediente do glacê de donut?", opts:["Açúcar","Farinha","Ovo","Leite"], certa:0 },{ q:"O donut foi popularizado em qual país?", opts:["Brasil","França","EUA","Japão"], certa:2 },{ q:"O que torna a Quinn Bakery especial?", opts:["Ingredientes","Feito com amor","Entrega rápida","Todas"], certa:3 }];
     let quizQ = 0, quizAcertos = 0;
     function iniciarQuiz() { quizQ=0; quizAcertos=0; renderQuizQ(); }
     function renderQuizQ() { const el = document.getElementById('quizContent'); if(quizQ >= PERGUNTAS.length) { const ganhou = quizAcertos/PERGUNTAS.length >= 0.6; el.innerHTML = `<div>${quizAcertos}/${PERGUNTAS.length}</div>${ganhou ? `<div>🎉 Você ganhou DONUT15!</div><button onclick="usarCupomPerfil('DONUT15');closeModal('quizModal')">Usar</button>` : `<button onclick="iniciarQuiz()">Tentar novamente</button>`}`; return; } const p = PERGUNTAS[quizQ]; el.innerHTML = `<div>${p.q}</div>${p.opts.map((o,i)=>`<button class="quiz-opt" onclick="responderQuiz(${i})">${o}</button>`).join('')}<div id="quizFeedback"></div>`; }
@@ -1350,7 +1350,7 @@
     window.openCart = openCart; window.closeCart = closeCart;
 
     window.abrirEncomenda = function() { if(!usuarioAtual){ mostrarLoginOverlay(); showToast('⚠️ Faça login primeiro.'); return; } closeCart(); openModal('encomendaModal'); };
-    window.confirmarEncomenda = function() { if(!usuarioAtual) return; if(!carrinho.length){ showToast('⚠️ Adicione itens ao carrinho'); return; } const data = document.getElementById('encomendaData').value; const horario = document.getElementById('encomendaHorario').value; const obs = document.getElementById('encomendaObs').value; const total = calcTotais().total; let msg = `📅 *ENCOMENDA - Donut ALR*\n👤 ${usuarioAtual.nome}\n📱 ${usuarioAtual.telefone}\n\n*ITENS:*\n`; carrinho.forEach(i=>msg+=`• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price*i.qtd)}\n`); msg+=`\n📅 Entrega: ${data}\n⏰ Horário: ${horario}\n💰 Total: ${formatBRL(total)}`; if(obs) msg+=`\n📝 Obs: ${obs}`; window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank'); lancarConfete(); closeModal('encomendaModal'); showToast('Encomenda enviada!'); };
+    window.confirmarEncomenda = function() { if(!usuarioAtual) return; if(!carrinho.length){ showToast('⚠️ Adicione itens ao carrinho'); return; } const data = document.getElementById('encomendaData').value; const horario = document.getElementById('encomendaHorario').value; const obs = document.getElementById('encomendaObs').value; const total = calcTotais().total; let msg = `📅 *ENCOMENDA - Quinn Bakery*\n👤 ${usuarioAtual.nome}\n📱 ${usuarioAtual.telefone}\n\n*ITENS:*\n`; carrinho.forEach(i=>msg+=`• ${i.emoji} ${i.name} x${i.qtd} = ${formatBRL(i.price*i.qtd)}\n`); msg+=`\n📅 Entrega: ${data}\n⏰ Horário: ${horario}\n💰 Total: ${formatBRL(total)}`; if(obs) msg+=`\n📝 Obs: ${obs}`; window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank'); lancarConfete(); closeModal('encomendaModal'); showToast('Encomenda enviada!'); };
 
     function atualizarStatusHorario() { const agora=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"})); const dia=agora.getDay(), hora=agora.getHours(); const aberto=dia>=1&&dia<=5&&hora>=8&&hora<18; document.getElementById("horarioStatus").textContent=aberto?"Aberto! · Seg–Sex 08:00–18:00h":"Fechado! · Seg–Sex 08:00–18:00h"; document.getElementById("statusDot").classList.toggle("fechado",!aberto); document.getElementById("statusBanner").style.background = aberto ? '#2ecc71' : '#e74c3c'; }
     function setTheme(theme) { document.documentElement.setAttribute("data-theme",theme); document.getElementById("darkToggle").textContent=theme==="dark"?"☀️":"🌙"; localStorage.setItem("donut_theme",theme); }
